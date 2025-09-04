@@ -1,0 +1,14 @@
+{
+  "type": "anvilcraft_lite:item_inject",
+  "block_ingredient": {
+    "blocks": "minecraft:deepslate"
+  },
+  "block_result": {
+    "block": "minecraft:deepslate_iron_ore"
+  },
+  "ingredients": [
+    {
+      "items": "minecraft:raw_iron_block"
+    }
+  ]
+}

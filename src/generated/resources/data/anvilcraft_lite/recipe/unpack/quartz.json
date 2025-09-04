@@ -1,0 +1,14 @@
+{
+  "type": "anvilcraft_lite:unpack",
+  "ingredients": [
+    {
+      "items": "minecraft:quartz_block"
+    }
+  ],
+  "results": [
+    {
+      "count": 4,
+      "id": "minecraft:quartz"
+    }
+  ]
+}

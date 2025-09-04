@@ -1,0 +1,14 @@
+{
+  "type": "anvilcraft_lite:block_compress",
+  "inputs": [
+    {
+      "blocks": "minecraft:warped_wart_block"
+    },
+    {
+      "blocks": "minecraft:netherrack"
+    }
+  ],
+  "result": {
+    "block": "minecraft:warped_nylium"
+  }
+}

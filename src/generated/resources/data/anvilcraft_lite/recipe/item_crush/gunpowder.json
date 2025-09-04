@@ -1,0 +1,14 @@
+{
+  "type": "anvilcraft_lite:item_crush",
+  "ingredients": [
+    {
+      "items": "minecraft:creeper_head"
+    }
+  ],
+  "results": [
+    {
+      "count": 64,
+      "id": "minecraft:gunpowder"
+    }
+  ]
+}

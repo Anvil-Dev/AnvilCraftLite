@@ -1,0 +1,14 @@
+{
+  "type": "anvilcraft_lite:item_inject",
+  "block_ingredient": {
+    "blocks": "minecraft:deepslate"
+  },
+  "block_result": {
+    "block": "minecraft:deepslate_gold_ore"
+  },
+  "ingredients": [
+    {
+      "items": "minecraft:raw_gold_block"
+    }
+  ]
+}
