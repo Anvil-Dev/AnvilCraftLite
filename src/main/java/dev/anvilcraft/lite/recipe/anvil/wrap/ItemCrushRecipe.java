@@ -38,7 +38,7 @@ public class ItemCrushRecipe extends AbstractProcessRecipe<ItemCrushRecipe> {
                 .setItemInputOffset(new Vec3(0.0, 0.125, 0.0))
                 .setItemInputRange(new Vec3(1.0, 0.25, 1.0))
                 .setInputItems(itemIngredients)
-                .setItemOutputOffset(new Vec3(0.0, 0.0, 0.0))
+                .setItemOutputOffset(new Vec3(0.0, -0.5, 0.0))
                 .setResultItems(results)
                 .setBlockInputOffset(new Vec3i(0, -1, 0))
                 .setInputBlocks(
