@@ -2,7 +2,8 @@ package dev.anvilcraft.lite;
 
 import com.mojang.logging.LogUtils;
 import dev.anvilcraft.lib.config.ConfigManager;
-import dev.anvilcraft.lite.init.reicpe.ModRecipeInits;
+import dev.anvilcraft.lite.init.ModRegister;
+import dev.anvilcraft.lite.init.item.ModInits;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -14,9 +15,11 @@ public class AnvilCraftLite {
     public static final String MOD_ID = "anvilcraft_lite";
     public static final Logger LOGGER = LogUtils.getLogger();
     public static final AnvilCraftLiteConfig CONFIG = ConfigManager.register(AnvilCraftLite.MOD_ID, AnvilCraftLiteConfig::new);
+    public static final ModRegister REGISTER = new ModRegister(AnvilCraftLite.MOD_ID);
 
     public AnvilCraftLite(IEventBus modEventBus, ModContainer modContainer) {
-        ModRecipeInits.init(modEventBus);
+        ModInits.init(modEventBus);
+        REGISTER.init(modEventBus);
     }
 
     public static ResourceLocation of(String id) {

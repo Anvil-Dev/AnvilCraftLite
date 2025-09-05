@@ -1,26 +1,26 @@
 package dev.anvilcraft.lite.init.item;
 
-import dev.anvilcraft.lite.AnvilCraftLite;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
+
+import static dev.anvilcraft.lite.AnvilCraftLite.REGISTER;
 
 public class ModItemGroups {
-    private static final DeferredRegister<CreativeModeTab> DF = DeferredRegister.create(
-        Registries.CREATIVE_MODE_TAB,
-        AnvilCraftLite.MOD_ID
-    );
-
-    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> ANVILCRAFT_LITE = DF.register(
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> ANVILCRAFT_LITE = REGISTER.itemGroup(
         "tab",
-        () -> CreativeModeTab.builder()
-            .icon(ModItems.RESIN.get()::getDefaultInstance)
+        builder -> builder
+            .icon(() -> ModItems.RESIN.get().getDefaultInstance())
             .displayItems((ctx, entries) -> {
                 entries.accept(ModItems.RESIN.get());
+                entries.accept(ModItems.MAGNET_INGOT.get());
+                entries.accept(ModItems.RESIN_BLOCK.get());
+                entries.accept(ModItems.MAGNET_BLOCK.get());
+                entries.accept(ModItems.HOLLOW_MAGNET_BLOCK.get());
+                entries.accept(ModItems.FERRITE_CORE_MAGNET_BLOCK.get());
             })
-            .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
-            .build()
     );
+
+    public static void init() {
+
+    }
 }
