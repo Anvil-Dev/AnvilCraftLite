@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "anvilcraft_lite:block/magnet_block"
+    },
+    "lit=true": {
+      "model": "anvilcraft_lite:block/demagnetized_magnet_block"
+    }
+  }
+}

@@ -11,12 +11,11 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
 
 public class ResinBlockItem extends HasMobBlockItem {
     public ResinBlockItem(Block block, Item.Properties properties) {
@@ -24,12 +23,13 @@ public class ResinBlockItem extends HasMobBlockItem {
     }
 
     @Override
-    public @NotNull InteractionResult useOn(@NotNull UseOnContext context) {
+    public InteractionResult place(BlockPlaceContext context) {
         ItemStack stack = context.getItemInHand();
-        if (!ResinBlockItem.hasMob(stack)) return super.useOn(context);
+        if (!ResinBlockItem.hasMob(stack)) return super.place(context);
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos().relative(context.getClickedFace());
         Player player = context.getPlayer();
+        if (player == null) return InteractionResult.FAIL;
         ResinBlockItem.spawnMobFromItem(level, player, pos, stack);
         return InteractionResult.SUCCESS;
     }
@@ -37,7 +37,7 @@ public class ResinBlockItem extends HasMobBlockItem {
     /**
      * 右键实体
      */
-    public static InteractionResult useEntity(Player player, @NotNull Entity target, ItemStack stack) {
+    public static InteractionResult useEntity(Player player, Entity target, ItemStack stack) {
         if (!(target instanceof Mob mob) || target.getBbHeight() > 2.0 || target.getBbWidth() > 1.5 || ResinBlockItem.hasMob(stack)) {
             return InteractionResult.PASS;
         }
@@ -46,7 +46,7 @@ public class ResinBlockItem extends HasMobBlockItem {
     }
 
     @SuppressWarnings("deprecation")
-    private static void spawnMobFromItem(@NotNull Level level, Player player, BlockPos pos, @NotNull ItemStack stack) {
+    private static void spawnMobFromItem(Level level, Player player, BlockPos pos, ItemStack stack) {
         ItemStack copy = stack.copy();
         stack.shrink(1);
         stack.remove(ModComponents.SAVED_ENTITY);
@@ -75,32 +75,5 @@ public class ResinBlockItem extends HasMobBlockItem {
         if (!player.getAbilities().instabuild) {
             player.getInventory().placeItemBackInInventory(back);
         }
-    }
-
-    @SuppressWarnings("deprecation")
-    public static ItemStack spawnMobFromItem(@NotNull Level level, BlockPos pos, @NotNull ItemStack stack) {
-        stack = stack.split(1);
-        if (level.isClientSide()) {
-            Item item = stack.getItem();
-            if (item instanceof ResinBlockItem item1) {
-                BlockState blockState = item1.getBlock().defaultBlockState();
-                SoundType soundType = blockState.getSoundType();
-                level.playSound(
-                    null,
-                    pos,
-                    item1.getPlaceSound(blockState),
-                    SoundSource.BLOCKS,
-                    (soundType.getVolume() + 1.0f) / 2.0f,
-                    soundType.getPitch() * 0.8f
-                );
-            }
-            return ItemStack.EMPTY;
-        }
-        Entity entity = HasMobBlockItem.getMobFromItem(level, stack);
-        if (entity == null) return stack;
-        entity.teleportTo(pos.getX(), pos.getY(), pos.getZ());
-        level.addFreshEntity(entity);
-        RandomSource random = level.getRandom();
-        return new ItemStack(ModItems.RESIN.asItem(), random.nextInt(1, 4));
     }
 }

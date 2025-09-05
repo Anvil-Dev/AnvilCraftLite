@@ -1,27 +1,29 @@
 package dev.anvilcraft.lite.init.block;
 
-import dev.anvilcraft.lite.AnvilCraftLite;
 import dev.anvilcraft.lite.block.FerriteCoreMagnetBlock;
 import dev.anvilcraft.lite.block.HollowMagnetBlock;
 import dev.anvilcraft.lite.block.MagnetBlock;
-import net.minecraft.world.level.block.Block;
+import dev.anvilcraft.lite.block.ResinBlock;
+import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.registries.DeferredBlock;
-import net.neoforged.neoforge.registries.DeferredRegister;
+
+import static dev.anvilcraft.lite.AnvilCraftLite.REGISTER;
 
 public class ModBlocks {
-    public static final DeferredRegister.Blocks DR = DeferredRegister.createBlocks(AnvilCraftLite.MOD_ID);
+    public static final DeferredBlock<ResinBlock> RESIN_BLOCK = REGISTER.block("resin_block", ResinBlock::new)
+        .properties(() -> Blocks.SLIME_BLOCK)
+        .register();
 
-    public static final DeferredBlock<Block> RESIN_BLOCK = DR.register("resin_block", () -> new Block(Block.Properties.of()));
+    public static final DeferredBlock<MagnetBlock> MAGNET_BLOCK = REGISTER.block("magnet_block", MagnetBlock::new).register();
 
-    public static final DeferredBlock<Block> MAGNET_BLOCK = DR.register("resin_block", () -> new MagnetBlock(Block.Properties.of()));
+    public static final DeferredBlock<HollowMagnetBlock> HOLLOW_MAGNET_BLOCK = REGISTER.block("hollow_magnet_block", HollowMagnetBlock::new)
+        .register();
 
-    public static final DeferredBlock<Block> HOLLOW_MAGNET_BLOCK = DR.register(
-        "hollow_magnet_block",
-        () -> new HollowMagnetBlock(Block.Properties.of())
-    );
-
-    public static final DeferredBlock<Block> FERRITE_CORE_MAGNET_BLOCK = DR.register(
+    public static final DeferredBlock<FerriteCoreMagnetBlock> FERRITE_CORE_MAGNET_BLOCK = REGISTER.block(
         "ferrite_core_magnet_block",
-        () -> new FerriteCoreMagnetBlock(Block.Properties.of())
-    );
+        FerriteCoreMagnetBlock::new
+    ).register();
+
+    public static void init() {
+    }
 }
