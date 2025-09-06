@@ -7,7 +7,10 @@
     "AnvilBlockMixin",
     "FallingBlockEntityMixin",
     "ItemEntityMixin",
-    "LightningBoltMixin"
+    "LightningBoltMixin",
+    "accessor.ShapedRecipeAccessor",
+    "accessor.ShapelessRecipeAccessor",
+    "accessor.SingleItemRecipeAccessor"
   ],
   "client": [
   ],
