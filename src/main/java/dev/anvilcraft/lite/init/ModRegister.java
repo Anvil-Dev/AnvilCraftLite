@@ -54,6 +54,7 @@ public class ModRegister {
         ResourceKey<Block> key = Objects.requireNonNull(block.getKey());
         String name = key.location().getPath();
         ItemRegister<T> register = new ItemRegister<>(name, properties -> factory.apply(block.value(), properties), this);
+        register.properties(Item.Properties::useBlockDescriptionPrefix);
         return register.register();
     }
 

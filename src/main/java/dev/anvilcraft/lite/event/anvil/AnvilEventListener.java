@@ -7,8 +7,12 @@ import dev.anvilcraft.lite.api.event.AnvilEvent;
 import dev.anvilcraft.lite.init.reicpe.ModRecipeTriggers;
 import dev.anvilcraft.lite.recipe.anvil.outcome.DamageAnvil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -16,6 +20,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -23,6 +29,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Optional;
 
 @EventBusSubscriber(modid = AnvilCraftLite.MOD_ID)
 public class AnvilEventListener {
@@ -114,6 +121,41 @@ public class AnvilEventListener {
                 0.0d
             );
             level.addFreshEntity(entity);
+        }
+    }
+
+
+    /**
+     * 侦听铁砧伤害实体事件
+     *
+     * @param event 铁砧伤害实体事件
+     */
+    @SubscribeEvent
+    @SuppressWarnings("resource")
+    public static void onAnvilHurtEntity(AnvilEvent.HurtEntity event) {
+        Entity hurtedEntity = event.getHurtedEntity();
+        if (!(hurtedEntity instanceof LivingEntity entity)) return;
+        if (!(hurtedEntity.level() instanceof ServerLevel serverLevel)) return;
+        float damage = event.getDamage();
+        float maxHealth = entity.getMaxHealth();
+        double rate = damage / maxHealth;
+        if (rate < 0.4) return;
+        FallingBlockEntity eventEntity = event.getEntity();
+        DamageSource source = entity.level().damageSources().anvil(eventEntity);
+        Vec3 pos = entity.position();
+        LootParams.Builder builder = new LootParams.Builder(serverLevel)
+            .withParameter(LootContextParams.DAMAGE_SOURCE, source)
+            .withOptionalParameter(LootContextParams.DIRECT_ATTACKING_ENTITY, eventEntity)
+            .withOptionalParameter(LootContextParams.ATTACKING_ENTITY, eventEntity)
+            .withParameter(LootContextParams.THIS_ENTITY, entity)
+            .withParameter(LootContextParams.ORIGIN, pos);
+        LootParams lootParams = builder.create(LootContextParamSets.ENTITY);
+        Optional<ResourceKey<LootTable>> resourceKey = entity.getLootTable();
+        if (resourceKey.isPresent()) {
+            LootTable lootTable = serverLevel.getServer().reloadableRegistries().getLootTable(resourceKey.get());
+            dropItems(lootTable.getRandomItems(lootParams), serverLevel, pos);
+            if (rate >= 0.6) dropItems(lootTable.getRandomItems(lootParams), serverLevel, pos);
+            if (rate >= 0.8) dropItems(lootTable.getRandomItems(lootParams), serverLevel, pos);
         }
     }
 }

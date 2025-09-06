@@ -67,7 +67,7 @@ public class MagnetBlock extends Block {
         @Nullable Orientation orientation,
         boolean movedByPiston
     ) {
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             return;
         }
         this.attract(state, level, pos);

@@ -5,6 +5,7 @@ import dev.anvilcraft.lite.api.event.AnvilEvent;
 import dev.anvilcraft.lite.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.FallingBlockEntity;
@@ -19,6 +20,10 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.List;
+import java.util.function.Predicate;
 
 @SuppressWarnings("resource")
 @Mixin(FallingBlockEntity.class)
@@ -83,5 +88,36 @@ abstract class FallingBlockEntityMixin extends Entity {
         if (this.level().isClientSide()) return;
         if (this.onGround()) return;
         this.anvilcraftLite$fallDistance = this.fallDistance;
+    }
+
+
+    @SuppressWarnings("UnreachableCode")
+    @Inject(
+        method = "causeFallDamage",
+        at =
+        @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/level/Level;"
+                     + "getEntities("
+                     + "Lnet/minecraft/world/entity/Entity;"
+                     + "Lnet/minecraft/world/phys/AABB;"
+                     + "Ljava/util/function/Predicate;"
+                     + ")Ljava/util/List;"
+        )
+    )
+    private void anvilHurtEntity(
+        double p_397518_,
+        float p_149643_,
+        DamageSource p_149645_,
+        CallbackInfoReturnable<Boolean> cir,
+        @Local Predicate<Entity> predicate,
+        @Local(ordinal = 1) float f
+    ) {
+        FallingBlockEntity anvil = Util.cast(this);
+        Level level = this.level();
+        List<Entity> entities = level.getEntities(this, this.getBoundingBox(), predicate);
+        for (Entity entity : entities) {
+            NeoForge.EVENT_BUS.post(new AnvilEvent.HurtEntity(anvil, this.getOnPos(), level, entity, f));
+        }
     }
 }
