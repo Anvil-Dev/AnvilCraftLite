@@ -5,8 +5,15 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -31,5 +38,20 @@ public class FerriteCoreMagnetBlock extends MagnetBlock {
         if (randomSource.nextInt(7) <= times) {
             serverLevel.setBlockAndUpdate(blockPos, ModBlocks.MAGNET_BLOCK.get().defaultBlockState());
         }
+    }
+
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+        if (!level.isClientSide) {
+            if (state.is(ModBlocks.FERRITE_CORE_MAGNET_BLOCK)) {
+                if (player.isShiftKeyDown()) {
+                    player.addItem(Items.IRON_INGOT.getDefaultInstance());
+                    level.setBlockAndUpdate(pos, ModBlocks.HOLLOW_MAGNET_BLOCK.get().defaultBlockState());
+                    level.playSound(null, pos, SoundEvents.ITEM_FRAME_REMOVE_ITEM, SoundSource.BLOCKS, 1.0f, 1.0f);
+                    return InteractionResult.SUCCESS;
+                }
+            }
+        }
+        return super.useWithoutItem(state, level, pos, player, hitResult);
     }
 }

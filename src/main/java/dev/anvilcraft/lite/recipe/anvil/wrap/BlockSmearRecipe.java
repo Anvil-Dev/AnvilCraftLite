@@ -7,6 +7,7 @@ import dev.anvilcraft.lib.recipe.component.ChanceBlockState;
 import dev.anvilcraft.lite.init.reicpe.ModRecipeTypes;
 import dev.anvilcraft.lite.recipe.anvil.builder.AbstractRecipeBuilder;
 import dev.anvilcraft.lite.recipe.anvil.util.WrapUtils;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -34,17 +35,11 @@ public class BlockSmearRecipe extends AbstractProcessRecipe<BlockSmearRecipe> {
      * @param inputs 输入方块列表
      * @param result 结果方块
      */
-    public BlockSmearRecipe(
-        List<BlockStatePredicate> inputs,
-        ChanceBlockState result
-    ) {
-        super(
-            new Property()
-                .setBlockInputOffset(new Vec3i(0, -1, 0))
-                .setInputBlocks(inputs)
-                .setBlockOutputOffset(new Vec3i(0, -2, 0))
-                .setResultBlocks(result)
-        );
+    public BlockSmearRecipe(List<BlockStatePredicate> inputs, ChanceBlockState result) {
+        super(new Property().setBlockInputOffset(new Vec3i(0, -1, 0))
+            .setInputBlocks(inputs)
+            .setBlockOutputOffset(new Vec3i(0, -2, 0))
+            .setResultBlocks(result));
     }
 
     @Override
@@ -62,8 +57,8 @@ public class BlockSmearRecipe extends AbstractProcessRecipe<BlockSmearRecipe> {
      *
      * @return 构建器实例
      */
-    public static Builder builder() {
-        return new Builder();
+    public static Builder builder(HolderGetter<Block> getter) {
+        return new Builder(getter);
     }
 
     /**
@@ -74,13 +69,8 @@ public class BlockSmearRecipe extends AbstractProcessRecipe<BlockSmearRecipe> {
          * 编解码器
          */
         private static final MapCodec<BlockSmearRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            BlockStatePredicate.CODEC
-                .listOf()
-                .fieldOf("inputs")
-                .forGetter(BlockSmearRecipe::getInputBlocks),
-            ChanceBlockState.CODEC.codec()
-                .fieldOf("result")
-                .forGetter(BlockSmearRecipe::getFirstResultBlock)
+            BlockStatePredicate.CODEC.listOf().fieldOf("inputs").forGetter(BlockSmearRecipe::getInputBlocks),
+            ChanceBlockState.CODEC.codec().fieldOf("result").forGetter(BlockSmearRecipe::getFirstResultBlock)
         ).apply(instance, BlockSmearRecipe::new));
 
         /**
@@ -109,6 +99,7 @@ public class BlockSmearRecipe extends AbstractProcessRecipe<BlockSmearRecipe> {
      * 方块涂抹配方构建器
      */
     public static class Builder extends AbstractRecipeBuilder<BlockSmearRecipe> {
+        private final HolderGetter<Block> getter;
         /**
          * 输入方块列表
          */
@@ -118,6 +109,10 @@ public class BlockSmearRecipe extends AbstractProcessRecipe<BlockSmearRecipe> {
          * 结果方块
          */
         private ChanceBlockState result = null;
+
+        public Builder(HolderGetter<Block> getter) {
+            this.getter = getter;
+        }
 
         /**
          * 添加输入方块
@@ -137,7 +132,7 @@ public class BlockSmearRecipe extends AbstractProcessRecipe<BlockSmearRecipe> {
          * @return 构建器实例
          */
         public Builder input(TagKey<Block> input) {
-            this.inputs.add(BlockStatePredicate.builder().of(input).build());
+            this.inputs.add(BlockStatePredicate.builder(this.getter).of(input).build());
             return this;
         }
 
@@ -148,7 +143,7 @@ public class BlockSmearRecipe extends AbstractProcessRecipe<BlockSmearRecipe> {
          * @return 构建器实例
          */
         public Builder input(Block input) {
-            this.inputs.add(BlockStatePredicate.builder().of(input).build());
+            this.inputs.add(BlockStatePredicate.builder(this.getter).of(input).build());
             return this;
         }
 

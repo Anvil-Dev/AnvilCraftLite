@@ -7,6 +7,8 @@ import dev.anvilcraft.lite.init.item.ModItems;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
@@ -131,6 +133,7 @@ public class MagnetBlock extends Block {
                 if (player.isShiftKeyDown()) {
                     player.addItem(ModItems.MAGNET_INGOT.get().getDefaultInstance());
                     level.setBlockAndUpdate(pos, ModBlocks.HOLLOW_MAGNET_BLOCK.get().defaultBlockState());
+                    level.playSound(null, pos, SoundEvents.ITEM_FRAME_REMOVE_ITEM, SoundSource.BLOCKS, 1.0f, 1.0f);
                     return InteractionResult.SUCCESS;
                 }
             }
