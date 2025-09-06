@@ -1,6 +1,5 @@
 package dev.anvilcraft.lite.integration.jei.category.anvil;
 
-import dev.anvilcraft.lite.init.block.ModBlocks;
 import dev.anvilcraft.lite.integration.jei.AnvilCraftJeiPlugin;
 import dev.anvilcraft.lite.integration.jei.drawable.DrawableBlockStateIcon;
 import dev.anvilcraft.lite.integration.jei.recipe.MeshRecipeGroup;
@@ -15,8 +14,8 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.types.IRecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.recipe.types.IRecipeType;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.MethodsReturnNonnullByDefault;

@@ -13,6 +13,7 @@ import dev.anvilcraft.lite.integration.jei.category.anvil.ItemInjectCategory;
 import dev.anvilcraft.lite.integration.jei.category.anvil.MeshRecipeCategory;
 import dev.anvilcraft.lite.integration.jei.category.anvil.SqueezingCategory;
 import dev.anvilcraft.lite.integration.jei.category.anvil.StampingCategory;
+import dev.anvilcraft.lite.integration.jei.category.anvil.SuperHeatingCategory;
 import dev.anvilcraft.lite.integration.jei.category.anvil.UnpackCategory;
 import dev.anvilcraft.lite.integration.jei.recipe.MeshRecipeGroup;
 import dev.anvilcraft.lite.recipe.anvil.wrap.BlockCompressRecipe;
@@ -26,6 +27,7 @@ import dev.anvilcraft.lite.recipe.anvil.wrap.ItemCrushRecipe;
 import dev.anvilcraft.lite.recipe.anvil.wrap.ItemInjectRecipe;
 import dev.anvilcraft.lite.recipe.anvil.wrap.SqueezingRecipe;
 import dev.anvilcraft.lite.recipe.anvil.wrap.StampingRecipe;
+import dev.anvilcraft.lite.recipe.anvil.wrap.SuperHeatingRecipe;
 import dev.anvilcraft.lite.recipe.anvil.wrap.UnpackRecipe;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -68,6 +70,8 @@ public class AnvilCraftJeiPlugin implements IModPlugin {
     public static final IRecipeType<RecipeHolder<CookingRecipe>> COOKING = createRecipeHolderType("cooking");
     public static final IRecipeType<RecipeHolder<BoilingRecipe>> BOILING = createRecipeHolderType("boiling");
     public static final IRecipeType<RecipeHolder<StampingRecipe>> STAMPING = createRecipeHolderType("stamping");
+    public static final IRecipeType<RecipeHolder<SuperHeatingRecipe>> SUPER_HEATING =
+        createRecipeHolderType("super_heating");
     public static final IRecipeType<RecipeHolder<SqueezingRecipe>> SQUEEZING = createRecipeHolderType("squeezing");
     public static final IRecipeType<RecipeHolder<BulgingRecipe>> BULGING = createRecipeHolderType("bulging");
 
@@ -90,6 +94,7 @@ public class AnvilCraftJeiPlugin implements IModPlugin {
         CookingCategory.registerRecipes(registration);
         BoilingCategory.registerRecipes(registration);
         StampingCategory.registerRecipes(registration);
+        SuperHeatingCategory.registerRecipes(registration);
         BulgingCategory.registerRecipes(registration);
     }
 
@@ -107,6 +112,7 @@ public class AnvilCraftJeiPlugin implements IModPlugin {
         CookingCategory.registerCraftingStations(registration);
         BoilingCategory.registerCraftingStations(registration);
         StampingCategory.registerCraftingStations(registration);
+        SuperHeatingCategory.registerCraftingStations(registration);
         BulgingCategory.registerCraftingStations(registration);
     }
 
@@ -127,6 +133,7 @@ public class AnvilCraftJeiPlugin implements IModPlugin {
         registration.addRecipeCategories(new CookingCategory(guiHelper));
         registration.addRecipeCategories(new BoilingCategory(guiHelper));
         registration.addRecipeCategories(new StampingCategory(guiHelper));
+        registration.addRecipeCategories(new SuperHeatingCategory(guiHelper));
         registration.addRecipeCategories(new BulgingCategory(guiHelper));
     }
 

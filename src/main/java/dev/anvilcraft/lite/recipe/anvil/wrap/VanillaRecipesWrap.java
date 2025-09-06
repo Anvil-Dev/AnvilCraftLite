@@ -2,11 +2,11 @@ package dev.anvilcraft.lite.recipe.anvil.wrap;
 
 import dev.anvilcraft.lib.recipe.InWorldRecipe;
 import dev.anvilcraft.lite.AnvilCraftLite;
+import dev.anvilcraft.lite.init.item.ModItemTags;
 import dev.anvilcraft.lite.mixin.accessor.ShapedRecipeAccessor;
 import dev.anvilcraft.lite.mixin.accessor.ShapelessRecipeAccessor;
 import dev.anvilcraft.lite.mixin.accessor.SingleItemRecipeAccessor;
 import dev.anvilcraft.lite.util.RecipeUtil;
-import dev.anvilcraft.lite.init.item.ModItemTags;
 import dev.anvilcraft.lite.util.Util;
 import lombok.extern.slf4j.Slf4j;
 import net.minecraft.core.registries.BuiltInRegistries;

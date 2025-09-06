@@ -82,7 +82,7 @@ public class SuperHeatingRecipe extends AbstractProcessRecipe<SuperHeatingRecipe
     public static class Builder extends SimpleAbstractBuilder<SuperHeatingRecipe, Builder> {
         @Override
         public String getType() {
-            return "item_compress";
+            return "super_heating";
         }
 
         @Override

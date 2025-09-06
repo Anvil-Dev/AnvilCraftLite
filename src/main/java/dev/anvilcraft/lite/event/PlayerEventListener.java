@@ -1,7 +1,6 @@
 package dev.anvilcraft.lite.event;
 
 import dev.anvilcraft.lite.AnvilCraftLite;
-import dev.anvilcraft.lite.init.block.ModBlocks;
 import dev.anvilcraft.lite.init.item.ModItems;
 import dev.anvilcraft.lite.item.ResinBlockItem;
 import net.minecraft.world.InteractionHand;

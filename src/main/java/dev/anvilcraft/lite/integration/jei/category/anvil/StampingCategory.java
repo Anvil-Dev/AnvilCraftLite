@@ -1,6 +1,5 @@
 package dev.anvilcraft.lite.integration.jei.category.anvil;
 
-import dev.anvilcraft.lite.init.block.ModBlocks;
 import dev.anvilcraft.lite.init.reicpe.ModRecipeTypes;
 import dev.anvilcraft.lite.integration.jei.AnvilCraftJeiPlugin;
 import dev.anvilcraft.lite.integration.jei.drawable.DrawableBlockStateIcon;

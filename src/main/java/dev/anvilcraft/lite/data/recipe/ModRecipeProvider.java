@@ -26,6 +26,7 @@ public class ModRecipeProvider extends RecipeProvider {
         BulgingRecipeLoader.init(this.output);
         ItemInjectRecipeLoader.init(this.output);
         SqueezingRecipeLoader.init(this.output);
+        SuperHeatingRecipeLoader.init(this.output);
     }
 
     public static class Runner extends RecipeProvider.Runner {
