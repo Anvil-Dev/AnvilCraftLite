@@ -1,0 +1,5 @@
+{
+  "net/minecraft/world/entity/Entity": [
+    "dev/anvilcraft/lite/api/extension/IItemEntityExtension"
+  ]
+}

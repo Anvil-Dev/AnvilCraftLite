@@ -2,6 +2,7 @@ package dev.anvilcraft.lite.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import dev.anvilcraft.lite.api.extension.IItemEntityExtension;
 import dev.anvilcraft.lite.init.block.ModBlockTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -9,10 +10,14 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(ItemEntity.class)
-abstract class ItemEntityMixin extends Entity {
+abstract class ItemEntityMixin extends Entity implements IItemEntityExtension {
+    @Unique
+    private boolean anvilcraftLite$isAdsorbable = true;
+
     public ItemEntityMixin(EntityType<?> entityType, Level level) {
         super(entityType, level);
     }
@@ -30,5 +35,15 @@ abstract class ItemEntityMixin extends Entity {
         double dy = 1.0;
         if (this.level().getBlockState(this.blockPosition()).is(ModBlockTags.MAGNET)) dy *= 0.2;
         return new Vec3(vec3.x, vec3.y * dy, vec3.z);
+    }
+
+    @Override
+    public void anvilcraftLite$setIsAdsorbable(boolean value) {
+        this.anvilcraftLite$isAdsorbable = value;
+    }
+
+    @Override
+    public boolean anvilcraftLite$isAdsorbable() {
+        return this.anvilcraftLite$isAdsorbable;
     }
 }

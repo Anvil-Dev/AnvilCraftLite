@@ -1,6 +1,7 @@
 package dev.anvilcraft.lite.data;
 
 import dev.anvilcraft.lite.AnvilCraftLite;
+import dev.anvilcraft.lite.data.loot.ModLootTableProvider;
 import dev.anvilcraft.lite.data.lang.LangHandler;
 import dev.anvilcraft.lite.data.recipe.ModRecipeProvider;
 import dev.anvilcraft.lite.data.tag.ModItemTagsProvider;
@@ -23,5 +24,6 @@ public class AnvilCraftLiteDatagen {
         generator.addProvider(true, new ModRecipeProvider.Runner(packOutput, lookupProvider));
         generator.addProvider(true, new ModItemTagsProvider(packOutput, lookupProvider));
         generator.addProvider(true, new LangHandler(packOutput));
+        generator.addProvider(true, ModLootTableProvider.create(packOutput, lookupProvider));
     }
 }

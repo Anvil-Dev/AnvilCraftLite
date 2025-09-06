@@ -6,7 +6,9 @@ import dev.anvilcraft.lib.recipe.component.ItemIngredientPredicate;
 import dev.anvilcraft.lite.init.reicpe.ModRecipeTypes;
 import dev.anvilcraft.lite.recipe.component.HasCauldronSimple;
 import lombok.Getter;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Vec3i;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Blocks;
@@ -33,6 +35,7 @@ public class SuperHeatingRecipe extends AbstractProcessRecipe<SuperHeatingRecipe
         List<ItemIngredientPredicate> itemIngredients,
         List<ChanceItemStack> results
     ) {
+        //noinspection DataFlowIssue
         super(
             new Property()
                 .setItemInputOffset(new Vec3(0.0, -0.375, 0.0))
@@ -43,7 +46,7 @@ public class SuperHeatingRecipe extends AbstractProcessRecipe<SuperHeatingRecipe
                 .setCauldronOffset(new Vec3i(0, -1, 0))
                 .setHasCauldron(HasCauldronSimple.empty().build())
                 .setBlockInputOffset(new Vec3i(0, -2, 0))
-                .setInputBlocks(BlockStatePredicate.builder().of(Blocks.LAVA_CAULDRON).build())
+                .setInputBlocks(BlockStatePredicate.builder(null).of(Blocks.LAVA_CAULDRON).build())
         );
     }
 
@@ -62,8 +65,8 @@ public class SuperHeatingRecipe extends AbstractProcessRecipe<SuperHeatingRecipe
      *
      * @return 构建器实例
      */
-    public static Builder builder() {
-        return new Builder();
+    public static Builder builder(HolderGetter<Item> getter) {
+        return new Builder(getter);
     }
 
     /**
@@ -80,6 +83,10 @@ public class SuperHeatingRecipe extends AbstractProcessRecipe<SuperHeatingRecipe
      * 物品压缩配方构建器
      */
     public static class Builder extends SimpleAbstractBuilder<SuperHeatingRecipe, Builder> {
+        protected Builder(HolderGetter<Item> getter) {
+            super(getter);
+        }
+
         @Override
         public String getType() {
             return "super_heating";
