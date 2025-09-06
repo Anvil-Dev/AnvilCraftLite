@@ -9,12 +9,14 @@ import dev.anvilcraft.lite.recipe.anvil.predicate.block.HasCauldron;
 import dev.anvilcraft.lite.recipe.anvil.util.WrapUtils;
 import dev.anvilcraft.lite.recipe.component.HasCauldronSimple;
 import lombok.Getter;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
@@ -38,21 +40,14 @@ public class BulgingRecipe extends AbstractProcessRecipe<BulgingRecipe> {
      * @param results         结果物品列表
      * @param hasCauldron     炼药锅条件
      */
-    public BulgingRecipe(
-        List<ItemIngredientPredicate> itemIngredients,
-        List<ChanceItemStack> results,
-        HasCauldronSimple hasCauldron
-    ) {
-        super(
-            new Property()
-                .setItemInputOffset(new Vec3(0.0, -0.375, 0.0))
-                .setItemInputRange(new Vec3(0.75, 0.75, 0.75))
-                .setInputItems(itemIngredients)
-                .setItemOutputOffset(new Vec3(0.0, -0.75, 0.0))
-                .setResultItems(results)
-                .setCauldronOffset(new Vec3i(0, -1, 0))
-                .setHasCauldron(hasCauldron)
-        );
+    public BulgingRecipe(List<ItemIngredientPredicate> itemIngredients, List<ChanceItemStack> results, HasCauldronSimple hasCauldron) {
+        super(new Property().setItemInputOffset(new Vec3(0.0, -0.375, 0.0))
+            .setItemInputRange(new Vec3(0.75, 0.75, 0.75))
+            .setInputItems(itemIngredients)
+            .setItemOutputOffset(new Vec3(0.0, -0.75, 0.0))
+            .setResultItems(results)
+            .setCauldronOffset(new Vec3i(0, -1, 0))
+            .setHasCauldron(hasCauldron));
     }
 
     @Override
@@ -70,8 +65,8 @@ public class BulgingRecipe extends AbstractProcessRecipe<BulgingRecipe> {
      *
      * @return 构建器实例
      */
-    public static Builder builder() {
-        return new Builder();
+    public static Builder builder(HolderGetter<Item> getter) {
+        return new Builder(getter);
     }
 
     /**
@@ -111,14 +106,9 @@ public class BulgingRecipe extends AbstractProcessRecipe<BulgingRecipe> {
          * 编解码器
          */
         public static final MapCodec<BulgingRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            ItemIngredientPredicate.CODEC.codec().listOf()
-                .fieldOf("ingredients")
-                .forGetter(BulgingRecipe::getInputItems),
-            ChanceItemStack.CODEC.listOf()
-                .fieldOf("results")
-                .forGetter(BulgingRecipe::getResultItems),
-            HasCauldronSimple.CODEC
-                .forGetter(BulgingRecipe::getHasCauldron)
+            ItemIngredientPredicate.CODEC.codec().listOf().fieldOf("ingredients").forGetter(BulgingRecipe::getInputItems),
+            ChanceItemStack.CODEC.listOf().fieldOf("results").forGetter(BulgingRecipe::getResultItems),
+            HasCauldronSimple.CODEC.forGetter(BulgingRecipe::getHasCauldron)
         ).apply(instance, BulgingRecipe::new));
 
         /**
@@ -153,6 +143,10 @@ public class BulgingRecipe extends AbstractProcessRecipe<BulgingRecipe> {
          * 炼药锅条件构建器
          */
         private final HasCauldronSimple.Builder hasCauldron = HasCauldronSimple.empty();
+
+        protected Builder(HolderGetter<Item> getter) {
+            super(getter);
+        }
 
         /**
          * 设置炼药锅流体

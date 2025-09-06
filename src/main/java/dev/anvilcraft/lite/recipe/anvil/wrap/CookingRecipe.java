@@ -6,7 +6,9 @@ import dev.anvilcraft.lib.recipe.component.ItemIngredientPredicate;
 import dev.anvilcraft.lite.init.reicpe.ModRecipeTypes;
 import dev.anvilcraft.lite.recipe.component.HasCauldronSimple;
 import lombok.Getter;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Vec3i;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Blocks;
@@ -29,27 +31,17 @@ public class CookingRecipe extends AbstractProcessRecipe<CookingRecipe> {
      * @param itemIngredients 物品原料列表
      * @param results         结果物品列表
      */
-    public CookingRecipe(
-        List<ItemIngredientPredicate> itemIngredients,
-        List<ChanceItemStack> results
-    ) {
-        super(
-            new Property()
-                .setItemInputOffset(new Vec3(0.0, -0.375, 0.0))
-                .setItemInputRange(new Vec3(0.75, 0.75, 0.75))
-                .setInputItems(itemIngredients)
-                .setItemOutputOffset(new Vec3(0.0, -0.75, 0.0))
-                .setResultItems(results)
-                .setCauldronOffset(new Vec3i(0, -1, 0))
-                .setHasCauldron(HasCauldronSimple.empty().build())
-                .setBlockInputOffset(new Vec3i(0, -2, 0))
-                .setInputBlocks(
-                    BlockStatePredicate.builder()
-                        .of(Blocks.CAMPFIRE)
-                        .with(CampfireBlock.LIT, true)
-                        .build()
-                )
-        );
+    public CookingRecipe(List<ItemIngredientPredicate> itemIngredients, List<ChanceItemStack> results) {
+        //noinspection DataFlowIssue
+        super(new Property().setItemInputOffset(new Vec3(0.0, -0.375, 0.0))
+            .setItemInputRange(new Vec3(0.75, 0.75, 0.75))
+            .setInputItems(itemIngredients)
+            .setItemOutputOffset(new Vec3(0.0, -0.75, 0.0))
+            .setResultItems(results)
+            .setCauldronOffset(new Vec3i(0, -1, 0))
+            .setHasCauldron(HasCauldronSimple.empty().build())
+            .setBlockInputOffset(new Vec3i(0, -2, 0))
+            .setInputBlocks(BlockStatePredicate.builder(null).of(Blocks.CAMPFIRE).with(CampfireBlock.LIT, true).build()));
     }
 
     @Override
@@ -67,8 +59,8 @@ public class CookingRecipe extends AbstractProcessRecipe<CookingRecipe> {
      *
      * @return 构建器实例
      */
-    public static Builder builder() {
-        return new Builder();
+    public static Builder builder(HolderGetter<Item> getter) {
+        return new Builder(getter);
     }
 
     /**
@@ -85,6 +77,10 @@ public class CookingRecipe extends AbstractProcessRecipe<CookingRecipe> {
      * 烹饪配方构建器
      */
     public static class Builder extends SimpleAbstractBuilder<CookingRecipe, Builder> {
+        protected Builder(HolderGetter<Item> getter) {
+            super(getter);
+        }
+
         @Override
         public String getType() {
             return "cooking";

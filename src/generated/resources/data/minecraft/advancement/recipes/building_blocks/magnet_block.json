@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_magnet_ingot": {
+      "conditions": {
+        "items": [
+          {
+            "items": "anvilcraft_lite:magnet_ingot"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:magnet_block"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_magnet_ingot"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:magnet_block"
+    ]
+  }
+}

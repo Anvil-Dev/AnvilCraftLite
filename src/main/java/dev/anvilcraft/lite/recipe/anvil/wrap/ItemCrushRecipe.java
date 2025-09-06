@@ -5,7 +5,9 @@ import dev.anvilcraft.lib.recipe.component.ChanceItemStack;
 import dev.anvilcraft.lib.recipe.component.ItemIngredientPredicate;
 import dev.anvilcraft.lite.init.reicpe.ModRecipeTypes;
 import lombok.Getter;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Vec3i;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Blocks;
@@ -33,6 +35,7 @@ public class ItemCrushRecipe extends AbstractProcessRecipe<ItemCrushRecipe> {
         List<ItemIngredientPredicate> itemIngredients,
         List<ChanceItemStack> results
     ) {
+        //noinspection DataFlowIssue
         super(
             new Property()
                 .setItemInputOffset(new Vec3(0.0, 0.125, 0.0))
@@ -42,7 +45,7 @@ public class ItemCrushRecipe extends AbstractProcessRecipe<ItemCrushRecipe> {
                 .setResultItems(results)
                 .setBlockInputOffset(new Vec3i(0, -1, 0))
                 .setInputBlocks(
-                    BlockStatePredicate.builder()
+                    BlockStatePredicate.builder(null)
                         .of(Blocks.IRON_TRAPDOOR)
                         .with(TrapDoorBlock.HALF, Half.TOP)
                         .with(TrapDoorBlock.OPEN, false)
@@ -66,8 +69,8 @@ public class ItemCrushRecipe extends AbstractProcessRecipe<ItemCrushRecipe> {
      *
      * @return 构建器实例
      */
-    public static Builder builder() {
-        return new Builder();
+    public static Builder builder(HolderGetter<Item> getter) {
+        return new Builder(getter);
     }
 
     /**
@@ -84,6 +87,10 @@ public class ItemCrushRecipe extends AbstractProcessRecipe<ItemCrushRecipe> {
      * 物品粉碎配方构建器
      */
     public static class Builder extends SimpleAbstractBuilder<ItemCrushRecipe, Builder> {
+        protected Builder(HolderGetter<Item> getter) {
+            super(getter);
+        }
+
         @Override
         public String getType() {
             return "item_crush";

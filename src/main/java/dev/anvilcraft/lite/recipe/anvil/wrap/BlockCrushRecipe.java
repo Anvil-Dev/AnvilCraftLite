@@ -7,6 +7,7 @@ import dev.anvilcraft.lib.recipe.component.ChanceBlockState;
 import dev.anvilcraft.lite.init.reicpe.ModRecipeTypes;
 import dev.anvilcraft.lite.recipe.anvil.builder.AbstractRecipeBuilder;
 import dev.anvilcraft.lite.recipe.anvil.util.WrapUtils;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -30,18 +31,12 @@ public class BlockCrushRecipe extends AbstractProcessRecipe<BlockCrushRecipe> {
      * @param input  输入方块谓词
      * @param result 结果方块
      */
-    public BlockCrushRecipe(
-        BlockStatePredicate input,
-        ChanceBlockState result
-    ) {
-        super(
-            new AbstractProcessRecipe.Property()
-                .setBlockInputOffset(new Vec3i(0, -1, 0))
-                .setConsumeInputBlocks(true)
-                .setInputBlocks(input)
-                .setBlockOutputOffset(new Vec3i(0, -1, 0))
-                .setResultBlocks(result)
-        );
+    public BlockCrushRecipe(BlockStatePredicate input, ChanceBlockState result) {
+        super(new AbstractProcessRecipe.Property().setBlockInputOffset(new Vec3i(0, -1, 0))
+            .setConsumeInputBlocks(true)
+            .setInputBlocks(input)
+            .setBlockOutputOffset(new Vec3i(0, -1, 0))
+            .setResultBlocks(result));
     }
 
     @Override
@@ -59,8 +54,8 @@ public class BlockCrushRecipe extends AbstractProcessRecipe<BlockCrushRecipe> {
      *
      * @return 构建器实例
      */
-    public static Builder builder() {
-        return new Builder();
+    public static Builder builder(HolderGetter<Block> getter) {
+        return new Builder(getter);
     }
 
     /**
@@ -71,12 +66,8 @@ public class BlockCrushRecipe extends AbstractProcessRecipe<BlockCrushRecipe> {
          * 编解码器
          */
         private static final MapCodec<BlockCrushRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            BlockStatePredicate.CODEC
-                .fieldOf("input")
-                .forGetter(BlockCrushRecipe::getFirstInputBlock),
-            ChanceBlockState.CODEC.codec()
-                .fieldOf("result")
-                .forGetter(BlockCrushRecipe::getFirstResultBlock)
+            BlockStatePredicate.CODEC.fieldOf("input").forGetter(BlockCrushRecipe::getFirstInputBlock),
+            ChanceBlockState.CODEC.codec().fieldOf("result").forGetter(BlockCrushRecipe::getFirstResultBlock)
         ).apply(instance, BlockCrushRecipe::new));
 
         /**
@@ -105,6 +96,7 @@ public class BlockCrushRecipe extends AbstractProcessRecipe<BlockCrushRecipe> {
      * 方块粉碎配方构建器
      */
     public static class Builder extends AbstractRecipeBuilder<BlockCrushRecipe> {
+        private final HolderGetter<Block> getter;
         /**
          * 输入方块谓词
          */
@@ -114,6 +106,10 @@ public class BlockCrushRecipe extends AbstractProcessRecipe<BlockCrushRecipe> {
          * 结果方块
          */
         private ChanceBlockState result = null;
+
+        public Builder(HolderGetter<Block> getter) {
+            this.getter = getter;
+        }
 
         /**
          * 设置输入方块
@@ -133,7 +129,7 @@ public class BlockCrushRecipe extends AbstractProcessRecipe<BlockCrushRecipe> {
          * @return 构建器实例
          */
         public Builder input(TagKey<Block> input) {
-            this.input = BlockStatePredicate.builder().of(input).build();
+            this.input = BlockStatePredicate.builder(this.getter).of(input).build();
             return this;
         }
 
@@ -144,7 +140,7 @@ public class BlockCrushRecipe extends AbstractProcessRecipe<BlockCrushRecipe> {
          * @return 构建器实例
          */
         public Builder input(Block input) {
-            this.input = (BlockStatePredicate.builder().of(input).build());
+            this.input = (BlockStatePredicate.builder(this.getter).of(input).build());
             return this;
         }
 

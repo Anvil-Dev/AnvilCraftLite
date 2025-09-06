@@ -5,7 +5,9 @@ import dev.anvilcraft.lib.recipe.component.ItemIngredientPredicate;
 import dev.anvilcraft.lite.init.reicpe.ModRecipeTypes;
 import dev.anvilcraft.lite.recipe.component.HasCauldronSimple;
 import lombok.Getter;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Vec3i;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.phys.Vec3;
@@ -58,8 +60,8 @@ public class ItemCompressRecipe extends AbstractProcessRecipe<ItemCompressRecipe
      *
      * @return 构建器实例
      */
-    public static Builder builder() {
-        return new Builder();
+    public static Builder builder(HolderGetter<Item> getter) {
+        return new Builder(getter);
     }
 
     /**
@@ -76,6 +78,10 @@ public class ItemCompressRecipe extends AbstractProcessRecipe<ItemCompressRecipe
      * 物品压缩配方构建器
      */
     public static class Builder extends SimpleAbstractBuilder<ItemCompressRecipe, Builder> {
+        protected Builder(HolderGetter<Item> getter) {
+            super(getter);
+        }
+
         @Override
         public String getType() {
             return "item_compress";

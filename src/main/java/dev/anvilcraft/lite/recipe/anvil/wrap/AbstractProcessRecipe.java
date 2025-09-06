@@ -15,6 +15,7 @@ import dev.anvilcraft.lite.init.reicpe.ModRecipeTriggers;
 import dev.anvilcraft.lite.recipe.anvil.builder.AbstractRecipeBuilder;
 import dev.anvilcraft.lite.recipe.component.HasCauldronSimple;
 import lombok.Getter;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -108,9 +109,10 @@ public abstract class AbstractProcessRecipe<T extends InWorldRecipe> extends InW
      * @return 首个输入方块
      */
     public BlockStatePredicate getFirstInputBlock() {
+        //noinspection DataFlowIssue
         return Objects.requireNonNullElseGet(
             this.getInputBlocks().getFirst(),
-            () -> BlockStatePredicate.builder().of(Blocks.AIR).build()
+            () -> BlockStatePredicate.builder(null).of(Blocks.AIR).build()
         );
     }
 
@@ -204,6 +206,8 @@ public abstract class AbstractProcessRecipe<T extends InWorldRecipe> extends InW
         B extends AbstractBuilder<T, B>
         > extends AbstractRecipeBuilder<T> {
 
+        private final HolderGetter<Item> getter;
+
         /**
          * 物品原料列表
          */
@@ -213,6 +217,10 @@ public abstract class AbstractProcessRecipe<T extends InWorldRecipe> extends InW
          * 结果列表
          */
         protected final List<ChanceItemStack> results = new ArrayList<>();
+
+        protected AbstractBuilder(HolderGetter<Item> getter) {
+            this.getter = getter;
+        }
 
         /**
          * 获取构建器实例
@@ -240,7 +248,7 @@ public abstract class AbstractProcessRecipe<T extends InWorldRecipe> extends InW
          * @return 构建器实例
          */
         public B requires(TagKey<Item> ingredient, int count) {
-            this.itemIngredients.add(ItemIngredientPredicate.Builder.item().of(ingredient).withCount(count).build());
+            this.itemIngredients.add(ItemIngredientPredicate.Builder.item(this.getter).of(ingredient).withCount(count).build());
             return this.getThis();
         }
 
@@ -261,7 +269,7 @@ public abstract class AbstractProcessRecipe<T extends InWorldRecipe> extends InW
          * @return 构建器实例
          */
         public B requires(ItemStack ingredient) {
-            this.itemIngredients.add(ItemIngredientPredicate.Builder.item().of(ingredient).build());
+            this.itemIngredients.add(ItemIngredientPredicate.Builder.item(this.getter).of(ingredient).build());
             return this.getThis();
         }
 
@@ -273,7 +281,7 @@ public abstract class AbstractProcessRecipe<T extends InWorldRecipe> extends InW
          * @return 构建器实例
          */
         public B requires(ItemLike ingredient, int count) {
-            return this.requires(ItemIngredientPredicate.Builder.item().of(ingredient).withCount(count).build());
+            return this.requires(ItemIngredientPredicate.Builder.item(this.getter).of(ingredient).withCount(count).build());
         }
 
         /**
@@ -391,6 +399,10 @@ public abstract class AbstractProcessRecipe<T extends InWorldRecipe> extends InW
         T extends AbstractProcessRecipe<T>,
         B extends SimpleAbstractBuilder<T, B>
         > extends AbstractBuilder<T, B> {
+        protected SimpleAbstractBuilder(HolderGetter<Item> getter) {
+            super(getter);
+        }
+
         /**
          * 创建配方实例
          *

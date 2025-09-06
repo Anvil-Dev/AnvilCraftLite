@@ -5,27 +5,38 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiFunction;
 
 public class ModRecipeProvider extends RecipeProvider {
+    public final List<ModRecipeLoader> providers = new ArrayList<>();
+
     protected ModRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
         super(registries, output);
     }
 
     @Override
     protected void buildRecipes() {
-        BlockCrushRecipeLoader.init(this.output);
-        ItemCrushRecipeLoader.init(this.output);
-        UnpackRecipeLoader.init(this.output);
-        BlockCompressRecipeLoader.init(this.output);
-        ItemCompressRecipeLoader.init(this.output);
-        MeshRecipeLoader.init(this.output);
-        StampingRecipeLoader.init(this.output);
-        BlockSmearRecipeLoader.init(this.output);
-        CookingRecipeLoader.init(this.output);
-        BulgingRecipeLoader.init(this.output);
-        ItemInjectRecipeLoader.init(this.output);
-        SqueezingRecipeLoader.init(this.output);
+        this.addProvider(BlockCrushRecipeLoader::new);
+        this.addProvider(ItemCrushRecipeLoader::new);
+        this.addProvider(UnpackRecipeLoader::new);
+        this.addProvider(BlockCompressRecipeLoader::new);
+        this.addProvider(ItemCompressRecipeLoader::new);
+        this.addProvider(MeshRecipeLoader::new);
+        this.addProvider(CookingRecipeLoader::new);
+        this.addProvider(BulgingRecipeLoader::new);
+        this.addProvider(StampingRecipeLoader::new);
+        this.addProvider(BlockSmearRecipeLoader::new);
+        this.addProvider(ItemInjectRecipeLoader::new);
+        this.addProvider(SqueezingRecipeLoader::new);
+        this.addProvider(VanillaRecipeLoader::new);
+        providers.forEach(ModRecipeLoader::buildRecipes);
+    }
+
+    public <T extends ModRecipeLoader> void addProvider(BiFunction<HolderLookup.Provider, RecipeOutput, T> provider) {
+        this.providers.add(provider.apply(this.registries, this.output));
     }
 
     public static class Runner extends RecipeProvider.Runner {

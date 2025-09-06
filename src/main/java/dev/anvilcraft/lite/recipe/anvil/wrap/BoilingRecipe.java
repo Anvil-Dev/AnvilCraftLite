@@ -6,8 +6,10 @@ import dev.anvilcraft.lib.recipe.component.ItemIngredientPredicate;
 import dev.anvilcraft.lite.init.reicpe.ModRecipeTypes;
 import dev.anvilcraft.lite.recipe.component.HasCauldronSimple;
 import lombok.Getter;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Blocks;
@@ -34,6 +36,7 @@ public class BoilingRecipe extends AbstractProcessRecipe<BoilingRecipe> {
         List<ItemIngredientPredicate> itemIngredients,
         List<ChanceItemStack> results
     ) {
+        //noinspection DataFlowIssue
         super(
             new Property()
                 .setItemInputOffset(new Vec3(0.0, -0.375, 0.0))
@@ -49,7 +52,7 @@ public class BoilingRecipe extends AbstractProcessRecipe<BoilingRecipe> {
                 )
                 .setBlockInputOffset(new Vec3i(0, -2, 0))
                 .setInputBlocks(
-                    BlockStatePredicate.builder()
+                    BlockStatePredicate.builder(null)
                         .of(Blocks.CAMPFIRE)
                         .with(CampfireBlock.LIT, true)
                         .build()
@@ -72,8 +75,8 @@ public class BoilingRecipe extends AbstractProcessRecipe<BoilingRecipe> {
      *
      * @return 构建器实例
      */
-    public static Builder builder() {
-        return new Builder();
+    public static Builder builder(HolderGetter<Item> getter) {
+        return new Builder(getter);
     }
 
     /**
@@ -90,6 +93,10 @@ public class BoilingRecipe extends AbstractProcessRecipe<BoilingRecipe> {
      * 煮沸配方构建器
      */
     public static class Builder extends SimpleAbstractBuilder<BoilingRecipe, Builder> {
+        protected Builder(HolderGetter<Item> getter) {
+            super(getter);
+        }
+
         @Override
         public String getType() {
             return "boiling";

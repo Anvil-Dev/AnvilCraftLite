@@ -9,6 +9,7 @@ import dev.anvilcraft.lib.recipe.component.ItemIngredientPredicate;
 import dev.anvilcraft.lite.init.reicpe.ModRecipeTypes;
 import dev.anvilcraft.lite.recipe.anvil.util.WrapUtils;
 import lombok.Getter;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -45,17 +46,14 @@ public class ItemInjectRecipe extends AbstractProcessRecipe<ItemInjectRecipe> {
         BlockStatePredicate blockIngredient,
         ChanceBlockState blockResult
     ) {
-        super(
-            new Property()
-                .setItemInputOffset(Vec3.ZERO)
-                .setInputItems(itemIngredients)
-                .setItemOutputOffset(new Vec3(0.0, -1.0, 0.0))
-                .setResultItems(results)
-                .setBlockInputOffset(new Vec3i(0, -1, 0))
-                .setInputBlocks(blockIngredient)
-                .setBlockOutputOffset(new Vec3i(0, -1, 0))
-                .setResultBlocks(blockResult)
-        );
+        super(new Property().setItemInputOffset(Vec3.ZERO)
+            .setInputItems(itemIngredients)
+            .setItemOutputOffset(new Vec3(0.0, -1.0, 0.0))
+            .setResultItems(results)
+            .setBlockInputOffset(new Vec3i(0, -1, 0))
+            .setInputBlocks(blockIngredient)
+            .setBlockOutputOffset(new Vec3i(0, -1, 0))
+            .setResultBlocks(blockResult));
     }
 
     @Override
@@ -73,8 +71,8 @@ public class ItemInjectRecipe extends AbstractProcessRecipe<ItemInjectRecipe> {
      *
      * @return 构建器实例
      */
-    public static Builder builder() {
-        return new Builder();
+    public static Builder builder(HolderGetter<Item> getter, HolderGetter<Block> blockGetter) {
+        return new Builder(getter, blockGetter);
     }
 
     /**
@@ -89,16 +87,9 @@ public class ItemInjectRecipe extends AbstractProcessRecipe<ItemInjectRecipe> {
                 .listOf()
                 .optionalFieldOf("ingredients", List.of())
                 .forGetter(ItemInjectRecipe::getInputItems),
-            ChanceItemStack.CODEC
-                .listOf()
-                .optionalFieldOf("results", List.of())
-                .forGetter(ItemInjectRecipe::getResultItems),
-            BlockStatePredicate.CODEC
-                .fieldOf("block_ingredient")
-                .forGetter(ItemInjectRecipe::getFirstInputBlock),
-            ChanceBlockState.CODEC.codec()
-                .fieldOf("block_result")
-                .forGetter(ItemInjectRecipe::getFirstResultBlock)
+            ChanceItemStack.CODEC.listOf().optionalFieldOf("results", List.of()).forGetter(ItemInjectRecipe::getResultItems),
+            BlockStatePredicate.CODEC.fieldOf("block_ingredient").forGetter(ItemInjectRecipe::getFirstInputBlock),
+            ChanceBlockState.CODEC.codec().fieldOf("block_result").forGetter(ItemInjectRecipe::getFirstResultBlock)
         ).apply(instance, ItemInjectRecipe::new));
 
         /**
@@ -134,12 +125,17 @@ public class ItemInjectRecipe extends AbstractProcessRecipe<ItemInjectRecipe> {
         /**
          * 方块原料谓词构建器
          */
-        BlockStatePredicate.Builder blockIngredient = BlockStatePredicate.builder();
+        BlockStatePredicate.Builder blockIngredient;
 
         /**
          * 方块结果
          */
         ChanceBlockState blockResult = null;
+
+        protected Builder(HolderGetter<Item> getter, HolderGetter<Block> blockGetter) {
+            super(getter);
+            this.blockIngredient = BlockStatePredicate.builder(blockGetter);
+        }
 
         /**
          * 设置输入方块
