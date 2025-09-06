@@ -11,12 +11,11 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
-import org.jetbrains.annotations.NotNull;
 
 @EventBusSubscriber(modid = AnvilCraftLite.MOD_ID)
 public class PlayerEventListener {
     @SubscribeEvent
-    public static void useEntity(@NotNull PlayerInteractEvent.EntityInteract event) {
+    public static void useEntity(PlayerInteractEvent.EntityInteract event) {
         InteractionHand hand = event.getHand();
         Player player = event.getEntity();
         ItemStack item = player.getItemInHand(hand);

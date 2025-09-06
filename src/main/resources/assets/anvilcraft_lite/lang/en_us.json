@@ -1,0 +1,15 @@
+{
+  "itemGroup.anvilcraft_lite.tab": "AnvilCraft: Lite",
+  "item.anvilcraft_lite.resin": "Resin",
+  "item.anvilcraft_lite.magnet_ingot": "Magnet Ingot",
+  "block.anvilcraft_lite.resin_block": "Block of Resin",
+  "block.anvilcraft_lite.magnet_block": "Block of Magnet",
+  "block.anvilcraft_lite.hollow_magnet_block": "Hollowed Block of Magnet",
+  "block.anvilcraft_lite.ferrite_core_magnet_block": "Ferrite-Cored Block of Magnet",
+  "anvilcraft.configuration.magnet_attracts_distance": "Magnet Attracts Distance",
+  "anvilcraft.configuration.magnet_attracts_distance.tooltip": "Maximum length a magnet attracts",
+  "anvilcraft.configuration.lightning_strike_depth": "Lightning Strike Depth",
+  "anvilcraft.configuration.lightning_strike_depth.tooltip": "Maximum depth a lightning strike can reach",
+  "anvilcraft.configuration.lightning_strike_radius": "Lightning Strike Radius",
+  "anvilcraft.configuration.lightning_strike_radius.tooltip": "Maximum radius a lightning strike can reach"
+}

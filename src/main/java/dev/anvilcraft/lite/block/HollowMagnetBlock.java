@@ -6,6 +6,8 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -57,14 +59,29 @@ public class HollowMagnetBlock extends MagnetBlock implements SimpleWaterloggedB
     }
 
     @Override
-
-    public VoxelShape getShape(
-        BlockState blockState,
-        BlockGetter blockGetter,
-        BlockPos blockPos,
-        CollisionContext collisionContext
+    protected InteractionResult useItemOn(
+        ItemStack stack,
+        BlockState state,
+        Level level,
+        BlockPos pos,
+        Player player,
+        InteractionHand hand,
+        BlockHitResult hitResult
     ) {
-        return HollowMagnetBlock.AABB;
+        if (!level.isClientSide()) {
+            if (stack.is(Items.IRON_INGOT)) {
+                stack.consume(1, player);
+                level.setBlockAndUpdate(pos, ModBlocks.FERRITE_CORE_MAGNET_BLOCK.get().defaultBlockState());
+                level.playSound(null, pos, SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.BLOCKS, 1.0f, 1.0f);
+                return InteractionResult.SUCCESS;
+            } else if (stack.is(ModItems.MAGNET_BLOCK)) {
+                stack.consume(1, player);
+                level.setBlockAndUpdate(pos, ModBlocks.MAGNET_BLOCK.get().defaultBlockState());
+                level.playSound(null, pos, SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.BLOCKS, 1.0f, 1.0f);
+                return InteractionResult.SUCCESS;
+            }
+        }
+        return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
     }
 
     @Override
@@ -138,22 +155,8 @@ public class HollowMagnetBlock extends MagnetBlock implements SimpleWaterloggedB
     }
 
     @Override
-    protected InteractionResult useItemOn(
-        ItemStack stack,
-        BlockState state,
-        Level level,
-        BlockPos pos,
-        Player player,
-        InteractionHand hand,
-        BlockHitResult hitResult
-    ) {
-        if (!level.isClientSide()) {
-            if (stack.is(Items.IRON_INGOT)) {
-                stack.consume(1, player);
-                level.setBlockAndUpdate(pos, ModBlocks.FERRITE_CORE_MAGNET_BLOCK.get().defaultBlockState());
-                return InteractionResult.SUCCESS;
-            }
-        }
-        return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
+
+    public VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
+        return HollowMagnetBlock.AABB;
     }
 }

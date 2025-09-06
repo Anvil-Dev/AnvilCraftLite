@@ -10,6 +10,7 @@ import dev.anvilcraft.lite.recipe.anvil.predicate.block.HasCauldron;
 import dev.anvilcraft.lite.recipe.anvil.util.WrapUtils;
 import dev.anvilcraft.lite.recipe.component.HasCauldronSimple;
 import lombok.Getter;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -35,21 +36,14 @@ public class SqueezingRecipe extends AbstractProcessRecipe<SqueezingRecipe> {
      * @param result      结果方块列表
      * @param hasCauldron 炼药锅条件
      */
-    public SqueezingRecipe(
-        BlockStatePredicate ingredient,
-        ChanceBlockState result,
-        HasCauldronSimple hasCauldron
-    ) {
-        super(
-            new Property()
-                .setBlockInputOffset(new Vec3i(0, -1, 0))
-                .setConsumeInputBlocks(true)
-                .setInputBlocks(ingredient)
-                .setCauldronOffset(new Vec3i(0, -2, 0))
-                .setHasCauldron(hasCauldron)
-                .setBlockOutputOffset(new Vec3i(0, -1, 0))
-                .setResultBlocks(result)
-        );
+    public SqueezingRecipe(BlockStatePredicate ingredient, ChanceBlockState result, HasCauldronSimple hasCauldron) {
+        super(new Property().setBlockInputOffset(new Vec3i(0, -1, 0))
+            .setConsumeInputBlocks(true)
+            .setInputBlocks(ingredient)
+            .setCauldronOffset(new Vec3i(0, -2, 0))
+            .setHasCauldron(hasCauldron)
+            .setBlockOutputOffset(new Vec3i(0, -1, 0))
+            .setResultBlocks(result));
     }
 
     @Override
@@ -67,8 +61,8 @@ public class SqueezingRecipe extends AbstractProcessRecipe<SqueezingRecipe> {
      *
      * @return 构建器实例
      */
-    public static Builder builder() {
-        return new Builder();
+    public static Builder builder(HolderGetter<Block> getter) {
+        return new Builder(getter);
     }
 
     /**
@@ -89,15 +83,9 @@ public class SqueezingRecipe extends AbstractProcessRecipe<SqueezingRecipe> {
          * 编解码器
          */
         public static final MapCodec<SqueezingRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            BlockStatePredicate.CODEC
-                .fieldOf("ingredient")
-                .forGetter(SqueezingRecipe::getFirstInputBlock),
-            ChanceBlockState.CODEC
-                .codec()
-                .fieldOf("result")
-                .forGetter(SqueezingRecipe::getFirstResultBlock),
-            HasCauldronSimple.CODEC
-                .forGetter(SqueezingRecipe::getHasCauldron)
+            BlockStatePredicate.CODEC.fieldOf("ingredient").forGetter(SqueezingRecipe::getFirstInputBlock),
+            ChanceBlockState.CODEC.codec().fieldOf("result").forGetter(SqueezingRecipe::getFirstResultBlock),
+            HasCauldronSimple.CODEC.forGetter(SqueezingRecipe::getHasCauldron)
         ).apply(instance, SqueezingRecipe::new));
 
         /**
@@ -128,6 +116,7 @@ public class SqueezingRecipe extends AbstractProcessRecipe<SqueezingRecipe> {
      * 压榨配方构建器
      */
     public static class Builder extends AbstractRecipeBuilder<SqueezingRecipe> {
+        private final HolderGetter<Block> getter;
         /**
          * 原料列表
          */
@@ -142,6 +131,10 @@ public class SqueezingRecipe extends AbstractProcessRecipe<SqueezingRecipe> {
          * 炼药锅条件构建器
          */
         private final HasCauldronSimple.Builder hasCauldron = HasCauldronSimple.empty();
+
+        public Builder(HolderGetter<Block> getter) {
+            this.getter = getter;
+        }
 
         /**
          * 添加原料方块
@@ -161,7 +154,7 @@ public class SqueezingRecipe extends AbstractProcessRecipe<SqueezingRecipe> {
          * @return 构建器实例
          */
         public Builder requires(Block ingredient) {
-            return this.requires(BlockStatePredicate.builder().of(ingredient).build());
+            return this.requires(BlockStatePredicate.builder(this.getter).of(ingredient).build());
         }
 
         /**
@@ -171,7 +164,7 @@ public class SqueezingRecipe extends AbstractProcessRecipe<SqueezingRecipe> {
          * @return 构建器实例
          */
         public Builder requires(TagKey<Block> ingredient) {
-            return this.requires(BlockStatePredicate.builder().of(ingredient).build());
+            return this.requires(BlockStatePredicate.builder(this.getter).of(ingredient).build());
         }
 
         /**

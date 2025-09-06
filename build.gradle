@@ -6,7 +6,19 @@ plugins {
     id 'io.freefair.lombok' version '8.7.1'
 }
 
-version = mod_version
+String buildNumber
+String buildType = 'build'
+if (System.getenv("CI_BUILD") == 'false') buildNumber = null
+else {
+    if (System.getenv("PR_BUILD") != 'false') buildType = 'pr'
+    buildNumber = System.getenv("GITHUB_RUN_NUMBER")
+}
+def envVersion = System.getenv("GITHUB_REF")
+if (envVersion != null && envVersion.startsWith("refs/tags/")) {
+    version = envVersion.substring(envVersion.lastIndexOf('/') + 1)
+} else {
+    version = "${mod_version}" + (buildNumber != null ? "+${buildType}.${buildNumber}" : "")
+}
 group = mod_group_id
 
 repositories {
@@ -21,8 +33,24 @@ repositories {
     }
 }
 
+tasks.register('sourcesJar', Jar) {
+    from delombok.outputs.files
+    dependsOn delombok
+    archiveClassifier = "sources"
+}
+
+jar {
+    def modId = mod_id
+    from(project.file("LICENSE")) {
+        rename { "${it}_${modId}" }
+    }
+    from(project.file("README.md")) {
+        rename { "${it}_${modId}" }
+    }
+}
+
 base {
-    archivesName = mod_id
+    archivesName = mod_id + "-neoforge-1.21.8"
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
@@ -109,9 +137,9 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
     // AnvilLib
-    implementation "dev.anvilcraft.lib:anvillib-neoforge-1.21.8:1.4.0+build.163"
-    interfaceInjectionData "dev.anvilcraft.lib:anvillib-neoforge-1.21.8:1.4.0+build.163"
-    jarJar "dev.anvilcraft.lib:anvillib-neoforge-1.21.8:1.4.0+build.163"
+    implementation "dev.anvilcraft.lib:anvillib-neoforge-1.21.8:1.4.0+build.167"
+    interfaceInjectionData "dev.anvilcraft.lib:anvillib-neoforge-1.21.8:1.4.0+build.167"
+    jarJar "dev.anvilcraft.lib:anvillib-neoforge-1.21.8:1.4.0+build.167"
 
     // JEI
     compileOnly("mezz.jei:jei-1.21.8-neoforge-api:24.0.0.2")
@@ -145,15 +173,37 @@ sourceSets.main.resources.srcDir generateModMetadata
 neoForge.ideSyncTask generateModMetadata
 
 // Example configuration to allow publishing using the maven-publish plugin
+
+artifacts {
+    archives tasks.jar
+    archives tasks.sourcesJar
+}
+
 publishing {
     publications {
-        register('mavenJava', MavenPublication) {
+        mavenJava(MavenPublication) {
+            groupId = project.group
+            artifactId = project.archivesBaseName
+            version = project.version
+
             from components.java
+
+            artifact sourcesJar
         }
     }
+
+    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
     repositories {
-        maven {
-            url "file://${project.projectDir}/repo"
+        // Add repositories to publish to here.
+        def MAVEN_URL = System.getenv("MAVEN_URL")
+        if (MAVEN_URL != null) {
+            maven {
+                url MAVEN_URL
+                credentials {
+                    username System.getenv("MAVEN_USERNAME")
+                    password System.getenv("MAVEN_PASSWORD")
+                }
+            }
         }
     }
 }
