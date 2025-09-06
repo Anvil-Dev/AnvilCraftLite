@@ -1,0 +1,117 @@
+package dev.anvilcraft.lite.integration.jei.util;
+
+import com.google.common.collect.ImmutableList;
+import dev.anvilcraft.lib.recipe.component.ChanceItemStack;
+import dev.anvilcraft.lib.util.NumberProviderUtil;
+import dev.anvilcraft.lite.integration.jei.AnvilCraftJeiPlugin;
+import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeInput;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class JeiRecipeUtil {
+    private static final DecimalFormat FORMATTER = new DecimalFormat();
+
+    public static <I extends RecipeInput, T extends Recipe<I>> List<T> getRecipesFromType(RecipeType<T> recipeType) {
+        if (AnvilCraftJeiPlugin.recipes.values().isEmpty()) {
+            throw new IllegalStateException(I18n.get("jei.message.missing.recipes.from.server"));
+        }
+        return AnvilCraftJeiPlugin.recipes
+            .byType(recipeType)
+            .stream()
+            .map(RecipeHolder::value)
+            .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public static <I extends RecipeInput, T extends Recipe<I>> List<RecipeHolder<T>> getRecipeHoldersFromType(
+        RecipeType<T> recipeType
+    ) {
+        if (AnvilCraftJeiPlugin.recipes.values().isEmpty()) {
+            throw new IllegalStateException(I18n.get("jei.message.missing.recipes.from.server"));
+        }
+        return new ArrayList<>(AnvilCraftJeiPlugin.recipes.byType(recipeType));
+    }
+
+    public static void addTooltips(IRecipeSlotBuilder slot, int count, NumberProvider provider) {
+        ImmutableList.Builder<Component> tooltipLines = new ImmutableList.Builder<>();
+
+        if (provider instanceof BinomialDistributionGenerator(NumberProvider n, NumberProvider p)) {
+            if (n instanceof ConstantValue(float value) && value == 1) {
+                String chance = FORMATTER.format(NumberProviderUtil.expected(p) * 100);
+                tooltipLines.add(Component.translatable("gui.anvilcraft.category.chance", chance)
+                    .withStyle(ChatFormatting.GRAY));
+            } else {
+                addAvgOutput(tooltipLines, count * NumberProviderUtil.expected(provider));
+            }
+            addMinMax(tooltipLines, 0, getMax(n));
+        } else if (provider.getClass() != ConstantValue.class) {
+            double val = count * NumberProviderUtil.expected(provider);
+            if (val != -1) {
+                addAvgOutput(tooltipLines, val);
+                if (provider instanceof UniformGenerator) {
+                    addMinMax(tooltipLines, getMin(provider), getMax(provider));
+                }
+            }
+        }
+
+        slot.addRichTooltipCallback((slotView, tooltip) -> tooltip.addAll(tooltipLines.build()));
+    }
+
+    public static boolean isChance(List<ChanceItemStack> chanceItemStacks) {
+        for (ChanceItemStack chanceItemStack : chanceItemStacks) {
+            NumberProvider provider = chanceItemStack.count();
+            if (provider instanceof BinomialDistributionGenerator) {
+                return true;
+            } else if (provider.getClass() != ConstantValue.class) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static double getMin(NumberProvider provider) {
+        return switch (provider) {
+            case ConstantValue value -> value.value();
+            case UniformGenerator uniform -> getMin(uniform.min());
+            default -> 0;
+        };
+    }
+
+    private static double getMax(NumberProvider provider) {
+        return switch (provider) {
+            case ConstantValue value -> value.value();
+            case UniformGenerator uniform -> getMax(uniform.max());
+            case BinomialDistributionGenerator binomial -> getMax(binomial.n());
+            default -> 0;
+        };
+    }
+
+    private static void addAvgOutput(ImmutableList.Builder<Component> tooltipLines, double avgValue) {
+        String avgOutput = FORMATTER.format(avgValue);
+        tooltipLines.add(Component.translatable("gui.anvilcraft.category.average_output", avgOutput)
+            .withStyle(ChatFormatting.GRAY));
+    }
+
+    private static void addMinMax(ImmutableList.Builder<Component> tooltipLines, double min, double max) {
+        String minOutput = FORMATTER.format(min);
+        String maxOutput = FORMATTER.format(max);
+
+        tooltipLines.add(Component.translatable("gui.anvilcraft.category.min_output", minOutput)
+            .withStyle(ChatFormatting.GRAY));
+        tooltipLines.add(Component.translatable("gui.anvilcraft.category.max_output", maxOutput)
+            .withStyle(ChatFormatting.GRAY));
+    }
+}
