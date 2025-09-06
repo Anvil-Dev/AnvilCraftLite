@@ -5,6 +5,7 @@ import dev.anvilcraft.lite.block.HollowMagnetBlock;
 import dev.anvilcraft.lite.block.MagnetBlock;
 import dev.anvilcraft.lite.block.ResinBlock;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.neoforge.registries.DeferredBlock;
 
 import static dev.anvilcraft.lite.AnvilCraftLite.REGISTER;
@@ -22,7 +23,7 @@ public class ModBlocks {
     public static final DeferredBlock<FerriteCoreMagnetBlock> FERRITE_CORE_MAGNET_BLOCK = REGISTER.block(
         "ferrite_core_magnet_block",
         FerriteCoreMagnetBlock::new
-    ).register();
+    ).properties(BlockBehaviour.Properties::randomTicks).register();
 
     public static void init() {
     }

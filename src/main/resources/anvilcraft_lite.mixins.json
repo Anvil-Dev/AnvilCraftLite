@@ -4,7 +4,10 @@
   "package": "dev.anvilcraft.lite.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "FallingBlockEntityMixin"
+    "AnvilBlockMixin",
+    "FallingBlockEntityMixin",
+    "ItemEntityMixin",
+    "LightningBoltMixin"
   ],
   "client": [
   ],

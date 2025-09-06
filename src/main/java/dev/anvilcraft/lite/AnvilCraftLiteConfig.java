@@ -9,5 +9,12 @@ import net.neoforged.fml.config.ModConfig;
 public class AnvilCraftLiteConfig {
     @Comment("Maximum length a magnet attracts")
     @BoundedDiscrete(max = 8, min = 0)
-    public int magnetAttractsDistance;
+    public int magnetAttractsDistance = 4;
+
+    @Comment("Maximum depth a lightning strike can reach")
+    @BoundedDiscrete(max = 16, min = 1)
+    public int lightningStrikeDepth = 2;
+
+    @Comment("Maximum radius a lightning strike can reach")
+    public int lightningStrikeRadius = 1;
 }
