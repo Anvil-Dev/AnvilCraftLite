@@ -31,6 +31,7 @@ public class ModRecipeProvider extends RecipeProvider {
         this.addProvider(BlockSmearRecipeLoader::new);
         this.addProvider(ItemInjectRecipeLoader::new);
         this.addProvider(SqueezingRecipeLoader::new);
+        this.addProvider(SuperHeatingRecipeLoader::new);
         this.addProvider(VanillaRecipeLoader::new);
         providers.forEach(ModRecipeLoader::buildRecipes);
     }
