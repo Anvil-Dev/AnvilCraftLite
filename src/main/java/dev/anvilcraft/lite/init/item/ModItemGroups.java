@@ -1,6 +1,5 @@
 package dev.anvilcraft.lite.init.item;
 
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
@@ -11,7 +10,7 @@ public class ModItemGroups {
         "tab",
         builder -> builder
             .icon(() -> ModItems.MAGNET_INGOT.get().getDefaultInstance())
-            .title(Component.translatable("itemGroup.anvilcraft_lite.tab"))
+            .title(REGISTER.lang("itemGroup.anvilcraft_lite.tab", "AnvilCraft: Lite"))
             .displayItems((ctx, entries) -> {
                 entries.accept(ModItems.RESIN.get());
                 entries.accept(ModItems.MAGNET_INGOT.get());

@@ -13,7 +13,7 @@ public class SuperHeatingRecipeLoader extends ModRecipeLoader {
 
     @Override
     public void buildRecipes() {
-        SuperHeatingRecipe.builder()
+        SuperHeatingRecipe.builder(this.items)
             .requires(Blocks.COAL_BLOCK, 8)
             .result(Items.DIAMOND)
             .save(this.output);

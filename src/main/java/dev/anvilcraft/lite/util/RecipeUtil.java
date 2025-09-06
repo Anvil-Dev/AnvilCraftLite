@@ -3,6 +3,7 @@ package dev.anvilcraft.lite.util;
 import com.mojang.datafixers.util.Either;
 import dev.anvilcraft.lib.recipe.component.ItemIngredientPredicate;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.TriState;
@@ -17,17 +18,18 @@ public final class RecipeUtil {
     private RecipeUtil() {
     }
 
-    public static ItemIngredientPredicate.Builder wrapIngredient(Ingredient ingredient) {
-        if (ingredient.isCustom()) return ItemIngredientPredicate.of();
+    public static ItemIngredientPredicate.Builder wrapIngredient(HolderGetter<Item> items, Ingredient ingredient) {
+        if (ingredient.isCustom()) return ItemIngredientPredicate.of(items);
         Either<TagKey<Item>, List<Holder<Item>>> data = ingredient.getValues().unwrap();
         final ItemIngredientPredicate.Builder[] result = new ItemIngredientPredicate.Builder[1];
-        data.ifLeft(tag -> result[0] = ItemIngredientPredicate.of(tag));
+        data.ifLeft(tag -> result[0] = ItemIngredientPredicate.of(items, tag));
         if (result[0] != null) return result[0];
-        data.ifRight(holders -> result[0] = ItemIngredientPredicate
-            .of(holders.stream().map(Holder::value).toArray(ItemLike[]::new))
-        );
+        data.ifRight(holders -> result[0] = ItemIngredientPredicate.of(
+            items,
+            holders.stream().map(Holder::value).toArray(ItemLike[]::new)
+        ));
         if (result[0] != null) return result[0];
-        return ItemIngredientPredicate.of();
+        return ItemIngredientPredicate.of(items);
     }
 
     public static String getName(Ingredient ingredient) {

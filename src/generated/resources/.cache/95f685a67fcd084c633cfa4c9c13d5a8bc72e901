@@ -1,4 +1,4 @@
-// 1.21.8	2025-09-06T20:22:52.1421629	AnvilCraft Lite Recipes
+// 1.21.8	2025-09-07T00:42:04.0661148	AnvilCraft Lite Recipes
 c7b5c09227d2ed4284f1142da14d92a0e9334744 data/anvilcraft_lite/advancement/recipes/block_compress/blackstone.json
 6d9e78d8213a1f970cbcf99aad207e16fe92664d data/anvilcraft_lite/advancement/recipes/block_compress/blue_ice.json
 ec56108bcbbc2af1e6d6c74b4b81e8ea52dc265d data/anvilcraft_lite/advancement/recipes/block_compress/crimson_nylium.json
@@ -145,6 +145,7 @@ f92a8875ed58a5ee16f9eefc01efd4d4dbf267c3 data/anvilcraft_lite/advancement/recipe
 79067a48a25f005ca058156a8db4abbdce800a01 data/anvilcraft_lite/advancement/recipes/stamping/pink_petals.json
 a70411f24b7da275c38b886a8107bd84cd6ec5f9 data/anvilcraft_lite/advancement/recipes/stamping/resin_from_logs.json
 8fa9bbf0627cd19b9137a4b9d6b0aaba444cd6c5 data/anvilcraft_lite/advancement/recipes/stamping/snow.json
+74f9e3077e44fba829ebe622dae12c424e7d4f47 data/anvilcraft_lite/advancement/recipes/super_heating/diamond.json
 227ecb4c6e83097b72f67a95e6ffaa70d1694fc8 data/anvilcraft_lite/advancement/recipes/unpack/amethyst_shard.json
 7f3d232aa3714797d5b36836bddf97ec5a3414aa data/anvilcraft_lite/advancement/recipes/unpack/clay_ball.json
 64d66a185ccf01f1e023098adbfeb138f50e3f1a data/anvilcraft_lite/advancement/recipes/unpack/glowstone_dust.json
@@ -302,6 +303,7 @@ ebb0edbafe2779801a14b5dcf3ac27de5cc0267c data/anvilcraft_lite/recipe/stamping/li
 30bbda27a83a100e665cef80267b537d4649b481 data/anvilcraft_lite/recipe/stamping/pink_petals.json
 9a0f15ba50dba6760bbe57bae02dad5ceb657b71 data/anvilcraft_lite/recipe/stamping/resin_from_logs.json
 36145cf66233bb758e15dcd45c3dcba8213cf8eb data/anvilcraft_lite/recipe/stamping/snow.json
+8f6b15c142127b2f7723e0f7934df588314d16d6 data/anvilcraft_lite/recipe/super_heating/diamond.json
 8fc903c29b2cbf96dd6bc97fef8f881457726384 data/anvilcraft_lite/recipe/unpack/amethyst_shard.json
 550cfc30373038b5e279954d7aceb60acc5ebb6f data/anvilcraft_lite/recipe/unpack/clay_ball.json
 569725af5a65872555bdacdc87e28afcbe0fa0c1 data/anvilcraft_lite/recipe/unpack/glowstone_dust.json
