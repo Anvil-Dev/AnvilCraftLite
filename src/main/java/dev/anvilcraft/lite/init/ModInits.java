@@ -1,6 +1,10 @@
-package dev.anvilcraft.lite.init.item;
+package dev.anvilcraft.lite.init;
 
 import dev.anvilcraft.lite.init.block.ModBlocks;
+import dev.anvilcraft.lite.init.entity.ModEntities;
+import dev.anvilcraft.lite.init.item.ModComponents;
+import dev.anvilcraft.lite.init.item.ModItemGroups;
+import dev.anvilcraft.lite.init.item.ModItems;
 import dev.anvilcraft.lite.init.reicpe.ModRecipeInits;
 import net.neoforged.bus.api.IEventBus;
 
@@ -11,5 +15,6 @@ public class ModInits {
         ModItems.init();
         ModItemGroups.init();
         ModRecipeInits.init(modEventBus);
+        ModEntities.init();
     }
 }

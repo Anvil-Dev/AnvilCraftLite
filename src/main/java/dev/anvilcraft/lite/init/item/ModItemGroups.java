@@ -10,7 +10,7 @@ public class ModItemGroups {
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> ANVILCRAFT_LITE = REGISTER.itemGroup(
         "tab",
         builder -> builder
-            .icon(() -> ModItems.RESIN.get().getDefaultInstance())
+            .icon(() -> ModItems.MAGNET_INGOT.get().getDefaultInstance())
             .title(Component.translatable("itemGroup.anvilcraft_lite.tab"))
             .displayItems((ctx, entries) -> {
                 entries.accept(ModItems.RESIN.get());

@@ -1,6 +1,7 @@
 package dev.anvilcraft.lite.data;
 
 import dev.anvilcraft.lite.AnvilCraftLite;
+import dev.anvilcraft.lite.data.loot.ModLootTableProvider;
 import dev.anvilcraft.lite.data.recipe.ModRecipeProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
@@ -19,5 +20,6 @@ public class AnvilCraftLiteDatagen {
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
         PackOutput packOutput = generator.getPackOutput();
         generator.addProvider(true, new ModRecipeProvider.Runner(packOutput, lookupProvider));
+        generator.addProvider(true, ModLootTableProvider.create(packOutput, lookupProvider));
     }
 }

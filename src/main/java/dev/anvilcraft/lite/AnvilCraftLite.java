@@ -3,7 +3,7 @@ package dev.anvilcraft.lite;
 import com.mojang.logging.LogUtils;
 import dev.anvilcraft.lib.config.ConfigManager;
 import dev.anvilcraft.lite.init.ModRegister;
-import dev.anvilcraft.lite.init.item.ModInits;
+import dev.anvilcraft.lite.init.ModInits;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;

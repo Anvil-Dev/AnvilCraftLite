@@ -16,6 +16,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 
 public class ResinBlockItem extends HasMobBlockItem {
     public ResinBlockItem(Block block, Item.Properties properties) {
@@ -27,7 +28,7 @@ public class ResinBlockItem extends HasMobBlockItem {
         ItemStack stack = context.getItemInHand();
         if (!ResinBlockItem.hasMob(stack)) return super.place(context);
         Level level = context.getLevel();
-        BlockPos pos = context.getClickedPos().relative(context.getClickedFace());
+        BlockPos pos = context.getClickedPos();
         Player player = context.getPlayer();
         if (player == null) return InteractionResult.FAIL;
         ResinBlockItem.spawnMobFromItem(level, player, pos, stack);
@@ -68,7 +69,8 @@ public class ResinBlockItem extends HasMobBlockItem {
         }
         Entity entity = HasMobBlockItem.getMobFromItem(level, copy);
         if (entity == null) return;
-        entity.teleportTo(pos.getX(), pos.getY(), pos.getZ());
+        Vec3 center = pos.getCenter();
+        entity.teleportTo(center.x(), center.y(), center.z());
         level.addFreshEntity(entity);
         RandomSource random = level.getRandom();
         ItemStack back = new ItemStack(ModItems.RESIN.asItem(), random.nextInt(1, 4));

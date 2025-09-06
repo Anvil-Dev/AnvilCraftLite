@@ -17,4 +17,8 @@ public class AnvilCraftLiteConfig {
 
     @Comment("Maximum radius a lightning strike can reach")
     public int lightningStrikeRadius = 1;
+
+    @Comment("Maximum radius a handheld magnet attracts")
+    @BoundedDiscrete(max = 16, min = 1)
+    public double magnetItemAttractsRadius = 8;
 }

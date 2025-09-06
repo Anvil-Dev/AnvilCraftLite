@@ -5,6 +5,9 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -28,22 +31,25 @@ public class ModRegister {
     public final String modId;
     public final DeferredRegister.Blocks blocks;
     public final DeferredRegister.Items items;
-    public final DeferredRegister<DataComponentType<?>> componentTypes;
+    public final DeferredRegister.Entities entities;
+    public final DeferredRegister.DataComponents dataComponents;
     public final DeferredRegister<CreativeModeTab> creativeModeTabs;
 
     public ModRegister(String modId) {
         this.modId = modId;
         this.blocks = DeferredRegister.createBlocks(modId);
         this.items = DeferredRegister.createItems(modId);
-        this.componentTypes = DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, modId);
+        this.entities = DeferredRegister.createEntities(modId);
+        this.dataComponents = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, modId);
         this.creativeModeTabs = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, modId);
     }
 
     public void init(IEventBus modEventBus) {
         this.blocks.register(modEventBus);
-        this.componentTypes.register(modEventBus);
+        this.dataComponents.register(modEventBus);
         this.items.register(modEventBus);
         this.creativeModeTabs.register(modEventBus);
+        this.entities.register(modEventBus);
     }
 
     public <T extends Item> ItemRegister<T> item(String name, Function<Item.Properties, T> factory) {
@@ -80,8 +86,12 @@ public class ModRegister {
         var builder = DataComponentType.<T>builder();
         customizer.accept(builder);
         var componentType = builder.build();
-        this.componentTypes.register(name, () -> componentType);
+        this.dataComponents.register(name, () -> componentType);
         return componentType;
+    }
+
+    public <T extends Entity> EntityRegister<T> entity(String name, EntityType.EntityFactory<T> factory, MobCategory category) {
+        return new EntityRegister<>(name, factory, category, this);
     }
 
     public static class ItemRegister<T extends Item> {
@@ -89,6 +99,8 @@ public class ModRegister {
         private final ModRegister register;
         private final Function<Item.Properties, T> factory;
         private final Item.Properties properties;
+        private Consumer<Item.Properties> propertiesConsumer = properties -> {
+        };
 
         public ItemRegister(String name, Function<Item.Properties, T> factory, ModRegister register) {
             this.name = name;
@@ -100,11 +112,16 @@ public class ModRegister {
         }
 
         public ItemRegister<T> properties(Consumer<Item.Properties> consumer) {
-            consumer.accept(this.properties);
+            final Consumer<Item.Properties> propertiesConsumer = this.propertiesConsumer;
+            this.propertiesConsumer = properties -> {
+                consumer.accept(properties);
+                propertiesConsumer.accept(properties);
+            };
             return this;
         }
 
         public DeferredItem<T> register() {
+            this.propertiesConsumer.accept(this.properties);
             return this.register.items.register(this.name, () -> factory.apply(this.properties));
         }
     }
@@ -127,7 +144,11 @@ public class ModRegister {
         }
 
         public BlockRegister<T> properties(Consumer<Block.Properties> consumer) {
-            this.propertiesConsumer = consumer;
+            final Consumer<Block.Properties> propertiesConsumer = this.propertiesConsumer;
+            this.propertiesConsumer = properties -> {
+                consumer.accept(properties);
+                propertiesConsumer.accept(properties);
+            };
             return this;
         }
 
@@ -141,6 +162,39 @@ public class ModRegister {
             ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, location);
             this.properties.setId(key);
             return this.register.blocks.register(this.name, () -> factory.apply(this.properties));
+        }
+    }
+
+    public static class EntityRegister<T extends Entity> {
+        private final String name;
+        private final ModRegister register;
+        private final EntityType.EntityFactory<T> factory;
+        private final MobCategory category;
+        private Consumer<EntityType.Builder<T>> builderConsumer = builder -> {
+        };
+
+        public EntityRegister(String name, EntityType.EntityFactory<T> factory, MobCategory category, ModRegister register) {
+            this.name = name;
+            this.register = register;
+            this.factory = factory;
+            this.category = category;
+        }
+
+        public EntityRegister<T> properties(Consumer<EntityType.Builder<T>> consumer) {
+            this.builderConsumer = builder -> {
+                consumer.accept(builder);
+                this.builderConsumer.accept(builder);
+            };
+            return this;
+        }
+
+        public DeferredHolder<EntityType<?>, EntityType<T>> register() {
+            return this.register.entities.registerEntityType(
+                this.name, this.factory, this.category, builder -> {
+                    builderConsumer.accept(builder);
+                    return builder;
+                }
+            );
         }
     }
 }
