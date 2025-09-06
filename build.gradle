@@ -15,6 +15,10 @@ repositories {
         name = "Cjsah Maven"
         url = "https://server.cjsah.net:1002/maven/"
     }
+    maven { // JEI
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
+    }
 }
 
 base {
@@ -108,6 +112,10 @@ dependencies {
     implementation "dev.anvilcraft.lib:anvillib-neoforge-1.21.8:1.4.0+build.163"
     interfaceInjectionData "dev.anvilcraft.lib:anvillib-neoforge-1.21.8:1.4.0+build.163"
     jarJar "dev.anvilcraft.lib:anvillib-neoforge-1.21.8:1.4.0+build.163"
+
+    // JEI
+    compileOnly("mezz.jei:jei-1.21.8-neoforge-api:24.0.0.2")
+    runtimeOnly("mezz.jei:jei-1.21.8-neoforge:24.0.0.2")
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

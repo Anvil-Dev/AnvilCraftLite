@@ -13,6 +13,7 @@ import dev.anvilcraft.lite.recipe.anvil.wrap.ItemInjectRecipe;
 import dev.anvilcraft.lite.recipe.anvil.wrap.MeshRecipe;
 import dev.anvilcraft.lite.recipe.anvil.wrap.SqueezingRecipe;
 import dev.anvilcraft.lite.recipe.anvil.wrap.StampingRecipe;
+import dev.anvilcraft.lite.recipe.anvil.wrap.SuperHeatingRecipe;
 import dev.anvilcraft.lite.recipe.anvil.wrap.UnpackRecipe;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.crafting.Recipe;
@@ -90,6 +91,11 @@ public class ModRecipeTypes {
     public static final DeferredHolder<RecipeType<?>, RecipeType<BulgingRecipe>> BULGING_TYPE = registerType("bulging");
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<BulgingRecipe>> BULGING_SERIALIZER =
         RECIPE_SERIALIZERS.register("bulging", BulgingRecipe.Serializer::new);
+
+    public static final DeferredHolder<RecipeType<?>, RecipeType<SuperHeatingRecipe>> SUPER_HEATING_TYPE =
+        registerType("super_heating");
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<SuperHeatingRecipe>>
+        SUPER_HEATING_SERIALIZER = RECIPE_SERIALIZERS.register("super_heating", SuperHeatingRecipe.Serializer::new);
 
     private static <T extends Recipe<?>> DeferredHolder<RecipeType<?>, RecipeType<T>> registerType(String name) {
         return RECIPE_TYPES.register(name, () -> new RecipeType<>() {

@@ -1,0 +1,243 @@
+package dev.anvilcraft.lite.integration.jei.category.anvil;
+
+import com.mojang.blaze3d.vertex.PoseStack;
+import dev.anvilcraft.lite.init.block.ModBlocks;
+import dev.anvilcraft.lite.init.reicpe.ModRecipeTypes;
+import dev.anvilcraft.lite.integration.jei.AnvilCraftJeiPlugin;
+import dev.anvilcraft.lite.integration.jei.drawable.DrawableBlockStateIcon;
+import dev.anvilcraft.lite.integration.jei.util.JeiRecipeUtil;
+import dev.anvilcraft.lite.integration.jei.util.JeiRenderHelper;
+import dev.anvilcraft.lite.integration.jei.util.JeiSlotUtil;
+import dev.anvilcraft.lite.recipe.anvil.wrap.BulgingRecipe;
+import dev.anvilcraft.lite.recipe.component.HasCauldronSimple;
+import dev.anvilcraft.lite.util.CauldronUtil;
+import dev.anvilcraft.lite.util.RenderHelper;
+import mezz.jei.api.gui.ITickTimer;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.ITooltipBuilder;
+import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
+import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.types.IRecipeType;
+import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.registration.IRecipeCatalystRegistration;
+import mezz.jei.api.registration.IRecipeRegistration;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
+
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
+public class BulgingCategory implements IRecipeCategory<RecipeHolder<BulgingRecipe>> {
+    public static final int WIDTH = 162;
+    public static final int HEIGHT = 64;
+
+    private final IDrawable icon;
+    private final IDrawable slotDefault;
+    private final IDrawable slotProbability;
+    private final Component title;
+    private final ITickTimer timer;
+
+    private final IDrawable arrowIn;
+    private final IDrawable arrowOut;
+
+    public BulgingCategory(IGuiHelper helper) {
+        icon = new DrawableBlockStateIcon(
+            Blocks.ANVIL.defaultBlockState(),
+            CauldronUtil.fullState(Blocks.WATER_CAULDRON)
+        );
+        slotDefault = JeiRenderHelper.getSlotDefault(helper);
+        slotProbability = JeiRenderHelper.getSlotProbability(helper);
+        title = Component.translatable("gui.anvilcraft.category.bulging");
+        timer = helper.createTickTimer(30, 60, true);
+
+        arrowIn = JeiRenderHelper.getArrowInput(helper);
+        arrowOut = JeiRenderHelper.getArrowOutput(helper);
+    }
+
+    @Override
+    public IRecipeType<RecipeHolder<BulgingRecipe>> getRecipeType() {
+        return AnvilCraftJeiPlugin.BULGING;
+    }
+
+    @Override
+    public Component getTitle() {
+        return title;
+    }
+
+    @Override
+    public int getWidth() {
+        return WIDTH;
+    }
+
+    @Override
+    public int getHeight() {
+        return HEIGHT;
+    }
+
+    @Override
+    public @Nullable IDrawable getIcon() {
+        return icon;
+    }
+
+    @Override
+    public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<BulgingRecipe> recipeHolder, IFocusGroup focuses) {
+        BulgingRecipe recipe = recipeHolder.value();
+        JeiSlotUtil.addInputSlots(builder, recipe.getInputItems());
+        if (!recipe.getResultItems().isEmpty()) {
+            JeiSlotUtil.addOutputSlots(builder, recipe.getResultItems());
+        }
+    }
+
+    @Override
+    public void draw(
+        RecipeHolder<BulgingRecipe> recipeHolder,
+        IRecipeSlotsView recipeSlotsView,
+        GuiGraphics guiGraphics,
+        double mouseX,
+        double mouseY) {
+        BulgingRecipe recipe = recipeHolder.value();
+        float anvilYOffset = JeiRenderHelper.getAnvilAnimationOffset(timer);
+        RenderHelper.renderBlock(
+            guiGraphics,
+            Blocks.ANVIL.defaultBlockState(),
+            81,
+            22 + anvilYOffset,
+            20,
+            12,
+            RenderHelper.SINGLE_BLOCK);
+        BlockState state;
+        if (recipe.isFromWater()) {
+            state = CauldronUtil.fullState(Blocks.WATER_CAULDRON);
+        } else if (recipe.isProduceFluid()) {
+            state = Blocks.CAULDRON.defaultBlockState();
+        } else {
+            state = recipe.getHasCauldron().getTransformCauldron().defaultBlockState();
+        }
+        RenderHelper.renderBlock(guiGraphics, state, 81, 40, 10, 12, RenderHelper.SINGLE_BLOCK);
+
+        arrowIn.draw(guiGraphics, 54, 30);
+        arrowOut.draw(guiGraphics, 92, 29);
+
+        JeiSlotUtil.drawInputSlots(guiGraphics, slotDefault, recipe.getInputItems().size());
+        if (!recipe.getResultItems().isEmpty()) {
+            if (JeiRecipeUtil.isChance(recipe.getResultItems())) {
+                JeiSlotUtil.drawOutputSlots(guiGraphics, slotProbability, recipe.getResultItems().size());
+            } else {
+                JeiSlotUtil.drawOutputSlots(guiGraphics, slotDefault, recipe.getResultItems().size());
+            }
+            HasCauldronSimple hasCauldron = recipe.getHasCauldron();
+            if (recipe.isConsumeFluid()) {
+                PoseStack pose = new PoseStack();
+                pose.pushPose();
+                pose.scale(0.8f, 0.8f, 1.0f);
+                guiGraphics.drawString(
+                    Minecraft.getInstance().font,
+                    Component.translatable(
+                        "gui.anvilcraft.category.bulging.consume_fluid",
+                        hasCauldron.consume(),
+                        hasCauldron.getFluidCauldron().getName()
+                    ),
+                    0,
+                    70,
+                    0xFF000000,
+                    false
+                );
+                pose.popPose();
+            } else if (recipe.isProduceFluid()) {
+                PoseStack pose = new PoseStack();
+                pose.pushPose();
+                pose.scale(0.8f, 0.8f, 1.0f);
+                guiGraphics.drawString(
+                    Minecraft.getInstance().font,
+                    Component.translatable(
+                        "gui.anvilcraft.category.bulging.produce_fluid",
+                        -hasCauldron.consume(),
+                        hasCauldron.getTransformCauldron().getName()
+                    ),
+                    0,
+                    70,
+                    0xFF000000,
+                    false
+                );
+                pose.popPose();
+            }
+        } else {
+            Block result = recipe.getHasCauldron().getTransformCauldron();
+            if (recipe.isConsumeFluid()) {
+                state = CauldronUtil.getStateFromContentAndLevel(result, CauldronUtil.maxLevel(result) - 1);
+            } else if (recipe.isProduceFluid()) {
+                state = CauldronUtil.getStateFromContentAndLevel(result, 1);
+            } else {
+                state = CauldronUtil.fullState(result);
+            }
+            RenderHelper.renderBlock(guiGraphics, state, 133, 30, 0, 12, RenderHelper.SINGLE_BLOCK);
+        }
+    }
+
+    @Override
+    public void getTooltip(
+        ITooltipBuilder tooltip,
+        RecipeHolder<BulgingRecipe> recipeHolder,
+        IRecipeSlotsView recipeSlotsView,
+        double mouseX,
+        double mouseY
+    ) {
+        BulgingRecipe recipe = recipeHolder.value();
+        if (mouseX >= 72 && mouseX <= 90) {
+            if (mouseY >= 34 && mouseY <= 53) {
+                Block material = recipe.getHasCauldron().getFluidCauldron();
+                Component text;
+                if (recipe.isFromWater()) {
+                    text = Blocks.WATER_CAULDRON.getName();
+                } else if (recipe.isConsumeFluid()) {
+                    text = material.getName();
+                } else if (recipe.isProduceFluid()) {
+                    text = Blocks.CAULDRON.getName();
+                } else {
+                    text = material.getName();
+                }
+                tooltip.add(text);
+            }
+        }
+        if (mouseX >= 124 && mouseX <= 140) {
+            if (mouseY >= 24 && mouseY <= 42) {
+                Block result = recipe.getHasCauldron().getTransformCauldron();
+                Component text;
+                if (recipe.getResultItems().isEmpty()) {
+                    if (recipe.isConsumeFluid()) {
+                        if (CauldronUtil.maxLevel(result) > 1) {
+                            text = result.getName();
+                        } else {
+                            text = Blocks.CAULDRON.getName();
+                        }
+                    } else {
+                        text = result.getName();
+                    }
+                    tooltip.add(text);
+                }
+            }
+        }
+    }
+
+    public static void registerRecipes(IRecipeRegistration registration) {
+        registration.addRecipes(AnvilCraftJeiPlugin.BULGING, JeiRecipeUtil.getRecipeHoldersFromType(ModRecipeTypes.BULGING_TYPE.get()));
+    }
+
+    public static void registerCraftingStations(IRecipeCatalystRegistration registration) {
+        registration.addCraftingStation(AnvilCraftJeiPlugin.BULGING, new ItemStack(Items.ANVIL));
+        registration.addCraftingStation(AnvilCraftJeiPlugin.BULGING, new ItemStack(Items.CAULDRON));
+    }
+}
