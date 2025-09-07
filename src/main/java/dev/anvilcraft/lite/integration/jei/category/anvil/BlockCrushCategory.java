@@ -5,7 +5,7 @@ import dev.anvilcraft.lite.integration.jei.AnvilCraftJeiPlugin;
 import dev.anvilcraft.lite.integration.jei.util.JeiRecipeUtil;
 import dev.anvilcraft.lite.integration.jei.util.JeiRenderHelper;
 import dev.anvilcraft.lite.recipe.anvil.wrap.BlockCrushRecipe;
-import dev.anvilcraft.lite.util.RenderHelper;
+import dev.anvilcraft.lite.util.render.RenderHelper;
 import mezz.jei.api.gui.ITickTimer;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
@@ -20,6 +20,7 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -88,32 +89,37 @@ public class BlockCrushCategory implements IRecipeCategory<RecipeHolder<BlockCru
         IRecipeSlotsView recipeSlotsView,
         GuiGraphics guiGraphics,
         double mouseX,
-        double mouseY) {
+        double mouseY
+    ) {
+        Rect2i area = AnvilCraftJeiPlugin.AREA_WHEN_DRAW.get();
+        int left = area.getX() - 9;
+        int top = area.getY();
         float anvilYOffset = JeiRenderHelper.getAnvilAnimationOffset(timer);
         arrowDefault.draw(guiGraphics, 73, 35);
 
-        RenderHelper.renderBlock(
+
+        List<BlockState> input = recipe.value().getFirstInputBlock().constructStatesForRender();
+        if (input.isEmpty()) throw new IllegalStateException("Unexpect no state input in Block Crush recipe %s".formatted(recipe.id()));
+        BlockState renderedState = input.get((int) ((System.currentTimeMillis() / 1000) % input.size()));
+        if (renderedState == null) {
+            throw new IllegalStateException("Unexpect no state input in Block Crush recipe %s".formatted(recipe.id()));
+        }
+        RenderHelper.renderSingleBlock(guiGraphics, renderedState, left + 50, top + 40, 12);
+        RenderHelper.renderSingleBlock(
             guiGraphics,
             Blocks.ANVIL.defaultBlockState(),
-            50,
-            22 + anvilYOffset,
-            20,
-            12,
-            RenderHelper.SINGLE_BLOCK);
+            left + 50,
+            top + 22 + anvilYOffset,
+            12
+        );
 
-        renderInput:
-        {
-            List<BlockState> input = recipe.value().getFirstInputBlock().constructStatesForRender();
-            if (input.isEmpty()) break renderInput;
-            BlockState renderedState = input.get((int) ((System.currentTimeMillis() / 1000) % input.size()));
-            if (renderedState == null) break renderInput;
-            RenderHelper.renderBlock(guiGraphics, renderedState, 50, 40, 10, 12, RenderHelper.SINGLE_BLOCK);
-        }
-
-        RenderHelper.renderBlock(
-            guiGraphics, Blocks.ANVIL.defaultBlockState(), 110, 30, 10, 12, RenderHelper.SINGLE_BLOCK);
-        RenderHelper.renderBlock(
-            guiGraphics, recipe.value().getFirstResultBlock().state(), 110, 40, 0, 12, RenderHelper.SINGLE_BLOCK);
+        RenderHelper.renderMultipleBlocks(
+            guiGraphics,
+            List.of(Blocks.ANVIL.defaultBlockState(), recipe.value().getFirstResultBlock().state()),
+            left + 110,
+            top + 30,
+            12
+        );
     }
 
     @Override
@@ -122,7 +128,8 @@ public class BlockCrushCategory implements IRecipeCategory<RecipeHolder<BlockCru
         RecipeHolder<BlockCrushRecipe> recipe,
         IRecipeSlotsView recipeSlotsView,
         double mouseX,
-        double mouseY) {
+        double mouseY
+    ) {
         IRecipeCategory.super.getTooltip(tooltip, recipe, recipeSlotsView, mouseX, mouseY);
         if (mouseX >= 40 && mouseX <= 58) {
             if (mouseY >= 42 && mouseY <= 52) {
@@ -139,7 +146,8 @@ public class BlockCrushCategory implements IRecipeCategory<RecipeHolder<BlockCru
     public static void registerRecipes(IRecipeRegistration registration) {
         registration.addRecipes(
             AnvilCraftJeiPlugin.BLOCK_CRUSH,
-            JeiRecipeUtil.getRecipeHoldersFromType(ModRecipeTypes.BLOCK_CRUSH_TYPE.get()));
+            JeiRecipeUtil.getRecipeHoldersFromType(ModRecipeTypes.BLOCK_CRUSH_TYPE.get())
+        );
     }
 
     public static void registerCraftingStations(IRecipeCatalystRegistration registration) {

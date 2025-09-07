@@ -82,14 +82,8 @@ public class JeiSlotUtil {
     public static void addSlotWithCount(
         IRecipeLayoutBuilder builder, int slotX, int slotY, ItemIngredientPredicate entry
     ) {
-        IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.INPUT, slotX, slotY);
-        entry.items().ifPresent(items -> {
-            List<ItemStack> stacks = new ArrayList<>();
-            for (Holder<Item> holder : items) {
-                stacks.add(new ItemStack(holder, entry.count()));
-            }
-            slot.addItemStacks(stacks);
-        });
+        IRecipeSlotBuilder slot = builder.addInputSlot(slotX, slotY);
+        slot.addItemStacks(List.of(entry.getItems()));
     }
 
     public static void addInputSlots(
@@ -98,8 +92,8 @@ public class JeiSlotUtil {
         if (inputSize == 0) return;
         if (inputSize == 1) {
             ItemIngredientPredicate ingredient = mergedIngredients.getFirst();
-            IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.INPUT, 21, 24);
-            ingredient.items().ifPresent(items -> slot.add(Ingredient.of(items)));
+            IRecipeSlotBuilder slot = builder.addInputSlot(21, 24);
+            slot.addItemStacks(List.of(ingredient.getItems()));
         } else if (inputSize <= 4) {
             int startX = 11;
             int startY = 15;
@@ -137,7 +131,7 @@ public class JeiSlotUtil {
             if (stack.count() instanceof ConstantValue) {
                 itemStack.setCount(stack.getMaxCount());
             }
-            IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.OUTPUT, 125, 24).add(itemStack);
+            IRecipeSlotBuilder slot = builder.addOutputSlot(125, 24).add(itemStack);
             JeiRecipeUtil.addTooltips(slot, stack.getMaxCount(), stack.count());
         } else if (outputSize <= 4) {
             int startX = 117;
@@ -150,7 +144,7 @@ public class JeiSlotUtil {
                 if (stack.count() instanceof ConstantValue) {
                     itemStack.setCount(stack.getMaxCount());
                 }
-                IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.OUTPUT, startX + 19 * col, startY + 19 * row).add(itemStack);
+                IRecipeSlotBuilder slot = builder.addOutputSlot(startX + 19 * col, startY + 19 * row).add(itemStack);
                 JeiRecipeUtil.addTooltips(slot, stack.getMaxCount(), stack.count());
             }
         } else if (outputSize <= 6) {
@@ -164,7 +158,7 @@ public class JeiSlotUtil {
                 if (stack.count() instanceof ConstantValue) {
                     itemStack.setCount(stack.getMaxCount());
                 }
-                IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.OUTPUT, startX + 19 * col, startY + 19 * row).add(itemStack);
+                IRecipeSlotBuilder slot = builder.addOutputSlot(startX + 19 * col, startY + 19 * row).add(itemStack);
                 JeiRecipeUtil.addTooltips(slot, stack.getMaxCount(), stack.count());
             }
         } else {
@@ -179,7 +173,7 @@ public class JeiSlotUtil {
                 if (stack.count() instanceof ConstantValue) {
                     itemStack.setCount(stack.getMaxCount());
                 }
-                IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.OUTPUT, startX + 19 * col, startY + 19 * row).add(itemStack);
+                IRecipeSlotBuilder slot = builder.addOutputSlot(startX + 19 * col, startY + 19 * row).add(itemStack);
                 JeiRecipeUtil.addTooltips(slot, stack.getMaxCount(), stack.count());
             }
         }

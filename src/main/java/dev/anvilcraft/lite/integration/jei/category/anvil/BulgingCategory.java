@@ -10,7 +10,7 @@ import dev.anvilcraft.lite.integration.jei.util.JeiSlotUtil;
 import dev.anvilcraft.lite.recipe.anvil.wrap.BulgingRecipe;
 import dev.anvilcraft.lite.recipe.component.HasCauldronSimple;
 import dev.anvilcraft.lite.util.CauldronUtil;
-import dev.anvilcraft.lite.util.RenderHelper;
+import dev.anvilcraft.lite.util.render.RenderHelper;
 import mezz.jei.api.gui.ITickTimer;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
@@ -25,6 +25,7 @@ import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -105,17 +106,13 @@ public class BulgingCategory implements IRecipeCategory<RecipeHolder<BulgingReci
         IRecipeSlotsView recipeSlotsView,
         GuiGraphics guiGraphics,
         double mouseX,
-        double mouseY) {
+        double mouseY
+    ) {
+        Rect2i area = AnvilCraftJeiPlugin.AREA_WHEN_DRAW.get();
+        int left = area.getX() - 9;
+        int top = area.getY() - 7;
         BulgingRecipe recipe = recipeHolder.value();
         float anvilYOffset = JeiRenderHelper.getAnvilAnimationOffset(timer);
-        RenderHelper.renderBlock(
-            guiGraphics,
-            Blocks.ANVIL.defaultBlockState(),
-            81,
-            22 + anvilYOffset,
-            20,
-            12,
-            RenderHelper.SINGLE_BLOCK);
         BlockState state;
         if (recipe.isFromWater()) {
             state = CauldronUtil.fullState(Blocks.WATER_CAULDRON);
@@ -124,7 +121,14 @@ public class BulgingCategory implements IRecipeCategory<RecipeHolder<BulgingReci
         } else {
             state = recipe.getHasCauldron().getTransformCauldron().defaultBlockState();
         }
-        RenderHelper.renderBlock(guiGraphics, state, 81, 40, 10, 12, RenderHelper.SINGLE_BLOCK);
+        RenderHelper.renderSingleBlock(guiGraphics, state, left + 81, top + 40, 12);
+        RenderHelper.renderSingleBlock(
+            guiGraphics,
+            Blocks.ANVIL.defaultBlockState(),
+            left + 81,
+            top + 22 + anvilYOffset,
+            12
+        );
 
         arrowIn.draw(guiGraphics, 54, 30);
         arrowOut.draw(guiGraphics, 92, 29);
@@ -181,7 +185,7 @@ public class BulgingCategory implements IRecipeCategory<RecipeHolder<BulgingReci
             } else {
                 state = CauldronUtil.fullState(result);
             }
-            RenderHelper.renderBlock(guiGraphics, state, 133, 30, 0, 12, RenderHelper.SINGLE_BLOCK);
+            RenderHelper.renderSingleBlock(guiGraphics, state, left + 133, top + 30, 12);
         }
     }
 
