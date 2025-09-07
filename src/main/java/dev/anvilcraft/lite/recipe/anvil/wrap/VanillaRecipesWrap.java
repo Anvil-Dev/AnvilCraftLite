@@ -10,7 +10,6 @@ import dev.anvilcraft.lite.util.RecipeUtil;
 import dev.anvilcraft.lite.util.Util;
 import lombok.extern.slf4j.Slf4j;
 import net.minecraft.core.HolderGetter;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -44,15 +43,15 @@ public class VanillaRecipesWrap {
     private static List<SmeltingRecipe> smeltingRecipes;
     public static List<RecipeHolder<InWorldRecipe>> recipes;
 
-    public static List<RecipeHolder<InWorldRecipe>> init(HolderLookup.Provider registries, Collection<RecipeHolder<?>> recipes) {
-        HolderLookup.RegistryLookup<Item> items = registries.lookupOrThrow(Registries.ITEM);
+    public static List<RecipeHolder<InWorldRecipe>> init(HolderGetter.Provider registries, Collection<RecipeHolder<?>> recipes) {
         VanillaRecipesWrap.cooked = Collections.synchronizedSet(new HashSet<>());
         VanillaRecipesWrap.smeltingRecipes = Collections.synchronizedList(new ArrayList<>());
         VanillaRecipesWrap.recipes = new ArrayList<>();
+        HolderGetter<Item> items = registries.lookupOrThrow(Registries.ITEM);
         for (RecipeHolder<?> recipeHolder : recipes) {
             VanillaRecipesWrap.wrap(items, recipeHolder).ifPresent(VanillaRecipesWrap.recipes::add);
         }
-        VanillaRecipesWrap.smeltingRecipes.forEach(smeltingRecipe -> VanillaRecipesWrap.wrap(items, smeltingRecipe));
+        VanillaRecipesWrap.smeltingRecipes.forEach(recipe -> VanillaRecipesWrap.wrap(items, recipe));
         return VanillaRecipesWrap.recipes;
     }
 
@@ -87,9 +86,10 @@ public class VanillaRecipesWrap {
                             RecipeUtil.getName(first),
                             BuiltInRegistries.ITEM.getKey(result.getItem()).getPath()
                         )
-                    ), ItemCompressRecipe.builder(items)
+                    ),
+                    ItemCompressRecipe.builder(items)
                         .result(result)
-                    .requires(RecipeUtil.wrapIngredient(items, first).withCount(pattern.height() * pattern.width()).build())
+                        .requires(RecipeUtil.wrapIngredient(items, first).withCount(pattern.height() * pattern.width()).build())
                         .buildRecipe()
                 ));
             }
@@ -108,7 +108,8 @@ public class VanillaRecipesWrap {
                                 RecipeUtil.getName(first),
                                 BuiltInRegistries.ITEM.getKey(result.getItem()).getPath()
                             )
-                        ), UnpackRecipe.builder(items)
+                        ),
+                        UnpackRecipe.builder(items)
                             .result(result)
                             .requires(RecipeUtil.wrapIngredient(items, first).build())
                             .buildRecipe()
@@ -125,7 +126,8 @@ public class VanillaRecipesWrap {
                             RecipeUtil.getName(first),
                             BuiltInRegistries.ITEM.getKey(result.getItem()).getPath()
                         )
-                    ), ItemCompressRecipe.builder(items)
+                    ),
+                    ItemCompressRecipe.builder(items)
                         .result(result)
                         .requires(RecipeUtil.wrapIngredient(items, first).withCount(ingredients.size()).build())
                         .buildRecipe()
@@ -148,7 +150,8 @@ public class VanillaRecipesWrap {
                             RecipeUtil.getName(input),
                             BuiltInRegistries.ITEM.getKey(result.getItem()).getPath()
                         )
-                    ), SuperHeatingRecipe.builder(items)
+                    ),
+                    SuperHeatingRecipe.builder(items)
                         .result(result.copyWithCount(boost ? 2 : 1))
                         .requires(RecipeUtil.wrapIngredient(items, input).build())
                         .buildRecipe()
@@ -167,7 +170,8 @@ public class VanillaRecipesWrap {
                             RecipeUtil.getName(input),
                             BuiltInRegistries.ITEM.getKey(result.getItem()).getPath()
                         )
-                    ), CookingRecipe.builder(items)
+                    ),
+                    CookingRecipe.builder(items)
                         .result(result)
                         .requires(RecipeUtil.wrapIngredient(items, input).build())
                         .buildRecipe()
@@ -186,7 +190,8 @@ public class VanillaRecipesWrap {
                             RecipeUtil.getName(input),
                             BuiltInRegistries.ITEM.getKey(result.getItem()).getPath()
                         )
-                    ), CookingRecipe.builder(items)
+                    ),
+                    CookingRecipe.builder(items)
                         .result(result)
                         .requires(RecipeUtil.wrapIngredient(items, input).build())
                         .buildRecipe()

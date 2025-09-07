@@ -35,18 +35,15 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.types.IRecipeHolderType;
 import mezz.jei.api.recipe.types.IRecipeType;
-import mezz.jei.api.registration.IAdvancedRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeMap;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.fml.loading.FMLLoader;
-import net.neoforged.neoforge.common.NeoForge;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -54,6 +51,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 public class AnvilCraftJeiPlugin implements IModPlugin {
+    public static final ThreadLocal<Rect2i> AREA_WHEN_DRAW = new ThreadLocal<>();
+
     public static RecipeMap recipes = RecipeMap.EMPTY;
 
     public static final IRecipeType<MeshRecipeGroup> MESH = createIRecipeType("mesh", MeshRecipeGroup.class);
@@ -135,14 +134,6 @@ public class AnvilCraftJeiPlugin implements IModPlugin {
         registration.addRecipeCategories(new StampingCategory(guiHelper));
         registration.addRecipeCategories(new SuperHeatingCategory(guiHelper));
         registration.addRecipeCategories(new BulgingCategory(guiHelper));
-    }
-
-    @Override
-    public void registerAdvanced(IAdvancedRegistration registration) {
-        NeoForge.EVENT_BUS.addListener(JeiEventListener::onDatapackSync);
-        if (FMLLoader.getDist() != Dist.CLIENT) return;
-        NeoForge.EVENT_BUS.addListener(JeiEventListener::onRecipeReceived);
-        NeoForge.EVENT_BUS.addListener(JeiEventListener::onLevelUnload);
     }
 
     public static <T> IRecipeType<T> createIRecipeType(String name, Class<T> clazz) {

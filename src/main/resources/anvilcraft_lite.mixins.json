@@ -10,10 +10,13 @@
     "LightningBoltMixin",
     "accessor.ShapedRecipeAccessor",
     "accessor.ShapelessRecipeAccessor",
-    "accessor.SingleItemRecipeAccessor"
+    "accessor.SingleItemRecipeAccessor",
+    "integration.JeiRecipeLayoutMixin"
   ],
   "client": [
+    "FallingBlockRendererMixin"
   ],
+  "plugin": "dev.anvilcraft.lite.mixin.plugin.AnvilCraftLiteMixinPlugin",
   "injectors": {
     "defaultRequire": 1
   },

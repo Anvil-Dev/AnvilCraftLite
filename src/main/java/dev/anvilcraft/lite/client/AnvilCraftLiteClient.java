@@ -11,7 +11,7 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
 @Mod(value = AnvilCraftLite.MOD_ID, dist = Dist.CLIENT)
 public class AnvilCraftLiteClient {
-    public AnvilCraftLiteClient(IEventBus modEventBus, ModContainer modContainer) {
+    public AnvilCraftLiteClient(IEventBus modEventBus, ModContainer ignored) {
         modEventBus.addListener(this::registerEntityRenderers);
         AnvilCraftLite.INTEGRATION_MANAGER.loadAllClientIntegrations();
     }

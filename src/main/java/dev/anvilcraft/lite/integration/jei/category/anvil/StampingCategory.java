@@ -7,7 +7,7 @@ import dev.anvilcraft.lite.integration.jei.util.JeiRecipeUtil;
 import dev.anvilcraft.lite.integration.jei.util.JeiRenderHelper;
 import dev.anvilcraft.lite.integration.jei.util.JeiSlotUtil;
 import dev.anvilcraft.lite.recipe.anvil.wrap.StampingRecipe;
-import dev.anvilcraft.lite.util.RenderHelper;
+import dev.anvilcraft.lite.util.render.RenderHelper;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.types.IRecipeType;
@@ -15,6 +15,7 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -50,29 +51,28 @@ public class StampingCategory extends AbstractProgressCategory<StampingRecipe> {
         double mouseX,
         double mouseY
     ) {
+        Rect2i area = AnvilCraftJeiPlugin.AREA_WHEN_DRAW.get();
+        int left = area.getX() - 9;
+        int top = area.getY() - 7;
         StampingRecipe recipe = recipeHolder.value();
         float anvilYOffset = JeiRenderHelper.getAnvilAnimationOffset(timer);
-        RenderHelper.renderBlock(
-            guiGraphics,
-            Blocks.ANVIL.defaultBlockState(),
-            81,
-            22 + anvilYOffset,
-            20,
-            12,
-            RenderHelper.SINGLE_BLOCK
-        );
-        RenderHelper.renderBlock(
+        RenderHelper.renderSingleBlock(
             guiGraphics,
             Blocks.PISTON.defaultBlockState().setValue(PistonBaseBlock.FACING, Direction.UP),
-            81,
-            40,
-            0,
-            12,
-            RenderHelper.SINGLE_BLOCK
+            left + 81,
+            top + 40,
+            12
+        );
+        RenderHelper.renderSingleBlock(
+            guiGraphics,
+            Blocks.ANVIL.defaultBlockState(),
+            left + 81,
+            top + 22 + anvilYOffset,
+            12
         );
 
         arrowIn.draw(guiGraphics, 54, 30);
-        arrowOutputFromBelow.draw(guiGraphics, 92, 29);
+        arrowOut.draw(guiGraphics, 92, 29);
 
         // TODO: 等待重构StampingUniqueItemsRecipe（目前仅多合一模板使用），重构后直接取消注释并修复import即可
 //        if (recipe instanceof StampingUniqueItemsRecipe) {

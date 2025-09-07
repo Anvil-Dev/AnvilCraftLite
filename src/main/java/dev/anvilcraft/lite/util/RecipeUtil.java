@@ -19,7 +19,7 @@ public final class RecipeUtil {
     }
 
     public static ItemIngredientPredicate.Builder wrapIngredient(HolderGetter<Item> items, Ingredient ingredient) {
-        if (ingredient.isCustom()) return ItemIngredientPredicate.of(items);
+        if (ingredient.isCustom()) return ItemIngredientPredicate.Builder.item(items);
         Either<TagKey<Item>, List<Holder<Item>>> data = ingredient.getValues().unwrap();
         final ItemIngredientPredicate.Builder[] result = new ItemIngredientPredicate.Builder[1];
         data.ifLeft(tag -> result[0] = ItemIngredientPredicate.of(items, tag));
@@ -29,7 +29,7 @@ public final class RecipeUtil {
             holders.stream().map(Holder::value).toArray(ItemLike[]::new)
         ));
         if (result[0] != null) return result[0];
-        return ItemIngredientPredicate.of(items);
+        return ItemIngredientPredicate.Builder.item(items);
     }
 
     public static String getName(Ingredient ingredient) {

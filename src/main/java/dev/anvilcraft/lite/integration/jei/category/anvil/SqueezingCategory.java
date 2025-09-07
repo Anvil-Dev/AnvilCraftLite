@@ -10,7 +10,7 @@ import dev.anvilcraft.lite.integration.jei.util.JeiRenderHelper;
 import dev.anvilcraft.lite.recipe.anvil.predicate.block.HasCauldron;
 import dev.anvilcraft.lite.recipe.anvil.wrap.SqueezingRecipe;
 import dev.anvilcraft.lite.util.CauldronUtil;
-import dev.anvilcraft.lite.util.RenderHelper;
+import dev.anvilcraft.lite.util.render.RenderHelper;
 import mezz.jei.api.gui.ITickTimer;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
@@ -25,6 +25,7 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -133,17 +134,11 @@ public class SqueezingCategory implements IRecipeCategory<RecipeHolder<Squeezing
         double mouseX,
         double mouseY
     ) {
+        Rect2i area = AnvilCraftJeiPlugin.AREA_WHEN_DRAW.get();
+        int left = area.getX() - 9;
+        int top = area.getY();
         SqueezingRecipe recipe = recipeHolder.value();
         float anvilYOffset = JeiRenderHelper.getAnvilAnimationOffset(timer);
-        RenderHelper.renderBlock(
-            guiGraphics,
-            Blocks.ANVIL.defaultBlockState(),
-            50,
-            12 + anvilYOffset,
-            20,
-            12,
-            RenderHelper.SINGLE_BLOCK
-        );
 
         List<BlockState> input = new ArrayList<>();
         for (BlockStatePredicate predicate : recipe.getInputBlocks()) {
@@ -152,17 +147,41 @@ public class SqueezingCategory implements IRecipeCategory<RecipeHolder<Squeezing
         if (input.isEmpty()) return;
         BlockState renderedState = input.get((int) ((System.currentTimeMillis() / 1000) % input.size()));
         if (renderedState == null) return;
-        RenderHelper.renderBlock(guiGraphics, renderedState, 50, 30, 10, 12, RenderHelper.SINGLE_BLOCK);
-        RenderHelper.renderBlock(guiGraphics, Blocks.CAULDRON.defaultBlockState(), 50, 40, 0, 12, RenderHelper.SINGLE_BLOCK);
+        RenderHelper.renderMultipleBlocks(
+            guiGraphics,
+            List.of(renderedState, Blocks.CAULDRON.defaultBlockState()),
+            left + 50,
+            top + 30,
+            12
+        );
+        RenderHelper.renderSingleBlock(
+            guiGraphics,
+            Blocks.ANVIL.defaultBlockState(),
+            left + 50,
+            top + 12 + anvilYOffset,
+            12
+        );
 
+        RenderHelper.renderSingleBlock(
+            guiGraphics,
+            SqueezingCategory.getCauldron(recipe),
+            left + 110,
+            top + 40,
+            12
+        );
         arrowDefault.draw(guiGraphics, 73, 35);
-
-        RenderHelper.renderBlock(guiGraphics, Blocks.ANVIL.defaultBlockState(), 110, 20, 20, 12, RenderHelper.SINGLE_BLOCK);
-        RenderHelper.renderBlock(guiGraphics, getCauldron(recipe), 110, 40, 0, 12, RenderHelper.SINGLE_BLOCK);
         List<ChanceBlockState> result = recipe.getResultBlocks();
-        if (result.isEmpty()) return;
-        renderedState = result.get((int) ((System.currentTimeMillis() / 1000) % result.size())).state();
-        RenderHelper.renderBlock(guiGraphics, renderedState, 110, 30, 10, 12, RenderHelper.SINGLE_BLOCK);
+        if (!result.isEmpty()) {
+            renderedState = result.get((int) ((System.currentTimeMillis() / 1000) % result.size())).state();
+            RenderHelper.renderSingleBlock(guiGraphics, renderedState, left + 110, top + 30, 12);
+        }
+        RenderHelper.renderSingleBlock(
+            guiGraphics,
+            Blocks.ANVIL.defaultBlockState(),
+            left + 110,
+            top + 20,
+            12
+        );
     }
 
     static BlockState getCauldron(SqueezingRecipe recipe) {
