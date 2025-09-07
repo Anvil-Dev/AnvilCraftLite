@@ -4,6 +4,7 @@ import dev.anvilcraft.lite.AnvilCraftLite;
 import dev.anvilcraft.lite.recipe.anvil.wrap.UnpackRecipe;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 
@@ -38,6 +39,11 @@ public class UnpackRecipeLoader extends ModRecipeLoader {
             .requires(Items.PRISMARINE_BRICKS)
             .result(Items.PRISMARINE_SHARD, 9)
             .save(this.output, AnvilCraftLite.of("unpack/prismine_shard_from_prismine_bricks"));
+
+        UnpackRecipe.builder(this.items)
+            .requires(ItemTags.WOOL)
+            .result(Items.STRING, 4)
+            .save(this.output, AnvilCraftLite.of("unpack/string_from_wools"));
     }
 
     private void unpack(ItemLike input, ItemLike result, int count) {
