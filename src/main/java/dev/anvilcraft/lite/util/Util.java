@@ -1,5 +1,6 @@
 package dev.anvilcraft.lite.util;
 
+import net.minecraft.world.InteractionResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,10 +36,14 @@ public class Util {
     @SuppressWarnings("TypeParameterExplicitlyExtendsObject")
     @SafeVarargs
     public static boolean instanceOfAny(@Nullable Object o, Class<? extends Object>... classes) {
-        Optional<Object> op = Optional.empty();
+        Optional<Object> optional = Optional.empty();
         for (Class<?> clazz : classes) {
-            op = op.or(() -> Util.castSafely(o, clazz));
+            optional = optional.or(() -> Util.castSafely(o, clazz));
         }
-        return op.isPresent();
+        return optional.isPresent();
+    }
+
+    public static InteractionResult sidedSuccess(boolean isClientSide) {
+        return isClientSide ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
     }
 }
