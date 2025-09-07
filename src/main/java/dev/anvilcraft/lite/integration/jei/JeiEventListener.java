@@ -1,11 +1,24 @@
 package dev.anvilcraft.lite.integration.jei;
 
+import dev.anvilcraft.lib.integration.Integration;
 import dev.anvilcraft.lite.init.reicpe.ModRecipeTypes;
 import net.neoforged.neoforge.client.event.RecipesReceivedEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.level.LevelEvent;
 
+@SuppressWarnings("unused")
+@Integration("jei")
 public class JeiEventListener {
+    public void apply() {
+        NeoForge.EVENT_BUS.addListener(JeiEventListener::onDatapackSync);
+    }
+
+    public void applyClient() {
+        NeoForge.EVENT_BUS.addListener(JeiEventListener::onRecipeReceived);
+        NeoForge.EVENT_BUS.addListener(JeiEventListener::onLevelUnload);
+    }
+
     public static void onDatapackSync(OnDatapackSyncEvent event) {
         event.sendRecipes(
             ModRecipeTypes.MESH_TYPE.get(),
@@ -20,6 +33,7 @@ public class JeiEventListener {
             ModRecipeTypes.COOKING_TYPE.get(),
             ModRecipeTypes.BOILING_TYPE.get(),
             ModRecipeTypes.STAMPING_TYPE.get(),
+            ModRecipeTypes.SUPER_HEATING_TYPE.get(),
             ModRecipeTypes.BULGING_TYPE.get()
         );
     }
@@ -28,7 +42,7 @@ public class JeiEventListener {
         AnvilCraftJeiPlugin.recipes = event.getRecipeMap();
     }
 
-    public static void onLevelUnload(LevelEvent.Unload event) {
+    public static void onLevelUnload(LevelEvent.Unload ignored) {
         AnvilCraftJeiPlugin.recipes = null;
     }
 }

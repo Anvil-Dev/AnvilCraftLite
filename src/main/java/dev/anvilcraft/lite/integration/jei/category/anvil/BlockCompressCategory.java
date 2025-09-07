@@ -7,7 +7,7 @@ import dev.anvilcraft.lite.integration.jei.util.BlockTagUtil;
 import dev.anvilcraft.lite.integration.jei.util.JeiRecipeUtil;
 import dev.anvilcraft.lite.integration.jei.util.JeiRenderHelper;
 import dev.anvilcraft.lite.recipe.anvil.wrap.BlockCompressRecipe;
-import dev.anvilcraft.lite.util.RenderHelper;
+import dev.anvilcraft.lite.util.render.RenderHelper;
 import mezz.jei.api.gui.ITickTimer;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
@@ -22,6 +22,7 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -98,42 +99,41 @@ public class BlockCompressCategory implements IRecipeCategory<RecipeHolder<Block
         double mouseX,
         double mouseY
     ) {
+        Rect2i area = AnvilCraftJeiPlugin.AREA_WHEN_DRAW.get();
+        int left = area.getX() - 9;
+        int top = area.getY();
         BlockCompressRecipe recipe = recipeHolder.value();
 
         float anvilYOffset = JeiRenderHelper.getAnvilAnimationOffset(timer);
         arrowDefault.draw(guiGraphics, 73, 35);
-
-        RenderHelper.renderBlock(
-            guiGraphics,
-            Blocks.ANVIL.defaultBlockState(),
-            50,
-            12 + anvilYOffset,
-            20,
-            12,
-            RenderHelper.SINGLE_BLOCK
-        );
 
         for (int i = recipe.getInputBlocks().size() - 1; i >= 0; i--) {
             List<BlockState> input = recipe.getInputBlocks().get(i).constructStatesForRender();
             if (input.isEmpty()) continue;
             BlockState renderedState = input.get((int) ((System.currentTimeMillis() / 1000) % input.size()));
             if (renderedState == null) continue;
-            RenderHelper.renderBlock(
+            RenderHelper.renderSingleBlock(
                 guiGraphics,
                 renderedState,
-                50,
-                30 + 10 * i,
-                10 - 10 * i,
-                12,
-                RenderHelper.SINGLE_BLOCK
+                left + 50,
+                top + 30 + 10 * i,
+                12
             );
         }
-
-        RenderHelper.renderBlock(
-            guiGraphics, Blocks.ANVIL.defaultBlockState(), 110, 30, 10, 12, RenderHelper.SINGLE_BLOCK
+        RenderHelper.renderSingleBlock(
+            guiGraphics,
+            Blocks.ANVIL.defaultBlockState(),
+            left + 50,
+            top + 12 + anvilYOffset,
+            12
         );
-        RenderHelper.renderBlock(
-            guiGraphics, recipe.getFirstResultBlock().state(), 110, 40, 0, 12, RenderHelper.SINGLE_BLOCK
+
+        RenderHelper.renderMultipleBlocks(
+            guiGraphics,
+            List.of(Blocks.ANVIL.defaultBlockState(), recipe.getFirstResultBlock().state()),
+            left + 110,
+            top + 30,
+            12
         );
     }
 

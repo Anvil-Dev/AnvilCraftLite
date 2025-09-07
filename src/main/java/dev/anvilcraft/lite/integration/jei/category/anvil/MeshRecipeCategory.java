@@ -5,7 +5,7 @@ import dev.anvilcraft.lite.integration.jei.drawable.DrawableBlockStateIcon;
 import dev.anvilcraft.lite.integration.jei.recipe.MeshRecipeGroup;
 import dev.anvilcraft.lite.integration.jei.util.JeiRecipeUtil;
 import dev.anvilcraft.lite.integration.jei.util.JeiRenderHelper;
-import dev.anvilcraft.lite.util.RenderHelper;
+import dev.anvilcraft.lite.util.render.RenderHelper;
 import mezz.jei.api.gui.ITickTimer;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
@@ -20,6 +20,7 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -100,18 +101,26 @@ public class MeshRecipeCategory implements IRecipeCategory<MeshRecipeGroup> {
         IRecipeSlotsView recipeSlotsView,
         GuiGraphics guiGraphics,
         double mouseX,
-        double mouseY) {
+        double mouseY
+    ) {
+        Rect2i area = AnvilCraftJeiPlugin.AREA_WHEN_DRAW.get();
+        int left = area.getX() - 9;
+        int top = area.getY() - 7;
         float anvilYOffset = JeiRenderHelper.getAnvilAnimationOffset(timer);
-        RenderHelper.renderBlock(
+        RenderHelper.renderSingleBlock(
+            guiGraphics,
+            Blocks.SCAFFOLDING.defaultBlockState(),
+            left + 81,
+            top + 30,
+            12
+        );
+        RenderHelper.renderSingleBlock(
             guiGraphics,
             Blocks.ANVIL.defaultBlockState(),
-            81,
-            12 + anvilYOffset,
-            20,
-            12,
-            RenderHelper.SINGLE_BLOCK);
-        RenderHelper.renderBlock(
-            guiGraphics, Blocks.SCAFFOLDING.defaultBlockState(), 81, 30, 10, 12, RenderHelper.SINGLE_BLOCK);
+            left + 81,
+            top + 12 + anvilYOffset,
+            12
+        );
 
         arrowIn.draw(guiGraphics, 55, 17);
         slotDefault.draw(guiGraphics, 36, 13);

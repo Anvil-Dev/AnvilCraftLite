@@ -7,8 +7,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.SectionPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.ColorResolver;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.biome.Biomes;
@@ -16,6 +18,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.DataLayer;
+import net.minecraft.world.level.lighting.LayerLightSectionStorage;
 import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
@@ -32,6 +36,7 @@ public class LevelLike implements BlockAndTintGetter {
     private final Map<BlockPos, BlockState> blocks = new HashMap<>();
     private final Map<BlockPos, BlockEntity> blockEntities = new HashMap<>();
     private final ClientLevel parent;
+    private final LevelLightEngine fullLight = new FullLightLevelLightEngine();
 
     @Getter
     private int currentVisibleLayer = 0;
@@ -116,7 +121,7 @@ public class LevelLike implements BlockAndTintGetter {
 
     @Override
     public LevelLightEngine getLightEngine() {
-        return LevelLightEngine.EMPTY;
+        return this.fullLight;
     }
 
     @Override
@@ -175,6 +180,66 @@ public class LevelLike implements BlockAndTintGetter {
         @Override
         public FluidState getFluidState(BlockPos blockPos) {
             return Fluids.EMPTY.defaultFluidState();
+        }
+    }
+
+    public static class FullLightLevelLightEngine extends LevelLightEngine {
+        @Override
+        public void checkBlock(BlockPos pos) {
+        }
+
+        @Override
+        public boolean hasLightWork() {
+            return false;
+        }
+
+        @Override
+        public int runLightUpdates() {
+            return 15;
+        }
+
+        @Override
+        public void updateSectionStatus(SectionPos pos, boolean isEmpty) {
+        }
+
+        @Override
+        public void updateSectionStatus(BlockPos pos, boolean isQueueEmpty) {
+        }
+
+        @Override
+        public void setLightEnabled(ChunkPos chunkPos, boolean b) {
+        }
+
+        @Override
+        public void propagateLightSources(ChunkPos pos) {
+        }
+
+        @Override
+        public String getDebugData(LightLayer lightLayer, SectionPos sectionPos) {
+            return "n/a";
+        }
+
+        @Override
+        public LayerLightSectionStorage.SectionType getDebugSectionType(LightLayer lightLayer, SectionPos sectionPos) {
+            return LayerLightSectionStorage.SectionType.EMPTY;
+        }
+
+        @Override
+        public void queueSectionData(LightLayer lightLayer, SectionPos sectionPos, @Nullable DataLayer dataLayer) {
+        }
+
+        @Override
+        public void retainData(ChunkPos pos, boolean retain) {
+        }
+
+        @Override
+        public int getRawBrightness(BlockPos blockPos, int amount) {
+            return 15;
+        }
+
+        @Override
+        public boolean lightOnInColumn(long columnPos) {
+            return true;
         }
     }
 }
