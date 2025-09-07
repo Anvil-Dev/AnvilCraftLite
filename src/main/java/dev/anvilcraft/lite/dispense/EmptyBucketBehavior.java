@@ -28,13 +28,13 @@ public class EmptyBucketBehavior implements ModDispenseItemBehavior {
         if (blockState.is(Blocks.WATER_CAULDRON) && blockState.getValue(LayeredCauldronBlock.LEVEL) == 3) {
             level.setBlockAndUpdate(pos1, Blocks.CAULDRON.defaultBlockState());
             return Items.WATER_BUCKET.getDefaultInstance();
-        } else if (blockState.is(Blocks.WATER) && blockState.getValue(LiquidBlock.LEVEL) == 15) {
+        } else if (blockState.is(Blocks.WATER) && blockState.getValue(LiquidBlock.LEVEL) == 0) {
             level.setBlockAndUpdate(pos1, Blocks.AIR.defaultBlockState());
             return Items.WATER_BUCKET.getDefaultInstance();
         } else if (blockState.is(Blocks.LAVA_CAULDRON)) {
             level.setBlockAndUpdate(pos1, Blocks.CAULDRON.defaultBlockState());
             return Items.LAVA_BUCKET.getDefaultInstance();
-        } else if (blockState.is(Blocks.LAVA) && blockState.getValue(LiquidBlock.LEVEL) == 15) {
+        } else if (blockState.is(Blocks.LAVA) && blockState.getValue(LiquidBlock.LEVEL) == 0) {
             level.setBlockAndUpdate(pos1, Blocks.AIR.defaultBlockState());
             return Items.LAVA_BUCKET.getDefaultInstance();
         } else if (blockState.is(Blocks.POWDER_SNOW_CAULDRON)) {

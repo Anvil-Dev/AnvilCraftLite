@@ -13,7 +13,7 @@
   "block.anvilcraft_lite.ferrite_core_magnet_block": "铁芯磁铁块",
   "block.anvilcraft_lite.hollow_magnet_block": "空心磁铁块",
   "block.anvilcraft_lite.magnet_block": "磁铁块",
-  "block.anvilcraft_lite.resin_block": "树脂块",
+  "block.anvilcraft_lite.resin_block": "树胶块",
   "entity.anvilcraft_lite.magnetized_node": "磁化节点",
   "gui.anvilcraft.category.average_output": "平均: %s",
   "gui.anvilcraft.category.block_compress": "方块压缩",
@@ -39,7 +39,7 @@
   "gui.anvilcraft.category.super_heating.produce_fluid": "产生: %d mB %s",
   "gui.anvilcraft.category.unpack": "拆解",
   "item.anvilcraft_lite.magnet_ingot": "磁铁锭",
-  "item.anvilcraft_lite.resin": "树脂",
+  "item.anvilcraft_lite.resin": "树胶",
   "itemGroup.anvilcraft_lite.tab": "铁砧工艺: 青春版",
   "jei.anvilcraft.tooltip.not_consumed": "不消耗"
 }
