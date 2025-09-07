@@ -44,6 +44,9 @@ jar {
     from(project.file("LICENSE")) {
         rename { "${it}_${modId}" }
     }
+    from(project.file("ASSETS_LICENSE")) {
+        rename { "${it}_${modId}" }
+    }
     from(project.file("README.md")) {
         rename { "${it}_${modId}" }
     }
@@ -147,7 +150,8 @@ dependencies {
     jarJar "dev.anvilcraft.lib:anvillib-neoforge-1.21.8:1.4.0+build.167"
 
     // JEI
-    implementation("mezz.jei:jei-1.21.8-neoforge:24.0.0.2")
+    compileOnly "mezz.jei:jei-1.21.8-neoforge-api:24.0.0.2"
+    runtimeOnly "mezz.jei:jei-1.21.8-neoforge:24.0.0.2"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
@@ -161,7 +165,7 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
                              mod_id                 : mod_id,
                              mod_name               : mod_name,
                              mod_license            : mod_license,
-                             mod_version            : mod_version,
+                             mod_version            : version,
                              mod_authors            : mod_authors,
                              mod_description        : mod_description]
     inputs.properties replaceProperties
