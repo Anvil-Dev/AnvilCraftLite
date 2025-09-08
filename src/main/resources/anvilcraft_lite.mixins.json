@@ -14,7 +14,7 @@
     "integration.JeiRecipeLayoutMixin"
   ],
   "client": [
-    "FallingBlockRendererMixin"
+    "FallingBlockRenderStateMixin"
   ],
   "plugin": "dev.anvilcraft.lite.mixin.plugin.AnvilCraftLiteMixinPlugin",
   "injectors": {
