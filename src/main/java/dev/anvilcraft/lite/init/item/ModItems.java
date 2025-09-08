@@ -1,6 +1,7 @@
 package dev.anvilcraft.lite.init.item;
 
 import dev.anvilcraft.lite.init.block.ModBlocks;
+import dev.anvilcraft.lite.item.CrabClawItem;
 import dev.anvilcraft.lite.item.MagnetItem;
 import dev.anvilcraft.lite.item.ResinBlockItem;
 import net.minecraft.world.item.BlockItem;
@@ -28,6 +29,9 @@ public class ModItems {
 
     public static final DeferredItem<BlockItem> FERRITE_CORE_MAGNET_BLOCK = REGISTER.simpleBlockItem(ModBlocks.FERRITE_CORE_MAGNET_BLOCK)
         .lang("Ferrite-Cored Block of Magnet")
+        .register();
+
+    public static final DeferredItem<CrabClawItem> CRAB_CLAW = REGISTER.item("crab_claw", CrabClawItem::new)
         .register();
 
     public static void init() {

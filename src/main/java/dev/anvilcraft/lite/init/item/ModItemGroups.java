@@ -18,6 +18,7 @@ public class ModItemGroups {
                 entries.accept(ModItems.MAGNET_BLOCK.get());
                 entries.accept(ModItems.HOLLOW_MAGNET_BLOCK.get());
                 entries.accept(ModItems.FERRITE_CORE_MAGNET_BLOCK.get());
+                entries.accept(ModItems.CRAB_CLAW.get());
             })
     );
 
