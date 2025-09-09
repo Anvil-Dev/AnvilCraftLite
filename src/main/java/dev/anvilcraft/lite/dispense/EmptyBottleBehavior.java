@@ -21,7 +21,11 @@ public class EmptyBottleBehavior implements ModDispenseItemBehavior {
         BlockState blockState = level.getBlockState(pos1);
         if (blockState.is(Blocks.WATER_CAULDRON)) {
             LayeredCauldronBlock.lowerFillLevel(blockState, level, pos1);
-            return PotionContents.createItemStack(Items.POTION.getDefaultInstance().getItem(), Potions.WATER);
+            return ModDispenseItemBehavior.consumeWithRemainder(
+                blockSource,
+                item,
+                PotionContents.createItemStack(Items.POTION.getDefaultInstance().getItem(), Potions.WATER)
+            );
         }
         return item;
     }
