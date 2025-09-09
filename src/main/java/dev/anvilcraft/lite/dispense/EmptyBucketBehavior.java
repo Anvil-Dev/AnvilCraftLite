@@ -27,22 +27,22 @@ public class EmptyBucketBehavior implements ModDispenseItemBehavior {
         BlockState blockState = level.getBlockState(pos1);
         if (blockState.is(Blocks.WATER_CAULDRON) && blockState.getValue(LayeredCauldronBlock.LEVEL) == 3) {
             level.setBlockAndUpdate(pos1, Blocks.CAULDRON.defaultBlockState());
-            return Items.WATER_BUCKET.getDefaultInstance();
+            return ModDispenseItemBehavior.consumeWithRemainder(blockSource, item, Items.WATER_BUCKET.getDefaultInstance());
         } else if (blockState.is(Blocks.WATER) && blockState.getValue(LiquidBlock.LEVEL) == 0) {
             level.setBlockAndUpdate(pos1, Blocks.AIR.defaultBlockState());
-            return Items.WATER_BUCKET.getDefaultInstance();
+            return ModDispenseItemBehavior.consumeWithRemainder(blockSource, item, Items.WATER_BUCKET.getDefaultInstance());
         } else if (blockState.is(Blocks.LAVA_CAULDRON)) {
             level.setBlockAndUpdate(pos1, Blocks.CAULDRON.defaultBlockState());
-            return Items.LAVA_BUCKET.getDefaultInstance();
+            return ModDispenseItemBehavior.consumeWithRemainder(blockSource, item, Items.LAVA_BUCKET.getDefaultInstance());
         } else if (blockState.is(Blocks.LAVA) && blockState.getValue(LiquidBlock.LEVEL) == 0) {
             level.setBlockAndUpdate(pos1, Blocks.AIR.defaultBlockState());
-            return Items.LAVA_BUCKET.getDefaultInstance();
+            return ModDispenseItemBehavior.consumeWithRemainder(blockSource, item, Items.LAVA_BUCKET.getDefaultInstance());
         } else if (blockState.is(Blocks.POWDER_SNOW_CAULDRON)) {
             level.setBlockAndUpdate(pos1, Blocks.CAULDRON.defaultBlockState());
-            return Items.POWDER_SNOW_BUCKET.getDefaultInstance();
+            return ModDispenseItemBehavior.consumeWithRemainder(blockSource, item, Items.POWDER_SNOW_BUCKET.getDefaultInstance());
         } else if (blockState.is(Blocks.POWDER_SNOW)) {
             level.setBlockAndUpdate(pos1, Blocks.AIR.defaultBlockState());
-            return Items.POWDER_SNOW_BUCKET.getDefaultInstance();
+            return ModDispenseItemBehavior.consumeWithRemainder(blockSource, item, Items.POWDER_SNOW_BUCKET.getDefaultInstance());
         }
         List<AbstractCow> cows = level.getEntities(
             EntityTypeTest.forClass(AbstractCow.class),
@@ -50,7 +50,7 @@ public class EmptyBucketBehavior implements ModDispenseItemBehavior {
             Entity::isAlive
         );
         if (!cows.isEmpty()) {
-            return Items.MILK_BUCKET.getDefaultInstance();
+            return ModDispenseItemBehavior.consumeWithRemainder(blockSource, item, Items.MILK_BUCKET.getDefaultInstance());
         }
         return item;
     }
