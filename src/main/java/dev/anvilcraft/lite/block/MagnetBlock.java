@@ -128,11 +128,13 @@ public class MagnetBlock extends Block {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             if (state.is(ModBlocks.MAGNET_BLOCK)) {
                 if (player.isShiftKeyDown()) {
                     player.addItem(ModItems.MAGNET_INGOT.get().getDefaultInstance());
-                    level.setBlockAndUpdate(pos, ModBlocks.HOLLOW_MAGNET_BLOCK.get().defaultBlockState());
+                    BlockState blockState = ModBlocks.HOLLOW_MAGNET_BLOCK.get().defaultBlockState();
+                    blockState.setValue(LIT, state.getValue(LIT));
+                    level.setBlockAndUpdate(pos, blockState);
                     level.playSound(null, pos, SoundEvents.ITEM_FRAME_REMOVE_ITEM, SoundSource.BLOCKS, 1.0f, 1.0f);
                     return InteractionResult.SUCCESS;
                 }

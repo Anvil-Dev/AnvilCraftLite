@@ -71,12 +71,16 @@ public class HollowMagnetBlock extends MagnetBlock implements SimpleWaterloggedB
         if (!level.isClientSide()) {
             if (stack.is(Items.IRON_INGOT)) {
                 stack.consume(1, player);
-                level.setBlockAndUpdate(pos, ModBlocks.FERRITE_CORE_MAGNET_BLOCK.get().defaultBlockState());
+                BlockState blockState = ModBlocks.FERRITE_CORE_MAGNET_BLOCK.get().defaultBlockState();
+                blockState.setValue(LIT, state.getValue(LIT));
+                level.setBlockAndUpdate(pos, blockState);
                 level.playSound(null, pos, SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.BLOCKS, 1.0f, 1.0f);
                 return InteractionResult.SUCCESS;
-            } else if (stack.is(ModItems.MAGNET_BLOCK)) {
+            } else if (stack.is(ModItems.MAGNET_INGOT)) {
                 stack.consume(1, player);
-                level.setBlockAndUpdate(pos, ModBlocks.MAGNET_BLOCK.get().defaultBlockState());
+                BlockState blockState = ModBlocks.MAGNET_BLOCK.get().defaultBlockState();
+                blockState.setValue(LIT, state.getValue(LIT));
+                level.setBlockAndUpdate(pos, blockState);
                 level.playSound(null, pos, SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.BLOCKS, 1.0f, 1.0f);
                 return InteractionResult.SUCCESS;
             }
