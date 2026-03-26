@@ -4,7 +4,7 @@ import dev.anvilcraft.lite.util.LevelLike;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.FallingBlockRenderer;
@@ -45,7 +45,7 @@ public class RenderHelper {
      */
     @SuppressWarnings("DataFlowIssue")
     public static void renderMultipleBlocks(
-        GuiGraphics graphics,
+        GuiGraphicsExtractor graphics,
         List<BlockState> states,
         float x,
         float y,
@@ -70,8 +70,8 @@ public class RenderHelper {
             FallingBlockRenderState renderState = renderer.createRenderState();
             renderer.extractRenderState(block, renderState, 1.0F);
             renderState.nameTag = RenderHelper.FULL_LIGHT_TAG;
-            renderState.hitboxesRenderState = null;
-            graphics.submitEntityRenderState(
+//            renderState.hitboxesRenderState = null;
+            graphics.entity(
                 renderState,
                 scale,
                 new Vector3f(0, 0.865f * i, 0),
@@ -96,7 +96,7 @@ public class RenderHelper {
      * @param y        y轴位置
      * @param scale    缩放量
      */
-    public static void renderMultipleBlocks(GuiGraphics graphics, List<BlockState> states, float x, float y, float scale) {
+    public static void renderMultipleBlocks(GuiGraphicsExtractor graphics, List<BlockState> states, float x, float y, float scale) {
         RenderHelper.renderMultipleBlocks(graphics, states, x, y, scale, BLOCK_DEFAULT_ROTATION);
     }
 
@@ -112,7 +112,7 @@ public class RenderHelper {
      */
     @SuppressWarnings("DataFlowIssue")
     public static void renderSingleBlock(
-        GuiGraphics graphics,
+        GuiGraphicsExtractor graphics,
         BlockState state,
         float x,
         float y,
@@ -134,8 +134,8 @@ public class RenderHelper {
         FallingBlockRenderState renderState = renderer.createRenderState();
         renderer.extractRenderState(block, renderState, 1.0F);
         renderState.nameTag = RenderHelper.FULL_LIGHT_TAG;
-        renderState.hitboxesRenderState = null;
-        graphics.submitEntityRenderState(
+//        renderState.hitboxesRenderState = null;
+        graphics.entity(
             renderState,
             scale,
             new Vector3f(0, 0, 0),
@@ -159,7 +159,7 @@ public class RenderHelper {
      * @param scale    缩放量
      * @param state    方块状态
      */
-    public static void renderSingleBlock(GuiGraphics graphics, BlockState state, float x, float y, float scale) {
+    public static void renderSingleBlock(GuiGraphicsExtractor graphics, BlockState state, float x, float y, float scale) {
         RenderHelper.renderSingleBlock(graphics, state, x, y, scale, BLOCK_DEFAULT_ROTATION);
     }
 

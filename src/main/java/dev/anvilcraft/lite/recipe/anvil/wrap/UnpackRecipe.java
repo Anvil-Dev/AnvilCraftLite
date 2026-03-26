@@ -46,7 +46,7 @@ public class UnpackRecipe extends AbstractProcessRecipe<UnpackRecipe> {
                 .setResultItems(results)
                 .setBlockInputOffset(new Vec3i(0, -1, 0))
                 .setInputBlocks(
-                    BlockStatePredicate.builder(null)
+                    BlockStatePredicate.builder()
                         .of(Blocks.IRON_TRAPDOOR)
                         .with(TrapDoorBlock.HALF, Half.TOP)
                         .with(TrapDoorBlock.OPEN, false)
@@ -78,6 +78,8 @@ public class UnpackRecipe extends AbstractProcessRecipe<UnpackRecipe> {
      * 解包配方序列化器
      */
     public static class Serializer extends AbstractSerializer<UnpackRecipe> {
+        public static final Serializer INSTANCE = new Serializer();
+
         @Override
         protected UnpackRecipe of(List<ItemIngredientPredicate> itemIngredients, List<ChanceItemStack> results) {
             return new UnpackRecipe(itemIngredients, results);

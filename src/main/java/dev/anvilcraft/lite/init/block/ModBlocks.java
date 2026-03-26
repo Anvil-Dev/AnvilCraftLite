@@ -1,38 +1,47 @@
 package dev.anvilcraft.lite.init.block;
 
+import dev.anvilcraft.lib.v2.registrum.util.entry.BlockEntry;
 import dev.anvilcraft.lite.block.FerriteCoreMagnetBlock;
 import dev.anvilcraft.lite.block.HollowMagnetBlock;
 import dev.anvilcraft.lite.block.MagnetBlock;
 import dev.anvilcraft.lite.block.ResinBlock;
+import dev.anvilcraft.lite.init.item.ModItemGroups;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.neoforged.neoforge.registries.DeferredBlock;
 
-import static dev.anvilcraft.lite.AnvilCraftLite.REGISTER;
+import static dev.anvilcraft.lite.AnvilCraftLite.REGISTRUM;
 
 public class ModBlocks {
-    public static final DeferredBlock<ResinBlock> RESIN_BLOCK = REGISTER.block("resin_block", ResinBlock::new)
-        .properties(() -> Blocks.SLIME_BLOCK)
+    static {
+        REGISTRUM.defaultCreativeTab(ModItemGroups.ANVILCRAFT_LITE);
+    }
+
+    public static final BlockEntry<ResinBlock> RESIN_BLOCK = REGISTRUM.block("resin_block", ResinBlock::new)
+        .initialProperties(() -> Blocks.SLIME_BLOCK)
         .lang("Block of Resin")
+        .simpleItem()
         .register();
 
-    public static final DeferredBlock<MagnetBlock> MAGNET_BLOCK = REGISTER.block("magnet_block", MagnetBlock::new)
-        .properties(() -> Blocks.IRON_BLOCK)
+    public static final BlockEntry<MagnetBlock> MAGNET_BLOCK = REGISTRUM.block("magnet_block", MagnetBlock::new)
+        .initialProperties(() -> Blocks.IRON_BLOCK)
         .lang("Block of Magnet")
+        .simpleItem()
         .register();
 
-    public static final DeferredBlock<HollowMagnetBlock> HOLLOW_MAGNET_BLOCK = REGISTER.block("hollow_magnet_block", HollowMagnetBlock::new)
-        .properties(() -> Blocks.IRON_BLOCK)
+    public static final BlockEntry<HollowMagnetBlock> HOLLOW_MAGNET_BLOCK = REGISTRUM.block("hollow_magnet_block", HollowMagnetBlock::new)
+        .initialProperties(() -> Blocks.IRON_BLOCK)
         .lang("Hollowed Block of Magnet")
+        .simpleItem()
         .register();
 
-    public static final DeferredBlock<FerriteCoreMagnetBlock> FERRITE_CORE_MAGNET_BLOCK = REGISTER.block(
-        "ferrite_core_magnet_block",
-        FerriteCoreMagnetBlock::new
+    public static final BlockEntry<FerriteCoreMagnetBlock> FERRITE_CORE_MAGNET_BLOCK = REGISTRUM.block(
+            "ferrite_core_magnet_block",
+            FerriteCoreMagnetBlock::new
         )
-        .properties(() -> Blocks.IRON_BLOCK)
+        .initialProperties(() -> Blocks.IRON_BLOCK)
         .properties(BlockBehaviour.Properties::randomTicks)
         .lang("Ferrite-Cored Block of Magnet")
+        .simpleItem()
         .register();
 
     public static void init() {

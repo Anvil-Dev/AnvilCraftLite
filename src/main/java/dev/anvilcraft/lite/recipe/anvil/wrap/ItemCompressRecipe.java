@@ -68,6 +68,8 @@ public class ItemCompressRecipe extends AbstractProcessRecipe<ItemCompressRecipe
      * 物品压缩配方序列化器
      */
     public static class Serializer extends AbstractSerializer<ItemCompressRecipe> {
+        public static final Serializer INSTANCE = new Serializer();
+
         @Override
         protected ItemCompressRecipe of(List<ItemIngredientPredicate> itemIngredients, List<ChanceItemStack> results) {
             return new ItemCompressRecipe(itemIngredients, results);

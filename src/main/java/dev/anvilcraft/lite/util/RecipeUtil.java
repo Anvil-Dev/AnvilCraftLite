@@ -12,6 +12,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
 public final class RecipeUtil {
@@ -19,17 +20,16 @@ public final class RecipeUtil {
     }
 
     public static ItemIngredientPredicate.Builder wrapIngredient(HolderGetter<Item> items, Ingredient ingredient) {
-        if (ingredient.isCustom()) return ItemIngredientPredicate.Builder.item(items);
+        if (ingredient.isCustom()) return ItemIngredientPredicate.Builder.item();
         Either<TagKey<Item>, List<Holder<Item>>> data = ingredient.getValues().unwrap();
-        final ItemIngredientPredicate.Builder[] result = new ItemIngredientPredicate.Builder[1];
-        data.ifLeft(tag -> result[0] = ItemIngredientPredicate.of(items, tag));
-        if (result[0] != null) return result[0];
-        data.ifRight(holders -> result[0] = ItemIngredientPredicate.of(
-            items,
+        AtomicReference<ItemIngredientPredicate.Builder> result = new AtomicReference<>();
+        data.ifLeft(tag -> result.set(ItemIngredientPredicate.of(tag)));
+        if (result.get() != null) return result.get();
+        data.ifRight(holders -> result.set(ItemIngredientPredicate.of(
             holders.stream().map(Holder::value).toArray(ItemLike[]::new)
-        ));
-        if (result[0] != null) return result[0];
-        return ItemIngredientPredicate.Builder.item(items);
+        )));
+        if (result.get() != null) return result.get();
+        return ItemIngredientPredicate.Builder.item();
     }
 
     public static String getName(Ingredient ingredient) {

@@ -51,7 +51,7 @@ public class CrabClawItem extends BetterItem {
      */
     public static void holdingCrabClawIncreasesRange(LivingEntity entity) {
         if (!(entity instanceof Player player)) return;
-        if (entity.level().isClientSide) return;
+        if (entity.level().isClientSide()) return;
         CompoundTag customData = entity.getPersistentData();
         boolean inOffHand = player.getOffhandItem().is(ModItems.CRAB_CLAW);
         boolean inMainHand = player.getMainHandItem().is(ModItems.CRAB_CLAW);
@@ -85,13 +85,13 @@ public class CrabClawItem extends BetterItem {
     @Override
     public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
         if (!(target instanceof Shulker shulker) || !shulker.isAlive()) return InteractionResult.PASS;
-        if (!player.level().isClientSide) {
+        if (!player.level().isClientSide()) {
             Optional.ofNullable(shulker.getAttribute(Attributes.ARMOR))
                 .ifPresent(attribute -> attribute.removeModifier(Shulker.COVERED_ARMOR_MODIFIER_ID));
             shulker.getEntityData().set(Shulker.DATA_PEEK_ID, (byte) 100);
         }
 
-        return Util.sidedSuccess(player.level().isClientSide);
+        return Util.sidedSuccess(player.level().isClientSide());
 
     }
 

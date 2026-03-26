@@ -1,7 +1,9 @@
 package dev.anvilcraft.lite.data.lang;
 
+import dev.anvilcraft.lib.v2.registrum.providers.RegistrumLangProvider;
+
 public class JeiLang {
-    public static void init(LangHandler provider) {
+    public static void init(RegistrumLangProvider provider) {
         provider.add("gui.anvilcraft.category.chance", "Chance: %s%%");
         provider.add("gui.anvilcraft.category.average_output", "Average: %s");
         provider.add("gui.anvilcraft.category.min_output", "Min: %s");

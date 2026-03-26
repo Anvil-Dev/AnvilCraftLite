@@ -1,25 +1,25 @@
 package dev.anvilcraft.lite.recipe.anvil.builder;
 
-import dev.anvilcraft.lite.AnvilCraftLite;
 import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
+import dev.anvilcraft.lite.AnvilCraftLite;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.Criterion;
-import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
+import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Recipe;
 import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * 抽象配方构建器类，用于构建各种类型的配方
@@ -67,7 +67,7 @@ public abstract class AbstractRecipeBuilder<T extends Recipe<?>> implements Reci
      */
     @Override
     public void save(RecipeOutput pRecipeOutput, ResourceKey<Recipe<?>> pId) {
-        validate(pId.location());
+        validate(pId.identifier());
         Advancement.Builder advancement = pRecipeOutput
             .advancement()
             .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(pId))
@@ -75,7 +75,7 @@ public abstract class AbstractRecipeBuilder<T extends Recipe<?>> implements Reci
             .requirements(AdvancementRequirements.Strategy.OR);
         criteria.forEach(advancement::addCriterion);
         T recipe = buildRecipe();
-        pRecipeOutput.accept(pId, recipe, advancement.build(pId.location().withPrefix("recipes/")));
+        pRecipeOutput.accept(pId, recipe, advancement.build(pId.identifier().withPrefix("recipes/")));
     }
 
     public void save(RecipeOutput pRecipeOutput, Identifier pId) {
@@ -126,4 +126,9 @@ public abstract class AbstractRecipeBuilder<T extends Recipe<?>> implements Reci
      * @return 配方结果物品
      */
     public abstract Item getResult();
+
+    @Override
+    public ResourceKey<Recipe<?>> defaultId() {
+        return ResourceKey.create(Registries.RECIPE, AnvilCraftLite.of(BuiltInRegistries.ITEM.getKey(this.getResult()).getPath()));
+    }
 }

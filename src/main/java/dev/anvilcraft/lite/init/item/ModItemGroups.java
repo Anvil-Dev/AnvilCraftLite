@@ -1,25 +1,33 @@
 package dev.anvilcraft.lite.init.item;
 
+import dev.anvilcraft.lite.AnvilCraftLite;
+import dev.anvilcraft.lite.init.block.ModBlocks;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.CreativeModeTab;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
-import static dev.anvilcraft.lite.AnvilCraftLite.REGISTER;
+import static dev.anvilcraft.lite.AnvilCraftLite.REGISTRUM;
 
 public class ModItemGroups {
-    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> ANVILCRAFT_LITE = REGISTER.itemGroup(
+    private static final DeferredRegister<CreativeModeTab> DF =
+        DeferredRegister.create(Registries.CREATIVE_MODE_TAB, AnvilCraftLite.MOD_ID);
+
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> ANVILCRAFT_LITE = DF.register(
         "tab",
-        builder -> builder
+        identifier -> CreativeModeTab.builder()
             .icon(() -> ModItems.MAGNET_INGOT.get().getDefaultInstance())
-            .title(REGISTER.lang("itemGroup.anvilcraft_lite.tab", "AnvilCraft: Lite"))
+            .title(REGISTRUM.addLang("itemGroup", AnvilCraftLite.of("tab"), "AnvilCraft: Lite"))
             .displayItems((ctx, entries) -> {
                 entries.accept(ModItems.RESIN.get());
                 entries.accept(ModItems.MAGNET_INGOT.get());
-                entries.accept(ModItems.RESIN_BLOCK.get());
-                entries.accept(ModItems.MAGNET_BLOCK.get());
-                entries.accept(ModItems.HOLLOW_MAGNET_BLOCK.get());
-                entries.accept(ModItems.FERRITE_CORE_MAGNET_BLOCK.get());
+                entries.accept(ModBlocks.RESIN_BLOCK.get());
+                entries.accept(ModBlocks.MAGNET_BLOCK.get());
+                entries.accept(ModBlocks.HOLLOW_MAGNET_BLOCK.get());
+                entries.accept(ModBlocks.FERRITE_CORE_MAGNET_BLOCK.get());
                 entries.accept(ModItems.CRAB_CLAW.get());
             })
+            .build()
     );
 
     public static void init() {

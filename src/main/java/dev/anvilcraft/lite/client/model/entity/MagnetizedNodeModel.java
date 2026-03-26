@@ -14,7 +14,6 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.RenderType;
 
 public class MagnetizedNodeModel extends EntityModel<MagnetizedNodeRenderState> {
     private final KeyframeAnimation idleAnimation;
@@ -36,7 +35,7 @@ public class MagnetizedNodeModel extends EntityModel<MagnetizedNodeRenderState> 
     ).build();
 
     public MagnetizedNodeModel(ModelPart root) {
-        super(root, RenderType::entityTranslucent);
+        super(root);
         this.idleAnimation = MagnetizedNodeModel.ROTATING.bake(root);
     }
 

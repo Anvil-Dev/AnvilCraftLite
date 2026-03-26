@@ -1,10 +1,10 @@
 package dev.anvilcraft.lite.mixin;
 
 import dev.anvilcraft.lite.util.render.RenderHelper;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.entity.state.FallingBlockRenderState;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.LightLayer;
 import org.spongepowered.asm.mixin.Mixin;
 

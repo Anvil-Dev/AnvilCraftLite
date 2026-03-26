@@ -7,7 +7,7 @@ import java.util.function.Supplier;
 
 public class DistExecutor {
     public static void run(Dist expectedDist, Supplier<Runnable> supplier) {
-        if (FMLLoader.getDist() == expectedDist) {
+        if (FMLLoader.getCurrent().getDist() == expectedDist) {
             supplier.get().run();
         }
     }

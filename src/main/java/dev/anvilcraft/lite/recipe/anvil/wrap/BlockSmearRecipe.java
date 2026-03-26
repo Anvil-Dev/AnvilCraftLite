@@ -64,11 +64,11 @@ public class BlockSmearRecipe extends AbstractProcessRecipe<BlockSmearRecipe> {
     /**
      * 方块涂抹配方序列化器
      */
-    public static class Serializer implements RecipeSerializer<BlockSmearRecipe> {
+    public static class Serializer {
         /**
          * 编解码器
          */
-        private static final MapCodec<BlockSmearRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        public static final MapCodec<BlockSmearRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             BlockStatePredicate.CODEC.listOf().fieldOf("inputs").forGetter(BlockSmearRecipe::getInputBlocks),
             ChanceBlockState.CODEC.codec().fieldOf("result").forGetter(BlockSmearRecipe::getFirstResultBlock)
         ).apply(instance, BlockSmearRecipe::new));
@@ -76,7 +76,7 @@ public class BlockSmearRecipe extends AbstractProcessRecipe<BlockSmearRecipe> {
         /**
          * 流编解码器
          */
-        private static final StreamCodec<RegistryFriendlyByteBuf, BlockSmearRecipe> STREAM_CODEC = StreamCodec.composite(
+        public static final StreamCodec<RegistryFriendlyByteBuf, BlockSmearRecipe> STREAM_CODEC = StreamCodec.composite(
             BlockStatePredicate.STREAM_CODEC.apply(ByteBufCodecs.list()),
             BlockSmearRecipe::getInputBlocks,
             ChanceBlockState.STREAM_CODEC,
@@ -84,12 +84,10 @@ public class BlockSmearRecipe extends AbstractProcessRecipe<BlockSmearRecipe> {
             BlockSmearRecipe::new
         );
 
-        @Override
         public MapCodec<BlockSmearRecipe> codec() {
             return Serializer.CODEC;
         }
 
-        @Override
         public StreamCodec<RegistryFriendlyByteBuf, BlockSmearRecipe> streamCodec() {
             return Serializer.STREAM_CODEC;
         }
@@ -132,7 +130,7 @@ public class BlockSmearRecipe extends AbstractProcessRecipe<BlockSmearRecipe> {
          * @return 构建器实例
          */
         public Builder input(TagKey<Block> input) {
-            this.inputs.add(BlockStatePredicate.builder(this.getter).of(input).build());
+            this.inputs.add(BlockStatePredicate.builder().of(input).build());
             return this;
         }
 
@@ -143,7 +141,7 @@ public class BlockSmearRecipe extends AbstractProcessRecipe<BlockSmearRecipe> {
          * @return 构建器实例
          */
         public Builder input(Block input) {
-            this.inputs.add(BlockStatePredicate.builder(this.getter).of(input).build());
+            this.inputs.add(BlockStatePredicate.builder().of(input).build());
             return this;
         }
 

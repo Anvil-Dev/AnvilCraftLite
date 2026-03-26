@@ -135,7 +135,14 @@ public class HollowMagnetBlock extends MagnetBlock implements SimpleWaterloggedB
     }
 
     @Override
-    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier) {
+    protected void entityInside(
+        BlockState state,
+        Level level,
+        BlockPos pos,
+        Entity entity,
+        InsideBlockEffectApplier effectApplier,
+        boolean isPrecise
+    ) {
         if (level.isClientSide()) {
             return;
         }
@@ -149,7 +156,7 @@ public class HollowMagnetBlock extends MagnetBlock implements SimpleWaterloggedB
             ItemStack item = itemEntity.getItem();
             if (item.is(Items.IRON_INGOT) && item.getCount() == 1) {
                 if (itemEntity.getOwner() instanceof ServerPlayer) {
-                    if (level.random.nextDouble() <= 0.005) {
+                    if (level.getRandom().nextDouble() <= 0.005) {
                         itemEntity.setItem(new ItemStack(ModItems.MAGNET_INGOT.get()));
                     }
                     HollowMagnetBlock.itemEntityHashCode = entity.hashCode();

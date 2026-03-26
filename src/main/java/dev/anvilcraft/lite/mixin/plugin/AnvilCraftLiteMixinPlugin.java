@@ -1,6 +1,6 @@
 package dev.anvilcraft.lite.mixin.plugin;
 
-import net.neoforged.fml.loading.LoadingModList;
+import net.neoforged.fml.loading.FMLLoader;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -18,7 +18,7 @@ public class AnvilCraftLiteMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public void onLoad(String mixinPackage) {
-        hasJei = LoadingModList.get().getMods().stream().anyMatch(it -> it.getModId().equals("jei"));
+        hasJei = FMLLoader.getCurrent().getLoadingModList().getMods().stream().anyMatch(it -> it.getModId().equals("jei"));
     }
 
     @Override

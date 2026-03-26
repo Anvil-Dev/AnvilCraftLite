@@ -78,7 +78,7 @@ public class SqueezingRecipe extends AbstractProcessRecipe<SqueezingRecipe> {
     /**
      * 压榨配方序列化器
      */
-    public static class Serializer implements RecipeSerializer<SqueezingRecipe> {
+    public static class Serializer {
         /**
          * 编解码器
          */
@@ -101,12 +101,10 @@ public class SqueezingRecipe extends AbstractProcessRecipe<SqueezingRecipe> {
             SqueezingRecipe::new
         );
 
-        @Override
         public MapCodec<SqueezingRecipe> codec() {
             return Serializer.CODEC;
         }
 
-        @Override
         public StreamCodec<RegistryFriendlyByteBuf, SqueezingRecipe> streamCodec() {
             return Serializer.STREAM_CODEC;
         }
@@ -154,7 +152,7 @@ public class SqueezingRecipe extends AbstractProcessRecipe<SqueezingRecipe> {
          * @return 构建器实例
          */
         public Builder requires(Block ingredient) {
-            return this.requires(BlockStatePredicate.builder(this.getter).of(ingredient).build());
+            return this.requires(BlockStatePredicate.builder().of(ingredient).build());
         }
 
         /**
@@ -164,7 +162,7 @@ public class SqueezingRecipe extends AbstractProcessRecipe<SqueezingRecipe> {
          * @return 构建器实例
          */
         public Builder requires(TagKey<Block> ingredient) {
-            return this.requires(BlockStatePredicate.builder(this.getter).of(ingredient).build());
+            return this.requires(BlockStatePredicate.builder().of(ingredient).build());
         }
 
         /**

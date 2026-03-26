@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import dev.anvilcraft.lib.v2.recipe.component.ChanceItemStack;
 import dev.anvilcraft.lib.v2.recipe.component.ItemIngredientPredicate;
-import dev.anvilcraft.lib.v2.util.NumberProviderUtil;
+import dev.anvilcraft.lib.v2.recipe.util.NumberProviderUtil;
 import dev.anvilcraft.lite.init.reicpe.ModRecipeTypes;
 import dev.anvilcraft.lite.integration.jei.util.JeiRecipeUtil;
 import dev.anvilcraft.lite.recipe.anvil.wrap.MeshRecipe;

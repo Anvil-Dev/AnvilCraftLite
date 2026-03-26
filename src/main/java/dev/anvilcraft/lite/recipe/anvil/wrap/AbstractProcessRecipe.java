@@ -11,20 +11,25 @@ import dev.anvilcraft.lib.v2.recipe.outcome.IRecipeOutcome;
 import dev.anvilcraft.lib.v2.recipe.predicate.IRecipePredicate;
 import dev.anvilcraft.lib.v2.recipe.predicate.block.HasBlock;
 import dev.anvilcraft.lib.v2.recipe.predicate.block.HasBlockIngredient;
+import dev.anvilcraft.lite.AnvilCraftLite;
 import dev.anvilcraft.lite.init.reicpe.ModRecipeTriggers;
 import dev.anvilcraft.lite.recipe.anvil.builder.AbstractRecipeBuilder;
 import dev.anvilcraft.lite.recipe.component.HasCauldronSimple;
 import lombok.Getter;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Vec3i;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.ItemLike;
@@ -109,10 +114,9 @@ public abstract class AbstractProcessRecipe<T extends InWorldRecipe> extends InW
      * @return 首个输入方块
      */
     public BlockStatePredicate getFirstInputBlock() {
-        //noinspection DataFlowIssue
         return Objects.requireNonNullElseGet(
             this.getInputBlocks().getFirst(),
-            () -> BlockStatePredicate.builder(null).of(Blocks.AIR).build()
+            () -> BlockStatePredicate.builder().of(Blocks.AIR).build()
         );
     }
 
@@ -151,12 +155,12 @@ public abstract class AbstractProcessRecipe<T extends InWorldRecipe> extends InW
      *
      * @param <T> 配方类型
      */
-    public abstract static class AbstractSerializer<T extends AbstractProcessRecipe<T>> implements RecipeSerializer<T> {
+    public abstract static class AbstractSerializer<T extends AbstractProcessRecipe<T>> {
         /**
          * 编解码器
          */
         protected final MapCodec<T> codec = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            ItemIngredientPredicate.CODEC.codec().listOf()
+            ItemIngredientPredicate.CODEC.listOf()
                 .optionalFieldOf("ingredients", List.of())
                 .forGetter(T::getInputItems),
             ChanceItemStack.CODEC.listOf()
@@ -184,12 +188,10 @@ public abstract class AbstractProcessRecipe<T extends InWorldRecipe> extends InW
          */
         protected abstract T of(List<ItemIngredientPredicate> itemIngredients, List<ChanceItemStack> results);
 
-        @Override
         public MapCodec<T> codec() {
             return this.codec;
         }
 
-        @Override
         public StreamCodec<RegistryFriendlyByteBuf, T> streamCodec() {
             return this.streamCodec;
         }
@@ -248,7 +250,7 @@ public abstract class AbstractProcessRecipe<T extends InWorldRecipe> extends InW
          * @return 构建器实例
          */
         public B requires(TagKey<Item> ingredient, int count) {
-            this.itemIngredients.add(ItemIngredientPredicate.Builder.item(this.getter).of(ingredient).withCount(count).build());
+            this.itemIngredients.add(ItemIngredientPredicate.Builder.item().of(ingredient).withCount(count).build());
             return this.getThis();
         }
 
@@ -269,7 +271,7 @@ public abstract class AbstractProcessRecipe<T extends InWorldRecipe> extends InW
          * @return 构建器实例
          */
         public B requires(ItemStack ingredient) {
-            this.itemIngredients.add(ItemIngredientPredicate.Builder.item(this.getter).of(ingredient).build());
+            this.itemIngredients.add(ItemIngredientPredicate.Builder.item().of(ingredient).build());
             return this.getThis();
         }
 
@@ -281,7 +283,7 @@ public abstract class AbstractProcessRecipe<T extends InWorldRecipe> extends InW
          * @return 构建器实例
          */
         public B requires(ItemLike ingredient, int count) {
-            return this.requires(ItemIngredientPredicate.Builder.item(this.getter).of(ingredient).withCount(count).build());
+            return this.requires(ItemIngredientPredicate.Builder.item().of(ingredient).withCount(count).build());
         }
 
         /**
@@ -425,6 +427,14 @@ public abstract class AbstractProcessRecipe<T extends InWorldRecipe> extends InW
             if (results.isEmpty()) {
                 throw new IllegalArgumentException("Recipe result must not be empty, RecipeId: " + pId);
             }
+        }
+
+        @Override
+        public ResourceKey<Recipe<?>> defaultId() {
+            return ResourceKey.create(
+                Registries.RECIPE,
+                AnvilCraftLite.of(BuiltInRegistries.ITEM.getKey(this.results.getFirst().getItem()).getPath())
+            );
         }
     }
 

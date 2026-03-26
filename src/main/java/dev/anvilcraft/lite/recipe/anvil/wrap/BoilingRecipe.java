@@ -52,7 +52,7 @@ public class BoilingRecipe extends AbstractProcessRecipe<BoilingRecipe> {
                 )
                 .setBlockInputOffset(new Vec3i(0, -2, 0))
                 .setInputBlocks(
-                    BlockStatePredicate.builder(null)
+                    BlockStatePredicate.builder()
                         .of(Blocks.CAMPFIRE)
                         .with(CampfireBlock.LIT, true)
                         .build()
@@ -83,6 +83,8 @@ public class BoilingRecipe extends AbstractProcessRecipe<BoilingRecipe> {
      * 煮沸配方序列化器
      */
     public static class Serializer extends AbstractSerializer<BoilingRecipe> {
+        public static final Serializer INSTANCE = new Serializer();
+
         @Override
         protected BoilingRecipe of(List<ItemIngredientPredicate> itemIngredients, List<ChanceItemStack> results) {
             return new BoilingRecipe(itemIngredients, results);

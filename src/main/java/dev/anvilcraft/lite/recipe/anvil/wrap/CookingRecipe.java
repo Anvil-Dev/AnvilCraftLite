@@ -8,7 +8,9 @@ import dev.anvilcraft.lite.recipe.component.HasCauldronSimple;
 import lombok.Getter;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Vec3i;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Blocks;
@@ -32,7 +34,6 @@ public class CookingRecipe extends AbstractProcessRecipe<CookingRecipe> {
      * @param results         结果物品列表
      */
     public CookingRecipe(List<ItemIngredientPredicate> itemIngredients, List<ChanceItemStack> results) {
-        //noinspection DataFlowIssue
         super(new Property().setItemInputOffset(new Vec3(0.0, -0.375, 0.0))
             .setItemInputRange(new Vec3(0.75, 0.75, 0.75))
             .setInputItems(itemIngredients)
@@ -41,7 +42,7 @@ public class CookingRecipe extends AbstractProcessRecipe<CookingRecipe> {
             .setCauldronOffset(new Vec3i(0, -1, 0))
             .setHasCauldron(HasCauldronSimple.empty().build())
             .setBlockInputOffset(new Vec3i(0, -2, 0))
-            .setInputBlocks(BlockStatePredicate.builder(null).of(Blocks.CAMPFIRE).with(CampfireBlock.LIT, true).build()));
+            .setInputBlocks(BlockStatePredicate.builder().of(Blocks.CAMPFIRE).with(CampfireBlock.LIT, true).build()));
     }
 
     @Override
@@ -67,6 +68,8 @@ public class CookingRecipe extends AbstractProcessRecipe<CookingRecipe> {
      * 烹饪配方序列化器
      */
     public static class Serializer extends AbstractSerializer<CookingRecipe> {
+        public static final Serializer INSTANCE = new Serializer();
+
         @Override
         protected CookingRecipe of(List<ItemIngredientPredicate> itemIngredients, List<ChanceItemStack> results) {
             return new CookingRecipe(itemIngredients, results);

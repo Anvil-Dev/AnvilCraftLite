@@ -11,15 +11,14 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.LootTableLoadEvent;
-import org.jetbrains.annotations.NotNull;
 
 @EventBusSubscriber
 public class LootTableEventListener {
     @SubscribeEvent
-    public static void lootTable(@NotNull LootTableLoadEvent event) {
+    public static void lootTable(LootTableLoadEvent event) {
         Identifier id = event.getName();
         LootTable table = event.getTable();
-        if (BuiltInLootTables.FISHING_JUNK.location().equals(id)) {
+        if (BuiltInLootTables.FISHING_JUNK.identifier().equals(id)) {
             table.addPool(
                 LootPool.lootPool()
                     .add(LootItem.lootTableItem(ModItems.CRAB_CLAW))

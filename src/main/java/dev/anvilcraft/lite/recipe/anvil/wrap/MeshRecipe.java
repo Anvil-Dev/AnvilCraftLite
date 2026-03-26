@@ -43,7 +43,7 @@ public class MeshRecipe extends AbstractProcessRecipe<MeshRecipe> {
                 .setResultItems(results)
                 .setBlockInputOffset(new Vec3i(0, -1, 0))
                 .setInputBlocks(
-                    BlockStatePredicate.builder(null)
+                    BlockStatePredicate.builder()
                         .of(Blocks.SCAFFOLDING)
                         .build()
                 )
@@ -73,6 +73,8 @@ public class MeshRecipe extends AbstractProcessRecipe<MeshRecipe> {
      * 筛网配方序列化器
      */
     public static class Serializer extends AbstractSerializer<MeshRecipe> {
+        public static final Serializer INSTANCE = new Serializer();
+
         @Override
         protected MeshRecipe of(List<ItemIngredientPredicate> itemIngredients, List<ChanceItemStack> results) {
             return new MeshRecipe(itemIngredients, results);

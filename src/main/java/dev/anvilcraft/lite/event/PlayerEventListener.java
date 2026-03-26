@@ -1,6 +1,7 @@
 package dev.anvilcraft.lite.event;
 
 import dev.anvilcraft.lite.AnvilCraftLite;
+import dev.anvilcraft.lite.init.block.ModBlocks;
 import dev.anvilcraft.lite.init.item.ModItems;
 import dev.anvilcraft.lite.item.ResinBlockItem;
 import net.minecraft.world.InteractionHand;
@@ -20,7 +21,7 @@ public class PlayerEventListener {
         Player player = event.getEntity();
         ItemStack item = player.getItemInHand(hand);
         Entity target = event.getTarget();
-        if (item.is(ModItems.RESIN_BLOCK.get())) {
+        if (item.is(ModBlocks.RESIN_BLOCK.asItem())) {
             InteractionResult result = ResinBlockItem.useEntity(player, target, item);
             if (result != InteractionResult.PASS) {
                 event.setCancellationResult(result);

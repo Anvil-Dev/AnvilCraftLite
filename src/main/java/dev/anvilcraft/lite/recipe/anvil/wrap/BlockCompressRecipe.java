@@ -66,11 +66,11 @@ public class BlockCompressRecipe extends AbstractProcessRecipe<BlockCompressReci
     /**
      * 方块压缩配方序列化器
      */
-    public static class Serializer implements RecipeSerializer<BlockCompressRecipe> {
+    public static class Serializer {
         /**
          * 编解码器
          */
-        private static final MapCodec<BlockCompressRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        public static final MapCodec<BlockCompressRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             BlockStatePredicate.CODEC.listOf().fieldOf("inputs").forGetter(BlockCompressRecipe::getInputBlocks),
             ChanceBlockState.CODEC.codec().fieldOf("result").forGetter(BlockCompressRecipe::getFirstResultBlock)
         ).apply(instance, BlockCompressRecipe::new));
@@ -78,7 +78,7 @@ public class BlockCompressRecipe extends AbstractProcessRecipe<BlockCompressReci
         /**
          * 流编解码器
          */
-        private static final StreamCodec<RegistryFriendlyByteBuf, BlockCompressRecipe> STREAM_CODEC = StreamCodec.composite(
+        public static final StreamCodec<RegistryFriendlyByteBuf, BlockCompressRecipe> STREAM_CODEC = StreamCodec.composite(
             BlockStatePredicate.STREAM_CODEC.apply(ByteBufCodecs.list()),
             BlockCompressRecipe::getInputBlocks,
             ChanceBlockState.STREAM_CODEC,
@@ -86,12 +86,10 @@ public class BlockCompressRecipe extends AbstractProcessRecipe<BlockCompressReci
             BlockCompressRecipe::new
         );
 
-        @Override
         public MapCodec<BlockCompressRecipe> codec() {
             return Serializer.CODEC;
         }
 
-        @Override
         public StreamCodec<RegistryFriendlyByteBuf, BlockCompressRecipe> streamCodec() {
             return Serializer.STREAM_CODEC;
         }
@@ -134,7 +132,7 @@ public class BlockCompressRecipe extends AbstractProcessRecipe<BlockCompressReci
          * @return 构建器实例
          */
         public Builder input(TagKey<Block> input) {
-            this.inputs.add(BlockStatePredicate.builder(this.getter).of(input).build());
+            this.inputs.add(BlockStatePredicate.builder().of(input).build());
             return this;
         }
 
@@ -145,7 +143,7 @@ public class BlockCompressRecipe extends AbstractProcessRecipe<BlockCompressReci
          * @return 构建器实例
          */
         public Builder input(Block input) {
-            this.inputs.add(BlockStatePredicate.builder(this.getter).of(input).build());
+            this.inputs.add(BlockStatePredicate.builder().of(input).build());
             return this;
         }
 

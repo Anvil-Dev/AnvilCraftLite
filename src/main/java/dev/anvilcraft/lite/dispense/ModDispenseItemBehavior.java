@@ -72,11 +72,11 @@ public interface ModDispenseItemBehavior extends DispenseItemBehavior {
         }
 
         ItemEntity itementity = new ItemEntity(level, d0, d1, d2, stack);
-        double d3 = level.random.nextDouble() * 0.1 + 0.2;
+        double d3 = level.getRandom().nextDouble() * 0.1 + 0.2;
         itementity.setDeltaMovement(
-            level.random.triangle((double) facing.getStepX() * d3, 0.0172275 * (double) speed),
-            level.random.triangle(0.2, 0.0172275 * (double) speed),
-            level.random.triangle((double) facing.getStepZ() * d3, 0.0172275 * (double) speed)
+            level.getRandom().triangle((double) facing.getStepX() * d3, 0.0172275 * (double) speed),
+            level.getRandom().triangle(0.2, 0.0172275 * (double) speed),
+            level.getRandom().triangle((double) facing.getStepZ() * d3, 0.0172275 * (double) speed)
         );
         level.addFreshEntity(itementity);
     }

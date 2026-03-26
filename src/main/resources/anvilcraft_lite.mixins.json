@@ -2,6 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "dev.anvilcraft.lite.mixin",
+  "plugin": "dev.anvilcraft.lite.mixin.plugin.AnvilCraftLiteMixinPlugin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "AnvilBlockMixin",
@@ -10,13 +11,11 @@
     "LightningBoltMixin",
     "accessor.ShapedRecipeAccessor",
     "accessor.ShapelessRecipeAccessor",
-    "accessor.SingleItemRecipeAccessor",
-    "integration.JeiRecipeLayoutMixin"
+    "accessor.SingleItemRecipeAccessor"
   ],
   "client": [
     "FallingBlockRenderStateMixin"
   ],
-  "plugin": "dev.anvilcraft.lite.mixin.plugin.AnvilCraftLiteMixinPlugin",
   "injectors": {
     "defaultRequire": 1
   },

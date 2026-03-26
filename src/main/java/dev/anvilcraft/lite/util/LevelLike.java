@@ -1,15 +1,15 @@
 package dev.anvilcraft.lite.util;
 
+import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
 import lombok.Getter;
 import lombok.Setter;
-import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.SectionPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.CardinalLighting;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.ColorResolver;
 import net.minecraft.world.level.LightLayer;
@@ -25,10 +25,10 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
@@ -61,7 +61,8 @@ public class LevelLike implements BlockAndTintGetter {
                 .map(BlockPos::getZ)
                 .max(Integer::compare)
                 .map(it -> it + 1)
-                .orElse(0));
+                .orElse(0)
+        );
     }
 
     public int verticalSize() {
@@ -104,24 +105,29 @@ public class LevelLike implements BlockAndTintGetter {
         return getBlockState(blockPos).getFluidState();
     }
 
-    @Override
-    public float getShade(Direction direction, boolean b) {
-        boolean flag = parent.effects().constantAmbientLight();
-        if (!b) {
-            return flag ? 0.9F : 1.0F;
-        } else {
-            return switch (direction) {
-                case DOWN -> flag ? 0.9F : 0.5F;
-                case UP -> flag ? 0.9F : 1.0F;
-                case NORTH, SOUTH -> 0.8F;
-                case WEST, EAST -> 0.6F;
-            };
-        }
-    }
+//    @Override
+//    public float getShade(Direction direction, boolean b) {
+//        boolean flag = parent.effects().constantAmbientLight();
+//        if (!b) {
+//            return flag ? 0.9F : 1.0F;
+//        } else {
+//            return switch (direction) {
+//                case DOWN -> flag ? 0.9F : 0.5F;
+//                case UP -> flag ? 0.9F : 1.0F;
+//                case NORTH, SOUTH -> 0.8F;
+//                case WEST, EAST -> 0.6F;
+//            };
+//        }
+//    }
 
     @Override
     public LevelLightEngine getLightEngine() {
         return this.fullLight;
+    }
+
+    @Override
+    public CardinalLighting cardinalLighting() {
+        return this.parent.dimensionType().cardinalLightType().get();
     }
 
     @Override

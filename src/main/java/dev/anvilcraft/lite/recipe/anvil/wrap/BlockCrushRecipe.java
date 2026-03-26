@@ -61,11 +61,11 @@ public class BlockCrushRecipe extends AbstractProcessRecipe<BlockCrushRecipe> {
     /**
      * 方块粉碎配方序列化器
      */
-    public static class Serializer implements RecipeSerializer<BlockCrushRecipe> {
+    public static class Serializer {
         /**
          * 编解码器
          */
-        private static final MapCodec<BlockCrushRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        public static final MapCodec<BlockCrushRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             BlockStatePredicate.CODEC.fieldOf("input").forGetter(BlockCrushRecipe::getFirstInputBlock),
             ChanceBlockState.CODEC.codec().fieldOf("result").forGetter(BlockCrushRecipe::getFirstResultBlock)
         ).apply(instance, BlockCrushRecipe::new));
@@ -73,7 +73,7 @@ public class BlockCrushRecipe extends AbstractProcessRecipe<BlockCrushRecipe> {
         /**
          * 流编解码器
          */
-        private static final StreamCodec<RegistryFriendlyByteBuf, BlockCrushRecipe> STREAM_CODEC = StreamCodec.composite(
+        public static final StreamCodec<RegistryFriendlyByteBuf, BlockCrushRecipe> STREAM_CODEC = StreamCodec.composite(
             BlockStatePredicate.STREAM_CODEC,
             BlockCrushRecipe::getFirstInputBlock,
             ChanceBlockState.STREAM_CODEC,
@@ -81,12 +81,10 @@ public class BlockCrushRecipe extends AbstractProcessRecipe<BlockCrushRecipe> {
             BlockCrushRecipe::new
         );
 
-        @Override
         public MapCodec<BlockCrushRecipe> codec() {
             return Serializer.CODEC;
         }
 
-        @Override
         public StreamCodec<RegistryFriendlyByteBuf, BlockCrushRecipe> streamCodec() {
             return Serializer.STREAM_CODEC;
         }
@@ -129,7 +127,7 @@ public class BlockCrushRecipe extends AbstractProcessRecipe<BlockCrushRecipe> {
          * @return 构建器实例
          */
         public Builder input(TagKey<Block> input) {
-            this.input = BlockStatePredicate.builder(this.getter).of(input).build();
+            this.input = BlockStatePredicate.builder().of(input).build();
             return this;
         }
 
@@ -140,7 +138,7 @@ public class BlockCrushRecipe extends AbstractProcessRecipe<BlockCrushRecipe> {
          * @return 构建器实例
          */
         public Builder input(Block input) {
-            this.input = (BlockStatePredicate.builder(this.getter).of(input).build());
+            this.input = (BlockStatePredicate.builder().of(input).build());
             return this;
         }
 

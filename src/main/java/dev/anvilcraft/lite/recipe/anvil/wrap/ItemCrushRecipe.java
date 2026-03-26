@@ -45,7 +45,7 @@ public class ItemCrushRecipe extends AbstractProcessRecipe<ItemCrushRecipe> {
                 .setResultItems(results)
                 .setBlockInputOffset(new Vec3i(0, -1, 0))
                 .setInputBlocks(
-                    BlockStatePredicate.builder(null)
+                    BlockStatePredicate.builder()
                         .of(Blocks.IRON_TRAPDOOR)
                         .with(TrapDoorBlock.HALF, Half.TOP)
                         .with(TrapDoorBlock.OPEN, false)
@@ -77,6 +77,8 @@ public class ItemCrushRecipe extends AbstractProcessRecipe<ItemCrushRecipe> {
      * 物品粉碎配方序列化器
      */
     public static class Serializer extends AbstractSerializer<ItemCrushRecipe> {
+        public static final Serializer INSTANCE = new Serializer();
+
         @Override
         protected ItemCrushRecipe of(List<ItemIngredientPredicate> itemIngredients, List<ChanceItemStack> results) {
             return new ItemCrushRecipe(itemIngredients, results);

@@ -1,52 +1,50 @@
 package dev.anvilcraft.lite.data.recipe;
 
+import dev.anvilcraft.lib.v2.registrum.providers.generators.RegistrumRecipeProvider;
 import dev.anvilcraft.lite.AnvilCraftLite;
 import dev.anvilcraft.lite.recipe.anvil.wrap.UnpackRecipe;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 
-public class UnpackRecipeLoader extends ModRecipeLoader {
-    public UnpackRecipeLoader(HolderLookup.Provider registries, RecipeOutput output) {
-        super(registries, output);
-    }
+public class UnpackRecipeLoader {
+    public static void init(RegistrumRecipeProvider provider) {
+        UnpackRecipeLoader.unpack(provider, Items.MELON, Items.MELON_SLICE, 9);
+        UnpackRecipeLoader.unpack(provider, Items.SNOW_BLOCK, Items.SNOWBALL, 4);
+        UnpackRecipeLoader.unpack(provider, Items.CLAY, Items.CLAY_BALL, 4);
+        UnpackRecipeLoader.unpack(provider, Items.GLOWSTONE, Items.GLOWSTONE_DUST, 4);
+        UnpackRecipeLoader.unpack(provider, Items.QUARTZ_BLOCK, Items.QUARTZ, 4);
+        UnpackRecipeLoader.unpack(provider, Items.DRIPSTONE_BLOCK, Items.POINTED_DRIPSTONE, 4);
+        UnpackRecipeLoader.unpack(provider, Items.AMETHYST_BLOCK, Items.AMETHYST_SHARD, 4);
+        UnpackRecipeLoader.unpack(provider, Items.HONEYCOMB_BLOCK, Items.HONEYCOMB, 4);
 
-    @Override
-    public void buildRecipes() {
-        this.unpack(Items.MELON, Items.MELON_SLICE, 9);
-        this.unpack(Items.SNOW_BLOCK, Items.SNOWBALL, 4);
-        this.unpack(Items.CLAY, Items.CLAY_BALL, 4);
-        this.unpack(Items.GLOWSTONE, Items.GLOWSTONE_DUST, 4);
-        this.unpack(Items.QUARTZ_BLOCK, Items.QUARTZ, 4);
-        this.unpack(Items.DRIPSTONE_BLOCK, Items.POINTED_DRIPSTONE, 4);
-        this.unpack(Items.AMETHYST_BLOCK, Items.AMETHYST_SHARD, 4);
-        this.unpack(Items.HONEYCOMB_BLOCK, Items.HONEYCOMB, 4);
-
-        UnpackRecipe.builder(this.items)
+        UnpackRecipe.builder(provider.getItems())
             .requires(Items.HONEY_BLOCK)
             .requires(Items.GLASS_BOTTLE, 4)
             .result(Items.HONEY_BOTTLE, 4)
-            .save(this.output);
+            .save(provider.getOutput());
 
-        UnpackRecipe.builder(this.items)
+        UnpackRecipe.builder(provider.getItems())
             .requires(Items.PRISMARINE)
             .result(Items.PRISMARINE_SHARD, 4)
-            .save(this.output, AnvilCraftLite.of("unpack/prismine_shard_from_prismine"));
+            .save(provider.getOutput(), AnvilCraftLite.of("unpack/prismine_shard_from_prismine"));
 
-        UnpackRecipe.builder(this.items)
+        UnpackRecipe.builder(provider.getItems())
             .requires(Items.PRISMARINE_BRICKS)
             .result(Items.PRISMARINE_SHARD, 9)
-            .save(this.output, AnvilCraftLite.of("unpack/prismine_shard_from_prismine_bricks"));
+            .save(provider.getOutput(), AnvilCraftLite.of("unpack/prismine_shard_from_prismine_bricks"));
 
-        UnpackRecipe.builder(this.items)
+        UnpackRecipe.builder(provider.getItems())
             .requires(ItemTags.WOOL)
             .result(Items.STRING, 4)
-            .save(this.output, AnvilCraftLite.of("unpack/string_from_wools"));
+            .save(provider.getOutput(), AnvilCraftLite.of("unpack/string_from_wools"));
     }
 
-    private void unpack(ItemLike input, ItemLike result, int count) {
-        UnpackRecipe.builder(this.items).requires(input).result(result, count).save(this.output);
+    private static void unpack(RegistrumRecipeProvider provider, ItemLike input, ItemLike result, int count) {
+        UnpackRecipe.builder(provider.getItems())
+            .requires(input)
+            .result(result, count)
+            .save(provider.getOutput());
     }
 }

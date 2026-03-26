@@ -46,7 +46,7 @@ public class SuperHeatingRecipe extends AbstractProcessRecipe<SuperHeatingRecipe
                 .setCauldronOffset(new Vec3i(0, -1, 0))
                 .setHasCauldron(HasCauldronSimple.empty().build())
                 .setBlockInputOffset(new Vec3i(0, -2, 0))
-                .setInputBlocks(BlockStatePredicate.builder(null).of(Blocks.LAVA_CAULDRON).build())
+                .setInputBlocks(BlockStatePredicate.builder().of(Blocks.LAVA_CAULDRON).build())
         );
     }
 
@@ -73,6 +73,8 @@ public class SuperHeatingRecipe extends AbstractProcessRecipe<SuperHeatingRecipe
      * 物品压缩配方序列化器
      */
     public static class Serializer extends AbstractSerializer<SuperHeatingRecipe> {
+        public static final Serializer INSTANCE = new Serializer();
+
         @Override
         protected SuperHeatingRecipe of(List<ItemIngredientPredicate> itemIngredients, List<ChanceItemStack> results) {
             return new SuperHeatingRecipe(itemIngredients, results);

@@ -45,7 +45,7 @@ public class StampingRecipe extends AbstractProcessRecipe<StampingRecipe> {
                 .setResultItems(results)
                 .setBlockInputOffset(new Vec3i(0, -1, 0))
                 .setInputBlocks(
-                    BlockStatePredicate.builder(null)
+                    BlockStatePredicate.builder()
                         .of(Blocks.PISTON, Blocks.PISTON_HEAD)
                         .with(PistonBaseBlock.FACING, Direction.UP)
                         .build()
@@ -76,6 +76,8 @@ public class StampingRecipe extends AbstractProcessRecipe<StampingRecipe> {
      * 冲压配方序列化器
      */
     public static class Serializer extends AbstractSerializer<StampingRecipe> {
+        public static final Serializer INSTANCE = new Serializer();
+
         @Override
         protected StampingRecipe of(List<ItemIngredientPredicate> itemIngredients, List<ChanceItemStack> results) {
             return new StampingRecipe(itemIngredients, results);

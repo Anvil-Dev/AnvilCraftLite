@@ -101,12 +101,12 @@ public class BulgingRecipe extends AbstractProcessRecipe<BulgingRecipe> {
     /**
      * 膨发配方序列化器
      */
-    public static class Serializer implements RecipeSerializer<BulgingRecipe> {
+    public static class Serializer {
         /**
          * 编解码器
          */
         public static final MapCodec<BulgingRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            ItemIngredientPredicate.CODEC.codec().listOf().fieldOf("ingredients").forGetter(BulgingRecipe::getInputItems),
+            ItemIngredientPredicate.CODEC.listOf().fieldOf("ingredients").forGetter(BulgingRecipe::getInputItems),
             ChanceItemStack.CODEC.listOf().fieldOf("results").forGetter(BulgingRecipe::getResultItems),
             HasCauldronSimple.CODEC.forGetter(BulgingRecipe::getHasCauldron)
         ).apply(instance, BulgingRecipe::new));
@@ -124,12 +124,10 @@ public class BulgingRecipe extends AbstractProcessRecipe<BulgingRecipe> {
             BulgingRecipe::new
         );
 
-        @Override
         public MapCodec<BulgingRecipe> codec() {
             return Serializer.CODEC;
         }
 
-        @Override
         public StreamCodec<RegistryFriendlyByteBuf, BulgingRecipe> streamCodec() {
             return Serializer.STREAM_CODEC;
         }

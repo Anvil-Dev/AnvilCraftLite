@@ -71,19 +71,19 @@ public class ItemInjectRecipe extends AbstractProcessRecipe<ItemInjectRecipe> {
      *
      * @return 构建器实例
      */
-    public static Builder builder(HolderGetter<Item> getter, HolderGetter<Block> blockGetter) {
-        return new Builder(getter, blockGetter);
+    public static Builder builder(HolderGetter<Item> getter) {
+        return new Builder(getter);
     }
 
     /**
      * 物品注入配方序列化器
      */
-    public static class Serializer implements RecipeSerializer<ItemInjectRecipe> {
+    public static class Serializer {
         /**
          * 编解码器
          */
-        private static final MapCodec<ItemInjectRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            ItemIngredientPredicate.CODEC.codec()
+        public static final MapCodec<ItemInjectRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            ItemIngredientPredicate.CODEC
                 .listOf()
                 .optionalFieldOf("ingredients", List.of())
                 .forGetter(ItemInjectRecipe::getInputItems),
@@ -95,7 +95,7 @@ public class ItemInjectRecipe extends AbstractProcessRecipe<ItemInjectRecipe> {
         /**
          * 流编解码器
          */
-        private static final StreamCodec<RegistryFriendlyByteBuf, ItemInjectRecipe> STREAM_CODEC = StreamCodec.composite(
+        public static final StreamCodec<RegistryFriendlyByteBuf, ItemInjectRecipe> STREAM_CODEC = StreamCodec.composite(
             ItemIngredientPredicate.STREAM_CODEC.apply(ByteBufCodecs.list()),
             ItemInjectRecipe::getInputItems,
             ChanceItemStack.STREAM_CODEC.apply(ByteBufCodecs.list()),
@@ -107,12 +107,10 @@ public class ItemInjectRecipe extends AbstractProcessRecipe<ItemInjectRecipe> {
             ItemInjectRecipe::new
         );
 
-        @Override
         public MapCodec<ItemInjectRecipe> codec() {
             return Serializer.CODEC;
         }
 
-        @Override
         public StreamCodec<RegistryFriendlyByteBuf, ItemInjectRecipe> streamCodec() {
             return Serializer.STREAM_CODEC;
         }
@@ -132,9 +130,9 @@ public class ItemInjectRecipe extends AbstractProcessRecipe<ItemInjectRecipe> {
          */
         ChanceBlockState blockResult = null;
 
-        protected Builder(HolderGetter<Item> getter, HolderGetter<Block> blockGetter) {
+        protected Builder(HolderGetter<Item> getter) {
             super(getter);
-            this.blockIngredient = BlockStatePredicate.builder(blockGetter);
+            this.blockIngredient = BlockStatePredicate.builder();
         }
 
         /**
