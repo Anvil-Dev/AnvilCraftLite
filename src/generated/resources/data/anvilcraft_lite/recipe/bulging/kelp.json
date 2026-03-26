@@ -1,0 +1,14 @@
+{
+  "type": "anvilcraft_lite:bulging",
+  "fluid": "minecraft:water",
+  "ingredients": [
+    {
+      "items": "minecraft:dried_kelp"
+    }
+  ],
+  "results": [
+    {
+      "id": "minecraft:kelp"
+    }
+  ]
+}

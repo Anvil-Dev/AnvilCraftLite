@@ -1,0 +1,14 @@
+{
+  "type": "anvilcraft_lite:unpack",
+  "ingredients": [
+    {
+      "items": "minecraft:melon"
+    }
+  ],
+  "results": [
+    {
+      "count": 9,
+      "id": "minecraft:melon_slice"
+    }
+  ]
+}

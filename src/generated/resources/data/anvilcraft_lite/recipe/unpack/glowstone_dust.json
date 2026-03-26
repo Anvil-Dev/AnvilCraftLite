@@ -1,0 +1,14 @@
+{
+  "type": "anvilcraft_lite:unpack",
+  "ingredients": [
+    {
+      "items": "minecraft:glowstone"
+    }
+  ],
+  "results": [
+    {
+      "count": 4,
+      "id": "minecraft:glowstone_dust"
+    }
+  ]
+}

@@ -11,7 +11,7 @@ public class ItemCompressRecipeLoader {
     public static void init(RegistrumRecipeProvider provider) {
         ItemCompressRecipe.builder(provider.getItems())
             .requires(Items.BONE, 3)
-            .result(new ItemStack(Items.BONE_BLOCK))
+            .result(Items.BONE_BLOCK)
             .save(provider.getOutput());
     }
 }

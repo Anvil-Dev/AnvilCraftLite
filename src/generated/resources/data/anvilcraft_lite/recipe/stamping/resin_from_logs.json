@@ -1,0 +1,17 @@
+{
+  "type": "anvilcraft_lite:stamping",
+  "ingredients": [
+    {
+      "items": []
+    }
+  ],
+  "results": [
+    {
+      "id": "anvilcraft_lite:resin"
+    },
+    {
+      "count": 8,
+      "id": "minecraft:stick"
+    }
+  ]
+}

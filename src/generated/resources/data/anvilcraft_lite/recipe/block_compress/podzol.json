@@ -1,9 +1,7 @@
 {
   "type": "anvilcraft_lite:block_compress",
   "inputs": [
-    {
-      "blocks": "#minecraft:leaves"
-    },
+    {},
     {
       "blocks": "minecraft:dirt"
     }

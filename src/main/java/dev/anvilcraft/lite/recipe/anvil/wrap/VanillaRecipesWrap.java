@@ -15,7 +15,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.TriState;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.BlastingRecipe;
 import net.minecraft.world.item.crafting.CampfireCookingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -64,9 +64,8 @@ public class VanillaRecipesWrap {
                 //noinspection ConstantValue
                 if (pattern == null) yield Optional.empty();
                 if (pattern.height() != pattern.width() || pattern.height() == 1) yield Optional.empty();
-                ItemStack result = accessor.getResult().create();
+                ItemStackTemplate result = accessor.getResult();
                 if (result == null) yield Optional.empty();
-                result = result.copy();
                 if (!result.is(ModItemTags.COMPRESS_ITEM)) yield Optional.empty();
                 List<Optional<Ingredient>> ingredients = pattern.ingredients();
                 Ingredient first = null;
@@ -84,7 +83,7 @@ public class VanillaRecipesWrap {
                     key(
                         "compress_warp_%s_2_%s".formatted(
                             RecipeUtil.getName(first),
-                            BuiltInRegistries.ITEM.getKey(result.getItem()).getPath()
+                            BuiltInRegistries.ITEM.getKey(result.item().value()).getPath()
                         )
                     ),
                     ItemCompressRecipe.builder(items)
@@ -98,15 +97,14 @@ public class VanillaRecipesWrap {
                 List<Ingredient> ingredients = accessor.getIngredients();
                 if (ingredients.isEmpty()) yield Optional.empty();
                 Ingredient first = ingredients.getFirst();
-                ItemStack result = accessor.getResult().create();
+                ItemStackTemplate result = accessor.getResult();
                 if (result == null) yield Optional.empty();
-                result = result.copy();
                 if (ingredients.size() == 1) {
                     yield Optional.of(new RecipeHolder<>(
                         key(
                             "unpack_warp_%s_2_%s".formatted(
                                 RecipeUtil.getName(first),
-                                BuiltInRegistries.ITEM.getKey(result.getItem()).getPath()
+                                BuiltInRegistries.ITEM.getKey(result.item().value()).getPath()
                             )
                         ),
                         UnpackRecipe.builder(items)
@@ -124,7 +122,7 @@ public class VanillaRecipesWrap {
                     key(
                         "compress_warp_%s_2_%s".formatted(
                             RecipeUtil.getName(first),
-                            BuiltInRegistries.ITEM.getKey(result.getItem()).getPath()
+                            BuiltInRegistries.ITEM.getKey(result.item().value()).getPath()
                         )
                     ),
                     ItemCompressRecipe.builder(items)
@@ -135,40 +133,38 @@ public class VanillaRecipesWrap {
             }
             case BlastingRecipe recipe -> {
                 SingleItemRecipeAccessor accessor = Util.cast(recipe);
-                ItemStack result = accessor.getResult().create();
+                ItemStackTemplate result = accessor.getResult();
                 if (result == null) yield Optional.empty();
-                result = result.copy();
                 Ingredient input = accessor.getInput();
                 boolean boost = RecipeUtil.testIngredient(
                     input,
                     itemHolder -> itemHolder.is(ModItemTags.SUPER_HEATING_BOOST_PRODUCTION)
                 ) == TriState.TRUE;
-                VanillaRecipesWrap.cooked.add(result.getItem());
+                VanillaRecipesWrap.cooked.add(result.item().value());
                 yield Optional.of(new RecipeHolder<>(
                     key(
                         "super_heating_warp_%s_2_%s".formatted(
                             RecipeUtil.getName(input),
-                            BuiltInRegistries.ITEM.getKey(result.getItem()).getPath()
+                            BuiltInRegistries.ITEM.getKey(result.item().value()).getPath()
                         )
                     ),
                     SuperHeatingRecipe.builder(items)
-                        .result(result.copyWithCount(boost ? 2 : 1))
+                        .result(result.withCount(boost ? 2 : 1))
                         .requires(RecipeUtil.wrapIngredient(items, input).build())
                         .buildRecipe()
                 ));
             }
             case SmokingRecipe recipe -> {
                 SingleItemRecipeAccessor accessor = Util.cast(recipe);
-                ItemStack result = accessor.getResult().create();
+                ItemStackTemplate result = accessor.getResult();
                 if (result == null) yield Optional.empty();
-                result = result.copy();
                 Ingredient input = accessor.getInput();
-                VanillaRecipesWrap.cooked.add(result.getItem());
+                VanillaRecipesWrap.cooked.add(result.item().value());
                 yield Optional.of(new RecipeHolder<>(
                     key(
                         "smoking_warp_%s_2_%s".formatted(
                             RecipeUtil.getName(input),
-                            BuiltInRegistries.ITEM.getKey(result.getItem()).getPath()
+                            BuiltInRegistries.ITEM.getKey(result.item().value()).getPath()
                         )
                     ),
                     CookingRecipe.builder(items)
@@ -179,16 +175,15 @@ public class VanillaRecipesWrap {
             }
             case CampfireCookingRecipe recipe -> {
                 SingleItemRecipeAccessor accessor = Util.cast(recipe);
-                ItemStack result = accessor.getResult().create();
+                ItemStackTemplate result = accessor.getResult();
                 if (result == null) yield Optional.empty();
-                result = result.copy();
                 Ingredient input = accessor.getInput();
-                VanillaRecipesWrap.cooked.add(result.getItem());
+                VanillaRecipesWrap.cooked.add(result.item().value());
                 yield Optional.of(new RecipeHolder<>(
                     key(
                         "cooking_warp_%s_2_%s".formatted(
                             RecipeUtil.getName(input),
-                            BuiltInRegistries.ITEM.getKey(result.getItem()).getPath()
+                            BuiltInRegistries.ITEM.getKey(result.item().value()).getPath()
                         )
                     ),
                     CookingRecipe.builder(items)
@@ -207,13 +202,15 @@ public class VanillaRecipesWrap {
 
     public static void wrap(HolderGetter<Item> items, SmeltingRecipe recipe) {
         SingleItemRecipeAccessor accessor = Util.cast(recipe);
-        ItemStack result = accessor.getResult().create();
+        ItemStackTemplate result = accessor.getResult();
         if (result == null) return;
-        result = result.copy();
-        if (VanillaRecipesWrap.cooked.contains(result.getItem())) return;
+        if (VanillaRecipesWrap.cooked.contains(result.item().value())) return;
         Ingredient input = accessor.getInput();
         VanillaRecipesWrap.recipes.add(new RecipeHolder<>(
-            key("heating_warp_%s_2_%s".formatted(RecipeUtil.getName(input), BuiltInRegistries.ITEM.getKey(result.getItem()).getPath())),
+            key("heating_warp_%s_2_%s".formatted(
+                RecipeUtil.getName(input),
+                BuiltInRegistries.ITEM.getKey(result.item().value()).getPath()
+            )),
             SuperHeatingRecipe.builder(items)
                 .result(result)
                 .requires(RecipeUtil.wrapIngredient(items, input).build())

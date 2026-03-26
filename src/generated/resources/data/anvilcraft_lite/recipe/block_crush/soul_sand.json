@@ -1,0 +1,9 @@
+{
+  "type": "anvilcraft_lite:block_crush",
+  "input": {
+    "blocks": "minecraft:soul_soil"
+  },
+  "result": {
+    "block": "minecraft:soul_sand"
+  }
+}

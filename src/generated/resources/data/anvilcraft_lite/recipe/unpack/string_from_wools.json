@@ -1,0 +1,14 @@
+{
+  "type": "anvilcraft_lite:unpack",
+  "ingredients": [
+    {
+      "items": []
+    }
+  ],
+  "results": [
+    {
+      "count": 4,
+      "id": "minecraft:string"
+    }
+  ]
+}

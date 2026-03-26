@@ -271,7 +271,7 @@ public abstract class AbstractProcessRecipe<T extends InWorldRecipe> extends InW
          * @param ingredient 原料物品堆栈
          * @return 构建器实例
          */
-        public B requires(ItemStack ingredient) {
+        public B requires(ItemStackTemplate ingredient) {
             this.itemIngredients.add(ItemIngredientPredicate.Builder.item().of(ingredient).build());
             return this.getThis();
         }
@@ -304,7 +304,7 @@ public abstract class AbstractProcessRecipe<T extends InWorldRecipe> extends InW
          * @param count  数量提供器
          * @return 构建器实例
          */
-        public B result(ItemStack result, NumberProvider count) {
+        public B result(ItemStackTemplate result, NumberProvider count) {
             this.results.add(ChanceItemStack.of(result, count));
             return this.getThis();
         }
@@ -316,8 +316,8 @@ public abstract class AbstractProcessRecipe<T extends InWorldRecipe> extends InW
          * @param chance 概率
          * @return 构建器实例
          */
-        public B result(ItemStack result, float chance) {
-            return this.result(result, BinomialDistributionGenerator.binomial(result.getCount(), chance));
+        public B result(ItemStackTemplate result, float chance) {
+            return this.result(result, BinomialDistributionGenerator.binomial(result.count(), chance));
         }
 
         /**
@@ -326,8 +326,8 @@ public abstract class AbstractProcessRecipe<T extends InWorldRecipe> extends InW
          * @param result 结果物品堆栈
          * @return 构建器实例
          */
-        public B result(ItemStack result) {
-            return this.result(result, ConstantValue.exactly(result.getCount()));
+        public B result(ItemStackTemplate result) {
+            return this.result(result, ConstantValue.exactly(result.count()));
         }
 
         /**
@@ -700,7 +700,7 @@ public abstract class AbstractProcessRecipe<T extends InWorldRecipe> extends InW
         private ItemStackTemplate getIcon() {
             ItemStackTemplate icon = null;
             if (this.resultItems != null && !this.resultItems.isEmpty()) {
-                icon = ItemStackTemplate.fromNonEmptyStack(this.resultItems.getFirst().stack());
+                icon = this.resultItems.getFirst().stack().withCount(1);
             }
             if (icon == null && this.resultBlocks != null && !this.resultBlocks.isEmpty()) {
                 Item item = this.resultBlocks.getFirst().state().getBlock().asItem();
