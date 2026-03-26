@@ -2,8 +2,8 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'idea'
-    id 'net.neoforged.moddev' version '2.0.107'
-    id 'io.freefair.lombok' version '8.7.1'
+    id 'net.neoforged.moddev' version '2.0.140'
+    id 'io.freefair.lombok' version '9.2.0'
 }
 
 String buildNumber
@@ -23,6 +23,14 @@ group = mod_group_id
 
 repositories {
     mavenLocal()
+    exclusiveContent {
+        forRepository {
+            mavenCentral()
+        }
+        filter {
+            includeGroup "dev.anvilcraft.lib"
+        }
+    }
     maven { // Anvil Lib
         name = "Cjsah Maven"
         url = "https://server.cjsah.net:1002/maven/"
@@ -53,7 +61,7 @@ jar {
 }
 
 base {
-    archivesName = mod_id + "-neoforge-1.21.8"
+    archivesName = mod_id + "-neoforge-26.1"
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
@@ -61,11 +69,6 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 neoForge {
     // Specify the version of NeoForge to use.
     version = project.neo_version
-
-    parchment {
-        mappingsVersion = project.parchment_mappings_version
-        minecraftVersion = project.parchment_minecraft_version
-    }
 
     // This line is optional. Access Transformers are automatically detected
     accessTransformers = project.files('src/main/resources/META-INF/accesstransformer.cfg')
@@ -145,13 +148,21 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
     // AnvilLib
-    implementation "dev.anvilcraft.lib:anvillib-neoforge-1.21.8:1.4.0+build.167"
-    interfaceInjectionData "dev.anvilcraft.lib:anvillib-neoforge-1.21.8:1.4.0+build.167"
-    jarJar "dev.anvilcraft.lib:anvillib-neoforge-1.21.8:1.4.0+build.167"
+    implementation "dev.anvilcraft.lib:anvillib-neoforge-26.1:2.0.0+snapshot.249"
+    jarJar "dev.anvilcraft.lib:anvillib-neoforge-26.1:2.0.0+snapshot.249"
+    implementation "dev.anvilcraft.lib:anvillib-config-neoforge-26.1:2.0.0+snapshot.249"
+    implementation "dev.anvilcraft.lib:anvillib-integration-neoforge-26.1:2.0.0+snapshot.249"
+    implementation "dev.anvilcraft.lib:anvillib-moveable-entity-block-neoforge-26.1:2.0.0+snapshot.249"
+    interfaceInjectionData "dev.anvilcraft.lib:anvillib-moveable-entity-block-neoforge-26.1:2.0.0+snapshot.249"
+    implementation "dev.anvilcraft.lib:anvillib-network-neoforge-26.1:2.0.0+snapshot.249"
+    implementation "dev.anvilcraft.lib:anvillib-recipe-neoforge-26.1:2.0.0+snapshot.249"
+    interfaceInjectionData "dev.anvilcraft.lib:anvillib-recipe-neoforge-26.1:2.0.0+snapshot.249"
+    implementation "dev.anvilcraft.lib:anvillib-registrum-neoforge-26.1:2.0.0+snapshot.249"
+
 
     // JEI
-    compileOnly "mezz.jei:jei-1.21.8-neoforge-api:24.0.0.2"
-    implementation "mezz.jei:jei-1.21.8-neoforge:24.0.0.2"
+    compileOnly "mezz.jei:jei-26.1-neoforge-api:24.0.0.2"
+    implementation "mezz.jei:jei-26.1-neoforge:24.0.0.2"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
@@ -187,35 +198,6 @@ artifacts {
     archives tasks.sourcesJar
 }
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            groupId = project.group
-            artifactId = project.archivesBaseName
-            version = project.version
-
-            from components.java
-
-            artifact sourcesJar
-        }
-    }
-
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-    repositories {
-        // Add repositories to publish to here.
-        def MAVEN_URL = System.getenv("MAVEN_URL")
-        if (MAVEN_URL != null) {
-            maven {
-                url MAVEN_URL
-                credentials {
-                    username System.getenv("MAVEN_USERNAME")
-                    password System.getenv("MAVEN_PASSWORD")
-                }
-            }
-        }
-    }
-}
-
 // IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
 idea {
     module {
@@ -225,5 +207,5 @@ idea {
 }
 
 lombok {
-    version = "1.18.34"
+    version = "1.18.44"
 }
