@@ -1,6 +1,7 @@
 package dev.anvilcraft.lite.mixin.accessor;
 
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.SingleItemRecipe;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,5 +13,5 @@ public interface SingleItemRecipeAccessor {
     Ingredient getInput();
 
     @Accessor("result")
-    ItemStack getResult();
+    ItemStackTemplate getResult();
 }

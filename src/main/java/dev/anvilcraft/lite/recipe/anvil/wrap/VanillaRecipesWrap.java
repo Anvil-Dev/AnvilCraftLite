@@ -64,7 +64,7 @@ public class VanillaRecipesWrap {
                 //noinspection ConstantValue
                 if (pattern == null) yield Optional.empty();
                 if (pattern.height() != pattern.width() || pattern.height() == 1) yield Optional.empty();
-                ItemStack result = accessor.getResult();
+                ItemStack result = accessor.getResult().create();
                 if (result == null) yield Optional.empty();
                 result = result.copy();
                 if (!result.is(ModItemTags.COMPRESS_ITEM)) yield Optional.empty();
@@ -98,7 +98,7 @@ public class VanillaRecipesWrap {
                 List<Ingredient> ingredients = accessor.getIngredients();
                 if (ingredients.isEmpty()) yield Optional.empty();
                 Ingredient first = ingredients.getFirst();
-                ItemStack result = accessor.getResult();
+                ItemStack result = accessor.getResult().create();
                 if (result == null) yield Optional.empty();
                 result = result.copy();
                 if (ingredients.size() == 1) {
@@ -135,7 +135,7 @@ public class VanillaRecipesWrap {
             }
             case BlastingRecipe recipe -> {
                 SingleItemRecipeAccessor accessor = Util.cast(recipe);
-                ItemStack result = accessor.getResult();
+                ItemStack result = accessor.getResult().create();
                 if (result == null) yield Optional.empty();
                 result = result.copy();
                 Ingredient input = accessor.getInput();
@@ -159,7 +159,7 @@ public class VanillaRecipesWrap {
             }
             case SmokingRecipe recipe -> {
                 SingleItemRecipeAccessor accessor = Util.cast(recipe);
-                ItemStack result = accessor.getResult();
+                ItemStack result = accessor.getResult().create();
                 if (result == null) yield Optional.empty();
                 result = result.copy();
                 Ingredient input = accessor.getInput();
@@ -179,7 +179,7 @@ public class VanillaRecipesWrap {
             }
             case CampfireCookingRecipe recipe -> {
                 SingleItemRecipeAccessor accessor = Util.cast(recipe);
-                ItemStack result = accessor.getResult();
+                ItemStack result = accessor.getResult().create();
                 if (result == null) yield Optional.empty();
                 result = result.copy();
                 Ingredient input = accessor.getInput();
@@ -207,7 +207,7 @@ public class VanillaRecipesWrap {
 
     public static void wrap(HolderGetter<Item> items, SmeltingRecipe recipe) {
         SingleItemRecipeAccessor accessor = Util.cast(recipe);
-        ItemStack result = accessor.getResult();
+        ItemStack result = accessor.getResult().create();
         if (result == null) return;
         result = result.copy();
         if (VanillaRecipesWrap.cooked.contains(result.getItem())) return;

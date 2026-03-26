@@ -1,6 +1,7 @@
 package dev.anvilcraft.lite.mixin.accessor;
 
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,5 +15,5 @@ public interface ShapelessRecipeAccessor {
     List<Ingredient> getIngredients();
 
     @Accessor("result")
-    ItemStack getResult();
+    ItemStackTemplate getResult();
 }
