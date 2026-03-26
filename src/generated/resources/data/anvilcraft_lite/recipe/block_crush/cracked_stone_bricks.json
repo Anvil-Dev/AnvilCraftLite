@@ -1,9 +1,0 @@
-{
-  "type": "anvilcraft_lite:block_crush",
-  "input": {
-    "blocks": "minecraft:stone_bricks"
-  },
-  "result": {
-    "block": "minecraft:cracked_stone_bricks"
-  }
-}

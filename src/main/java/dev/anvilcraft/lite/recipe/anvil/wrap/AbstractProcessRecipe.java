@@ -28,6 +28,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -696,16 +697,16 @@ public abstract class AbstractProcessRecipe<T extends InWorldRecipe> extends InW
          *
          * @return 图标物品堆栈
          */
-        private ItemStack getIcon() {
-            ItemStack icon = null;
+        private ItemStackTemplate getIcon() {
+            ItemStackTemplate icon = null;
             if (this.resultItems != null && !this.resultItems.isEmpty()) {
-                icon = this.resultItems.getFirst().stack();
+                icon = ItemStackTemplate.fromNonEmptyStack(this.resultItems.getFirst().stack());
             }
             if (icon == null && this.resultBlocks != null && !this.resultBlocks.isEmpty()) {
                 Item item = this.resultBlocks.getFirst().state().getBlock().asItem();
-                if (item != Items.AIR) icon = item.getDefaultInstance();
+                if (item != Items.AIR) icon = new ItemStackTemplate(item);
             }
-            if (icon == null) icon = Items.ANVIL.getDefaultInstance();
+            if (icon == null) icon = new ItemStackTemplate(Items.ANVIL);
             return icon;
         }
 

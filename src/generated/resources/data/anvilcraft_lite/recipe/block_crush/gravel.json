@@ -1,9 +1,0 @@
-{
-  "type": "anvilcraft_lite:block_crush",
-  "input": {
-    "blocks": "minecraft:cobblestone"
-  },
-  "result": {
-    "block": "minecraft:gravel"
-  }
-}

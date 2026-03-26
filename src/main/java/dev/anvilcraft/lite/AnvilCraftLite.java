@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import dev.anvilcraft.lib.v2.config.ConfigManager;
 import dev.anvilcraft.lib.v2.integration.IntegrationManager;
 import dev.anvilcraft.lib.v2.registrum.Registrum;
+import dev.anvilcraft.lite.data.AnvilCraftLiteDatagen;
 import dev.anvilcraft.lite.init.ModInits;
 import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
@@ -26,6 +27,7 @@ public class AnvilCraftLite {
         ModInits.init(modEventBus);
         INTEGRATION_MANAGER.compileContent();
         INTEGRATION_MANAGER.loadAllIntegrations();
+        AnvilCraftLiteDatagen.init();
     }
 
     public static Identifier of(String id) {

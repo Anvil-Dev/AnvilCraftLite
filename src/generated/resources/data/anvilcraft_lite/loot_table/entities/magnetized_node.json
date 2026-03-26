@@ -1,0 +1,4 @@
+{
+  "type": "minecraft:entity",
+  "random_sequence": "anvilcraft_lite:entities/magnetized_node"
+}
