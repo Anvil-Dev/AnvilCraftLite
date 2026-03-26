@@ -2,6 +2,6 @@
 @ParametersAreNonnullByDefault
 package dev.anvilcraft.lite.integration.jei.util;
 
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
 
 import javax.annotation.ParametersAreNonnullByDefault;

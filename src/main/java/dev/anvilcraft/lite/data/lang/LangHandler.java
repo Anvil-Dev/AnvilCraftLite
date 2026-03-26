@@ -1,6 +1,6 @@
 package dev.anvilcraft.lite.data.lang;
 
-import dev.anvilcraft.lib.config.ConfigData;
+import dev.anvilcraft.lib.v2.config.ConfigData;
 import dev.anvilcraft.lite.AnvilCraftLite;
 import dev.anvilcraft.lite.AnvilCraftLiteConfig;
 import net.minecraft.data.PackOutput;

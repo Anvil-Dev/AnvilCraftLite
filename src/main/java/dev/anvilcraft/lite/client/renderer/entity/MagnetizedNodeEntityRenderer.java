@@ -11,10 +11,10 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class MagnetizedNodeEntityRenderer extends EntityRenderer<MagnetizedNodeEntity, MagnetizedNodeRenderState> {
-    public static final ResourceLocation MAGNETIZED_NODE_TEXTURE = AnvilCraftLite.of("textures/entity/magnetized_node.png");
+    public static final Identifier MAGNETIZED_NODE_TEXTURE = AnvilCraftLite.of("textures/entity/magnetized_node.png");
 
     private final MagnetizedNodeModel model;
 

@@ -1,9 +1,9 @@
 package dev.anvilcraft.lite.init.block;
 
 import dev.anvilcraft.lite.AnvilCraftLite;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 
@@ -107,12 +107,12 @@ public class ModBlockTags {
     public static final TagKey<Block> MEKANISM_CARDBOARD_BOX_BLACKLIST = bindMekanism("cardboard_blacklist");
 
     private static TagKey<Block> bindC(String id) {
-        return TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", id));
+        return TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("c", id));
     }
 
     @SuppressWarnings("SameParameterValue")
     private static TagKey<Block> bindMekanism(String id) {
-        return TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(MEKANISM_MODID, id));
+        return TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(MEKANISM_MODID, id));
     }
 
     private static TagKey<Block> bind(String id) {

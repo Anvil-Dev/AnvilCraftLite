@@ -1,7 +1,7 @@
 package dev.anvilcraft.lite.integration.jei.drawable;
 
 import mezz.jei.api.gui.inputs.IJeiGuiEventListener;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
 import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 

@@ -1,7 +1,7 @@
 package dev.anvilcraft.lite.util;
 
 import com.mojang.datafixers.util.Either;
-import dev.anvilcraft.lib.recipe.component.ItemIngredientPredicate;
+import dev.anvilcraft.lib.v2.recipe.component.ItemIngredientPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.BuiltInRegistries;

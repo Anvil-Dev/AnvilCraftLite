@@ -8,7 +8,7 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -123,7 +123,7 @@ public class ModRegister {
             this.name = name;
             this.register = register;
             this.factory = factory;
-            ResourceLocation location = ResourceLocation.fromNamespaceAndPath(this.register.modId, this.name);
+            Identifier location = Identifier.fromNamespaceAndPath(this.register.modId, this.name);
             ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, location);
             this.properties = new Item.Properties().setId(key);
         }
@@ -155,7 +155,7 @@ public class ModRegister {
         private final ModRegister register;
         private final Function<Block.Properties, T> factory;
         private Block.Properties properties;
-        private final ResourceLocation location;
+        private final Identifier location;
         private String lang = null;
         private Consumer<Block.Properties> propertiesConsumer = properties -> {
         };
@@ -164,7 +164,7 @@ public class ModRegister {
             this.name = name;
             this.register = register;
             this.factory = factory;
-            this.location = ResourceLocation.fromNamespaceAndPath(this.register.modId, this.name);
+            this.location = Identifier.fromNamespaceAndPath(this.register.modId, this.name);
             this.properties = Block.Properties.of();
         }
 
@@ -204,7 +204,7 @@ public class ModRegister {
         private final ModRegister register;
         private final EntityType.EntityFactory<T> factory;
         private final MobCategory category;
-        private final ResourceLocation location;
+        private final Identifier location;
         private String lang = null;
         private Consumer<EntityType.Builder<T>> builderConsumer = builder -> {
         };
@@ -214,7 +214,7 @@ public class ModRegister {
             this.register = register;
             this.factory = factory;
             this.category = category;
-            this.location = ResourceLocation.fromNamespaceAndPath(this.register.modId, this.name);
+            this.location = Identifier.fromNamespaceAndPath(this.register.modId, this.name);
         }
 
         public EntityRegister<T> properties(Consumer<EntityType.Builder<T>> consumer) {

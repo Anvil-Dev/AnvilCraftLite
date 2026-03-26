@@ -1,7 +1,7 @@
 package dev.anvilcraft.lite.init.reicpe;
 
-import dev.anvilcraft.lib.init.LibRegistries;
-import dev.anvilcraft.lib.recipe.predicate.IRecipePredicate;
+import dev.anvilcraft.lib.v2.init.LibRegistries;
+import dev.anvilcraft.lib.v2.recipe.predicate.IRecipePredicate;
 import dev.anvilcraft.lite.AnvilCraftLite;
 import dev.anvilcraft.lite.recipe.anvil.predicate.block.HasCauldron;
 import net.neoforged.neoforge.registries.DeferredHolder;

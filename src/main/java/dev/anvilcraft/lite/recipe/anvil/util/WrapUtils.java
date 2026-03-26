@@ -1,13 +1,13 @@
 package dev.anvilcraft.lite.recipe.anvil.util;
 
-import dev.anvilcraft.lib.recipe.component.BlockStatePredicate;
-import dev.anvilcraft.lib.recipe.component.ChanceBlockState;
-import dev.anvilcraft.lib.recipe.outcome.IRecipeOutcome;
-import dev.anvilcraft.lib.recipe.predicate.IRecipePredicate;
-import dev.anvilcraft.lib.recipe.predicate.block.HasBlock;
-import dev.anvilcraft.lib.recipe.predicate.block.HasBlockIngredient;
+import dev.anvilcraft.lib.v2.recipe.component.BlockStatePredicate;
+import dev.anvilcraft.lib.v2.recipe.component.ChanceBlockState;
+import dev.anvilcraft.lib.v2.recipe.outcome.IRecipeOutcome;
+import dev.anvilcraft.lib.v2.recipe.predicate.IRecipePredicate;
+import dev.anvilcraft.lib.v2.recipe.predicate.block.HasBlock;
+import dev.anvilcraft.lib.v2.recipe.predicate.block.HasBlockIngredient;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -179,11 +179,11 @@ public class WrapUtils {
      * @param cauldron 炼药锅方块
      * @return 流体ID
      */
-    public static ResourceLocation cauldron2Fluid(Block cauldron) {
-        ResourceLocation key = BuiltInRegistries.BLOCK.getKey(cauldron);
+    public static Identifier cauldron2Fluid(Block cauldron) {
+        Identifier key = BuiltInRegistries.BLOCK.getKey(cauldron);
         String namespace = key.getNamespace();
         String path = key.getPath();
         if (path.endsWith("_cauldron")) path = path.substring(0, path.length() - 9);
-        return ResourceLocation.fromNamespaceAndPath(namespace, path);
+        return Identifier.fromNamespaceAndPath(namespace, path);
     }
 }

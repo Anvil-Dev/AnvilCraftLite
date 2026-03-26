@@ -2,7 +2,7 @@ package dev.anvilcraft.lite.integration.jei.drawable;
 
 import dev.anvilcraft.lite.util.render.RenderHelper;
 import mezz.jei.api.gui.drawable.IDrawable;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.level.block.state.BlockState;
 

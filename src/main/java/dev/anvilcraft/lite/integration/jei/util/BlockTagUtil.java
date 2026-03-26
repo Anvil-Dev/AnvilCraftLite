@@ -1,6 +1,6 @@
 package dev.anvilcraft.lite.integration.jei.util;
 
-import dev.anvilcraft.lib.recipe.component.BlockStatePredicate;
+import dev.anvilcraft.lib.v2.recipe.component.BlockStatePredicate;
 import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;

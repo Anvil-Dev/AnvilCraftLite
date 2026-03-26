@@ -3,10 +3,10 @@ package dev.anvilcraft.lite.recipe.anvil.predicate.block;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.anvilcraft.lib.recipe.cache.BlockCache;
-import dev.anvilcraft.lib.recipe.predicate.IRecipePredicate;
-import dev.anvilcraft.lib.recipe.util.InWorldRecipeContext;
-import dev.anvilcraft.lib.util.CodecUtil;
+import dev.anvilcraft.lib.v2.recipe.cache.BlockCache;
+import dev.anvilcraft.lib.v2.recipe.predicate.IRecipePredicate;
+import dev.anvilcraft.lib.v2.recipe.util.InWorldRecipeContext;
+import dev.anvilcraft.lib.v2.util.CodecUtil;
 import dev.anvilcraft.lite.init.reicpe.ModRecipePredicateTypes;
 import dev.anvilcraft.lite.recipe.anvil.util.WrapUtils;
 import dev.anvilcraft.lite.util.CauldronUtil;
@@ -16,7 +16,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.level.block.Block;
@@ -37,17 +37,17 @@ import java.util.Optional;
  * @param consume   消耗量（负数表示产生）
  * @param transform 转换后的流体ID
  */
-public record HasCauldron(Vec3 offset, ResourceLocation fluid, int consume, ResourceLocation transform)
+public record HasCauldron(Vec3 offset, Identifier fluid, int consume, Identifier transform)
     implements IRecipePredicate<HasCauldron> {
     /**
      * 空炼药锅标识
      */
-    public static final ResourceLocation EMPTY = ResourceLocation.withDefaultNamespace("empty");
+    public static final Identifier EMPTY = Identifier.withDefaultNamespace("empty");
 
     /**
      * 空转换标识
      */
-    public static final ResourceLocation NULL = ResourceLocation.withDefaultNamespace("null");
+    public static final Identifier NULL = Identifier.withDefaultNamespace("null");
 
     /**
      * 构造一个炼药锅条件谓词
@@ -142,18 +142,18 @@ public record HasCauldron(Vec3 offset, ResourceLocation fluid, int consume, Reso
      * @param fluid 流体ID
      * @return 炼药锅方块
      */
-    public static Block getDefaultCauldron(ResourceLocation fluid) {
+    public static Block getDefaultCauldron(Identifier fluid) {
         if (fluid.equals(HasCauldron.EMPTY) || fluid.equals(HasCauldron.NULL)) return Blocks.CAULDRON;
         String namespace = fluid.getNamespace();
         String path = fluid.getPath();
-        ResourceLocation cauldron = ResourceLocation.fromNamespaceAndPath(namespace, "%s_cauldron".formatted(path));
+        Identifier cauldron = Identifier.fromNamespaceAndPath(namespace, "%s_cauldron".formatted(path));
         Holder.Reference<Block> reference = BuiltInRegistries.BLOCK.get(cauldron).orElse(null);
         Block block = Blocks.WATER_CAULDRON;
         if (reference != null) block = reference.value();
         return block;
     }
 
-    public static boolean isNotEmpty(ResourceLocation fluid) {
+    public static boolean isNotEmpty(Identifier fluid) {
         return !fluid.equals(HasCauldron.NULL) && !fluid.equals(HasCauldron.EMPTY);
     }
 
@@ -211,9 +211,9 @@ public record HasCauldron(Vec3 offset, ResourceLocation fluid, int consume, Reso
          */
         public final MapCodec<HasCauldron> codec = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 Vec3.CODEC.fieldOf("offset").forGetter(HasCauldron::offset),
-                ResourceLocation.CODEC.optionalFieldOf("fluid", EMPTY).forGetter(HasCauldron::fluid),
+                Identifier.CODEC.optionalFieldOf("fluid", EMPTY).forGetter(HasCauldron::fluid),
                 Codec.INT.optionalFieldOf("consume", 0).forGetter(HasCauldron::consume),
-                ResourceLocation.CODEC.optionalFieldOf("transform", NULL).forGetter(HasCauldron::transform)
+                Identifier.CODEC.optionalFieldOf("transform", NULL).forGetter(HasCauldron::transform)
             ).apply(instance, HasCauldron::new)
         );
 
@@ -223,11 +223,11 @@ public record HasCauldron(Vec3 offset, ResourceLocation fluid, int consume, Reso
         public final StreamCodec<RegistryFriendlyByteBuf, HasCauldron> mapCodec = StreamCodec.composite(
             CodecUtil.VEC3_STREAM_CODEC,
             HasCauldron::offset,
-            ResourceLocation.STREAM_CODEC,
+            Identifier.STREAM_CODEC,
             HasCauldron::fluid,
             ByteBufCodecs.INT,
             HasCauldron::consume,
-            ResourceLocation.STREAM_CODEC,
+            Identifier.STREAM_CODEC,
             HasCauldron::transform,
             HasCauldron::new
         );
@@ -248,9 +248,9 @@ public record HasCauldron(Vec3 offset, ResourceLocation fluid, int consume, Reso
      */
     public static class Builder {
         private Vec3 offset = Vec3.ZERO;
-        private ResourceLocation fluid = HasCauldron.EMPTY;
+        private Identifier fluid = HasCauldron.EMPTY;
         private int consume = 0;
-        private ResourceLocation transform = HasCauldron.NULL;
+        private Identifier transform = HasCauldron.NULL;
 
         /**
          * 设置偏移量
@@ -329,7 +329,7 @@ public record HasCauldron(Vec3 offset, ResourceLocation fluid, int consume, Reso
          * @param fluid 流体ID
          * @return 构建器实例
          */
-        public Builder fluid(ResourceLocation fluid) {
+        public Builder fluid(Identifier fluid) {
             this.fluid = fluid;
             return this;
         }
@@ -351,7 +351,7 @@ public record HasCauldron(Vec3 offset, ResourceLocation fluid, int consume, Reso
          * @param transform 转换后的流体ID
          * @return 构建器实例
          */
-        public Builder transform(ResourceLocation transform) {
+        public Builder transform(Identifier transform) {
             this.transform = transform;
             return this;
         }

@@ -1,6 +1,6 @@
 package dev.anvilcraft.lite.recipe.anvil.wrap;
 
-import dev.anvilcraft.lib.recipe.InWorldRecipe;
+import dev.anvilcraft.lib.v2.recipe.InWorldRecipe;
 import dev.anvilcraft.lite.AnvilCraftLite;
 import dev.anvilcraft.lite.init.item.ModItemTags;
 import dev.anvilcraft.lite.mixin.accessor.ShapedRecipeAccessor;

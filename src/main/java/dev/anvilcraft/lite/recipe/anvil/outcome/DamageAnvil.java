@@ -1,9 +1,9 @@
 package dev.anvilcraft.lite.recipe.anvil.outcome;
 
 import com.mojang.serialization.MapCodec;
-import dev.anvilcraft.lib.recipe.outcome.IRecipeOutcome;
-import dev.anvilcraft.lib.recipe.util.InWorldRecipeContext;
-import dev.anvilcraft.lib.recipe.util.InWorldRecipeData;
+import dev.anvilcraft.lib.v2.recipe.outcome.IRecipeOutcome;
+import dev.anvilcraft.lib.v2.recipe.util.InWorldRecipeContext;
+import dev.anvilcraft.lib.v2.recipe.util.InWorldRecipeData;
 import dev.anvilcraft.lite.AnvilCraftLite;
 import dev.anvilcraft.lite.init.reicpe.ModRecipeOutcomeTypes;
 import net.minecraft.network.RegistryFriendlyByteBuf;

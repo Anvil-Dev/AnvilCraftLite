@@ -3,7 +3,7 @@ package dev.anvilcraft.lite.item;
 import dev.anvilcraft.lite.init.item.ModComponents;
 import dev.anvilcraft.lite.item.property.component.SavedEntity;
 import net.minecraft.ChatFormatting;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;

@@ -4,7 +4,7 @@ import dev.anvilcraft.lite.AnvilCraftLite;
 import dev.anvilcraft.lite.init.block.ModBlockTags;
 import dev.anvilcraft.lite.init.block.ModBlocks;
 import dev.anvilcraft.lite.init.item.ModItems;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;

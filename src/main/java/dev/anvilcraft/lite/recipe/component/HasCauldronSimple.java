@@ -7,7 +7,7 @@ import dev.anvilcraft.lite.recipe.anvil.predicate.block.HasCauldron;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
  * @param consume   消耗量（负数表示产生）
  * @param transform 转换后的流体ID
  */
-public record HasCauldronSimple(ResourceLocation fluid, int consume, ResourceLocation transform) {
+public record HasCauldronSimple(Identifier fluid, int consume, Identifier transform) {
     /**
      * 构造一个简单的炼药锅条件
      *
@@ -38,13 +38,13 @@ public record HasCauldronSimple(ResourceLocation fluid, int consume, ResourceLoc
      */
     public static final MapCodec<HasCauldronSimple> CODEC = RecordCodecBuilder.mapCodec(
         instance -> instance.group(
-            ResourceLocation.CODEC
+            Identifier.CODEC
                 .optionalFieldOf("fluid", HasCauldron.EMPTY)
                 .forGetter(HasCauldronSimple::fluid),
             Codec.INT
                 .optionalFieldOf("consume", 0)
                 .forGetter(HasCauldronSimple::consume),
-            ResourceLocation.CODEC
+            Identifier.CODEC
                 .optionalFieldOf("transform", HasCauldron.NULL)
                 .forGetter(HasCauldronSimple::transform)
         ).apply(instance, HasCauldronSimple::new)
@@ -82,11 +82,11 @@ public record HasCauldronSimple(ResourceLocation fluid, int consume, ResourceLoc
      * HasCauldronSimple的网络流编解码器
      */
     public static final StreamCodec<RegistryFriendlyByteBuf, HasCauldronSimple> STREAM_CODEC = StreamCodec.composite(
-        ResourceLocation.STREAM_CODEC,
+        Identifier.STREAM_CODEC,
         HasCauldronSimple::fluid,
         ByteBufCodecs.INT,
         HasCauldronSimple::consume,
-        ResourceLocation.STREAM_CODEC,
+        Identifier.STREAM_CODEC,
         HasCauldronSimple::transform,
         HasCauldronSimple::new
     );
@@ -106,7 +106,7 @@ public record HasCauldronSimple(ResourceLocation fluid, int consume, ResourceLoc
      * @param fluid 流体ID
      * @return 构建器实例
      */
-    public static @NotNull Builder fluid(ResourceLocation fluid) {
+    public static @NotNull Builder fluid(Identifier fluid) {
         return Builder.of(fluid);
     }
 
@@ -114,9 +114,9 @@ public record HasCauldronSimple(ResourceLocation fluid, int consume, ResourceLoc
      * 构建器类，用于构建HasCauldronSimple实例
      */
     public static class Builder {
-        private ResourceLocation fluid = HasCauldron.EMPTY;
+        private Identifier fluid = HasCauldron.EMPTY;
         private int consume = 0;
-        private ResourceLocation transform = HasCauldron.NULL;
+        private Identifier transform = HasCauldron.NULL;
 
         /**
          * 创建一个空的构建器
@@ -133,7 +133,7 @@ public record HasCauldronSimple(ResourceLocation fluid, int consume, ResourceLoc
          * @param fluid 流体ID
          * @return 构建器实例
          */
-        public static @NotNull Builder of(ResourceLocation fluid) {
+        public static @NotNull Builder of(Identifier fluid) {
             Builder builder = new Builder();
             builder.fluid = fluid;
             return builder;
@@ -145,7 +145,7 @@ public record HasCauldronSimple(ResourceLocation fluid, int consume, ResourceLoc
          * @param fluid 流体ID
          * @return 构建器实例
          */
-        public @NotNull Builder fluid(ResourceLocation fluid) {
+        public @NotNull Builder fluid(Identifier fluid) {
             this.fluid = fluid;
             return this;
         }
@@ -156,7 +156,7 @@ public record HasCauldronSimple(ResourceLocation fluid, int consume, ResourceLoc
          * @param transform 转换后的流体ID
          * @return 构建器实例
          */
-        public @NotNull Builder transform(ResourceLocation transform) {
+        public @NotNull Builder transform(Identifier transform) {
             this.transform = transform;
             return this;
         }

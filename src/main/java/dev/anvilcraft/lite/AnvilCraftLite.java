@@ -1,11 +1,11 @@
 package dev.anvilcraft.lite;
 
 import com.mojang.logging.LogUtils;
-import dev.anvilcraft.lib.config.ConfigManager;
-import dev.anvilcraft.lib.integration.IntegrationManager;
+import dev.anvilcraft.lib.v2.config.ConfigManager;
+import dev.anvilcraft.lib.v2.integration.IntegrationManager;
 import dev.anvilcraft.lite.init.ModRegister;
 import dev.anvilcraft.lite.init.ModInits;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -29,7 +29,7 @@ public class AnvilCraftLite {
         INTEGRATION_MANAGER.loadAllIntegrations();
     }
 
-    public static ResourceLocation of(String id) {
-        return ResourceLocation.fromNamespaceAndPath(AnvilCraftLite.MOD_ID, id);
+    public static Identifier of(String id) {
+        return Identifier.fromNamespaceAndPath(AnvilCraftLite.MOD_ID, id);
     }
 }

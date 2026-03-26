@@ -1,8 +1,8 @@
 package dev.anvilcraft.lite.integration.jei.util;
 
 import com.google.common.collect.ImmutableList;
-import dev.anvilcraft.lib.recipe.component.ChanceItemStack;
-import dev.anvilcraft.lib.util.NumberProviderUtil;
+import dev.anvilcraft.lib.v2.recipe.component.ChanceItemStack;
+import dev.anvilcraft.lib.v2.util.NumberProviderUtil;
 import dev.anvilcraft.lite.integration.jei.AnvilCraftJeiPlugin;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import net.minecraft.ChatFormatting;

@@ -1,8 +1,8 @@
 package dev.anvilcraft.lite.event;
 
-import dev.anvilcraft.lib.event.InWorldRecipeManagerEvent;
-import dev.anvilcraft.lib.event.ItemCacheEvent;
-import dev.anvilcraft.lib.recipe.InWorldRecipe;
+import dev.anvilcraft.lib.v2.event.InWorldRecipeManagerEvent;
+import dev.anvilcraft.lib.v2.event.ItemCacheEvent;
+import dev.anvilcraft.lib.v2.recipe.InWorldRecipe;
 import dev.anvilcraft.lite.AnvilCraftLite;
 import dev.anvilcraft.lite.recipe.anvil.wrap.VanillaRecipesWrap;
 import net.minecraft.world.item.crafting.RecipeHolder;

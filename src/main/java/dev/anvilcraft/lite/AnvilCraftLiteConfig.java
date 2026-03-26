@@ -1,8 +1,8 @@
 package dev.anvilcraft.lite;
 
-import dev.anvilcraft.lib.config.BoundedDiscrete;
-import dev.anvilcraft.lib.config.Comment;
-import dev.anvilcraft.lib.config.Config;
+import dev.anvilcraft.lib.v2.config.BoundedDiscrete;
+import dev.anvilcraft.lib.v2.config.Comment;
+import dev.anvilcraft.lib.v2.config.Config;
 import net.neoforged.fml.config.ModConfig;
 
 @Config(name = AnvilCraftLite.MOD_ID, type = ModConfig.Type.SERVER)

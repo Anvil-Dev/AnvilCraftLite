@@ -1,7 +1,7 @@
 package dev.anvilcraft.lite.recipe.anvil.builder;
 
 import dev.anvilcraft.lite.AnvilCraftLite;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
@@ -12,7 +12,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Recipe;
 import org.jetbrains.annotations.Nullable;
@@ -78,7 +78,7 @@ public abstract class AbstractRecipeBuilder<T extends Recipe<?>> implements Reci
         pRecipeOutput.accept(pId, recipe, advancement.build(pId.location().withPrefix("recipes/")));
     }
 
-    public void save(RecipeOutput pRecipeOutput, ResourceLocation pId) {
+    public void save(RecipeOutput pRecipeOutput, Identifier pId) {
         save(pRecipeOutput, ResourceKey.create(Registries.RECIPE, pId));
     }
 
@@ -111,7 +111,7 @@ public abstract class AbstractRecipeBuilder<T extends Recipe<?>> implements Reci
      *
      * @param pId 配方ID
      */
-    public abstract void validate(ResourceLocation pId);
+    public abstract void validate(Identifier pId);
 
     /**
      * 获取配方类型

@@ -1,7 +1,7 @@
 package dev.anvilcraft.lite.init.reicpe;
 
-import dev.anvilcraft.lib.init.LibRegistries;
-import dev.anvilcraft.lib.recipe.outcome.IRecipeOutcome;
+import dev.anvilcraft.lib.v2.init.LibRegistries;
+import dev.anvilcraft.lib.v2.recipe.outcome.IRecipeOutcome;
 import dev.anvilcraft.lite.AnvilCraftLite;
 import dev.anvilcraft.lite.recipe.anvil.outcome.DamageAnvil;
 import net.neoforged.neoforge.registries.DeferredHolder;

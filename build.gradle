@@ -64,7 +64,7 @@ base {
     archivesName = mod_id + "-neoforge-26.1"
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
 neoForge {
     // Specify the version of NeoForge to use.
@@ -161,8 +161,8 @@ dependencies {
 
 
     // JEI
-    compileOnly "mezz.jei:jei-26.1-neoforge-api:24.0.0.2"
-    implementation "mezz.jei:jei-26.1-neoforge:24.0.0.2"
+    compileOnly "mezz.jei:jei-1.21.11-neoforge-api:27.4.0.17"
+//    implementation "mezz.jei:jei-26.1-neoforge:24.0.0.2"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

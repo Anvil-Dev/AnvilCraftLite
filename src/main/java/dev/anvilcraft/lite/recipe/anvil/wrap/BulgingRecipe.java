@@ -2,8 +2,8 @@ package dev.anvilcraft.lite.recipe.anvil.wrap;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.anvilcraft.lib.recipe.component.ChanceItemStack;
-import dev.anvilcraft.lib.recipe.component.ItemIngredientPredicate;
+import dev.anvilcraft.lib.v2.recipe.component.ChanceItemStack;
+import dev.anvilcraft.lib.v2.recipe.component.ItemIngredientPredicate;
 import dev.anvilcraft.lite.init.reicpe.ModRecipeTypes;
 import dev.anvilcraft.lite.recipe.anvil.predicate.block.HasCauldron;
 import dev.anvilcraft.lite.recipe.anvil.util.WrapUtils;
@@ -15,7 +15,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -154,7 +154,7 @@ public class BulgingRecipe extends AbstractProcessRecipe<BulgingRecipe> {
          * @param fluid 流体ID
          * @return 构建器实例
          */
-        public Builder cauldron(ResourceLocation fluid) {
+        public Builder cauldron(Identifier fluid) {
             this.hasCauldron.fluid(fluid);
             return this;
         }
@@ -176,7 +176,7 @@ public class BulgingRecipe extends AbstractProcessRecipe<BulgingRecipe> {
          * @param transform 转换后的流体ID
          * @return 构建器实例
          */
-        public Builder transform(ResourceLocation transform) {
+        public Builder transform(Identifier transform) {
             this.hasCauldron.transform(transform);
             return this;
         }
@@ -222,7 +222,7 @@ public class BulgingRecipe extends AbstractProcessRecipe<BulgingRecipe> {
         }
 
         @Override
-        public void validate(ResourceLocation pId) {
+        public void validate(Identifier pId) {
         }
 
         @Override

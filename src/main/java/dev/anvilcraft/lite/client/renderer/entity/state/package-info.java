@@ -2,6 +2,6 @@
 @ParametersAreNonnullByDefault
 package dev.anvilcraft.lite.client.renderer.entity.state;
 
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
 
 import javax.annotation.ParametersAreNonnullByDefault;

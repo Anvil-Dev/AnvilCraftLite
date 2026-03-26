@@ -1,6 +1,6 @@
 package dev.anvilcraft.lite.integration.jei;
 
-import dev.anvilcraft.lib.integration.Integration;
+import dev.anvilcraft.lib.v2.integration.Integration;
 import dev.anvilcraft.lite.init.reicpe.ModRecipeTypes;
 import net.neoforged.neoforge.client.event.RecipesReceivedEvent;
 import net.neoforged.neoforge.common.NeoForge;

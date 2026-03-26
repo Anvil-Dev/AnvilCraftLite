@@ -1,7 +1,7 @@
 package dev.anvilcraft.lite.block;
 
 import dev.anvilcraft.lite.init.block.ModBlocks;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;

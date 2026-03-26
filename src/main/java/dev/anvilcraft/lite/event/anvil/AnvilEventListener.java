@@ -1,7 +1,7 @@
 package dev.anvilcraft.lite.event.anvil;
 
-import dev.anvilcraft.lib.recipe.util.InWorldRecipeContext;
-import dev.anvilcraft.lib.recipe.util.InWorldRecipeManager;
+import dev.anvilcraft.lib.v2.recipe.util.InWorldRecipeContext;
+import dev.anvilcraft.lib.v2.recipe.util.InWorldRecipeManager;
 import dev.anvilcraft.lite.AnvilCraftLite;
 import dev.anvilcraft.lite.api.event.AnvilEvent;
 import dev.anvilcraft.lite.init.reicpe.ModRecipeTriggers;

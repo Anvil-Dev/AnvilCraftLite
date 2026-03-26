@@ -2,7 +2,7 @@ package dev.anvilcraft.lite.init.item;
 
 import dev.anvilcraft.lite.AnvilCraftLite;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.NotNull;
@@ -183,11 +183,11 @@ public class ModItemTags {
 
 
     public static @NotNull TagKey<Item> bindC(String id) {
-        return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", id));
+        return TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("c", id));
     }
 
     public static @NotNull TagKey<Item> bindCurios(String id) {
-        return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("curios", id));
+        return TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("curios", id));
     }
 
     public static @NotNull TagKey<Item> bind(String id) {
