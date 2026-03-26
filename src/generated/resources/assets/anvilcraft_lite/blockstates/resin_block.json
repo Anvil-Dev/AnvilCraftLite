@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "anvilcraft_lite:resin_block"
+      "model": "anvilcraft_lite:block/resin_block"
     }
   }
 }

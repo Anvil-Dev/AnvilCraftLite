@@ -17,7 +17,7 @@ public class ModItems {
     public static final ItemEntry<MagnetItem> MAGNET_INGOT = REGISTRUM.item("magnet_ingot", MagnetItem::new).register();
 
     public static final ItemEntry<CrabClawItem> CRAB_CLAW = REGISTRUM.item("crab_claw", CrabClawItem::new)
-        .model(() -> (ctx, generator) -> generator.createWithExistingModel(ctx.get(), generator.modLoc(ctx.getName())))
+        .model(() -> (ctx, generator) -> generator.createWithExistingModel(ctx.get(), generator.modLoc(ctx.getName()).withPrefix("item/")))
         .register();
 
     public static void init() {

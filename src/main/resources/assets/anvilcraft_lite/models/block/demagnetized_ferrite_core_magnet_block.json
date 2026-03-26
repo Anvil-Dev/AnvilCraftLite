@@ -1,10 +1,12 @@
 {
-  "parent": "anvilcraft_lite:block/ferrite_core_magnet_block",
-  "textures": {
+	"format_version": "1.21.11",
+	"credit": "Made with Blockbench",
+	"parent": "anvilcraft_lite:block/ferrite_core_magnet_block",
+	"textures": {
 		"particle": "anvilcraft_lite:block/demagnetized_magnet_block_side",
 		"side": "anvilcraft_lite:block/demagnetized_magnet_block_side",
 		"top": "anvilcraft_lite:block/demagnetized_magnet_block_top",
 		"bottom": "anvilcraft_lite:block/demagnetized_magnet_block_bottom",
-		"core": "minecraft:block/iron_block"
+		"core": "block/iron_block"
 	}
 }

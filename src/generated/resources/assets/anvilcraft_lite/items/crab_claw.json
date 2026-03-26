@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "anvilcraft_lite:crab_claw"
+    "model": "anvilcraft_lite:item/crab_claw"
   }
 }

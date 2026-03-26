@@ -1,10 +1,10 @@
 {
   "variants": {
     "lit=false": {
-      "model": "anvilcraft_lite:hollow_magnet_block"
+      "model": "anvilcraft_lite:block/hollow_magnet_block"
     },
     "lit=true": {
-      "model": "anvilcraft_lite:demagnetized_hollow_magnet_block"
+      "model": "anvilcraft_lite:block/demagnetized_hollow_magnet_block"
     }
   }
 }

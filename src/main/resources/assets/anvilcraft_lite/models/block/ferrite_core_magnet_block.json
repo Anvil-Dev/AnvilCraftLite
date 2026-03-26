@@ -1,4 +1,5 @@
 {
+	"format_version": "1.21.11",
 	"credit": "Made by XeKr with Blockbench",
 	"parent": "minecraft:block/block",
 	"textures": {
@@ -6,7 +7,7 @@
 		"side": "anvilcraft_lite:block/magnet_block_side",
 		"top": "anvilcraft_lite:block/magnet_block_top",
 		"bottom": "anvilcraft_lite:block/magnet_block_bottom",
-		"core": "minecraft:block/iron_block"
+		"core": "block/iron_block"
 	},
 	"elements": [
 		{
@@ -57,5 +58,6 @@
 				"down": {"uv": [5, 5, 11, 11], "texture": "#core", "cullface": "down"}
 			}
 		}
-	]
+	],
+	"display": {}
 }

@@ -22,7 +22,7 @@ public class ModBlocks {
     public static final BlockEntry<ResinBlock> RESIN_BLOCK = REGISTRUM.block("resin_block", ResinBlock::new)
         .initialProperties(() -> Blocks.SLIME_BLOCK)
         .lang("Block of Resin")
-        .blockstate(() -> (ctx, generator) -> generator.create(ctx.get(), generator.modLoc(ctx.getName())))
+        .blockstate(() -> (ctx, generator) -> generator.create(ctx.get(), generator.modLoc(ctx.getName()).withPrefix("block/")))
         .simpleItem()
         .register();
 
@@ -33,8 +33,8 @@ public class ModBlocks {
             MultiVariantGenerator.dispatch(ctx.get()).with(
                 BlockModelGenerators.createBooleanModelDispatch(
                     BlockStateProperties.LIT,
-                    BlockModelGenerators.plainVariant(generator.modLoc(ctx.getName()).withPrefix("demagnetized_")),
-                    BlockModelGenerators.plainVariant(generator.modLoc(ctx.getName()))
+                    BlockModelGenerators.plainVariant(generator.modLoc(ctx.getName()).withPrefix("block/demagnetized_")),
+                    BlockModelGenerators.plainVariant(generator.modLoc(ctx.getName()).withPrefix("block/"))
                 )
             )
         ))
@@ -48,8 +48,8 @@ public class ModBlocks {
             MultiVariantGenerator.dispatch(ctx.get()).with(
                 BlockModelGenerators.createBooleanModelDispatch(
                     BlockStateProperties.LIT,
-                    BlockModelGenerators.plainVariant(generator.modLoc(ctx.getName()).withPrefix("demagnetized_")),
-                    BlockModelGenerators.plainVariant(generator.modLoc(ctx.getName()))
+                    BlockModelGenerators.plainVariant(generator.modLoc(ctx.getName()).withPrefix("block/demagnetized_")),
+                    BlockModelGenerators.plainVariant(generator.modLoc(ctx.getName()).withPrefix("block/"))
                 )
             )
         ))
@@ -67,8 +67,8 @@ public class ModBlocks {
             MultiVariantGenerator.dispatch(ctx.get()).with(
                 BlockModelGenerators.createBooleanModelDispatch(
                     BlockStateProperties.LIT,
-                    BlockModelGenerators.plainVariant(generator.modLoc(ctx.getName()).withPrefix("demagnetized_")),
-                    BlockModelGenerators.plainVariant(generator.modLoc(ctx.getName()))
+                    BlockModelGenerators.plainVariant(generator.modLoc(ctx.getName()).withPrefix("block/demagnetized_")),
+                    BlockModelGenerators.plainVariant(generator.modLoc(ctx.getName()).withPrefix("block/"))
                 )
             )
         ))
