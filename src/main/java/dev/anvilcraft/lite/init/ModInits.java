@@ -10,10 +10,10 @@ import net.neoforged.bus.api.IEventBus;
 
 public class ModInits {
     public static void init(IEventBus modEventBus) {
+        ModItemGroups.init();
         ModBlocks.init();
         ModComponents.init();
         ModItems.init();
-        ModItemGroups.init();
         ModRecipeInits.init(modEventBus);
         ModEntities.init();
     }

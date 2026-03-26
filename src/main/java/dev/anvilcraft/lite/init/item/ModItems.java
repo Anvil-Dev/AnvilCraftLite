@@ -9,7 +9,7 @@ import static dev.anvilcraft.lite.AnvilCraftLite.REGISTRUM;
 
 public class ModItems {
     static {
-        REGISTRUM.defaultCreativeTab(ModItemGroups.ANVILCRAFT_LITE);
+        REGISTRUM.defaultCreativeTab(ModItemGroups.ANVILCRAFT_LITE.getKey());
     }
 
     public static final ItemEntry<Item> RESIN = REGISTRUM.item("resin", Item::new).register();

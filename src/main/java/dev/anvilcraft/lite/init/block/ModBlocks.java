@@ -13,7 +13,7 @@ import static dev.anvilcraft.lite.AnvilCraftLite.REGISTRUM;
 
 public class ModBlocks {
     static {
-        REGISTRUM.defaultCreativeTab(ModItemGroups.ANVILCRAFT_LITE);
+        REGISTRUM.defaultCreativeTab(ModItemGroups.ANVILCRAFT_LITE.getKey());
     }
 
     public static final BlockEntry<ResinBlock> RESIN_BLOCK = REGISTRUM.block("resin_block", ResinBlock::new)
